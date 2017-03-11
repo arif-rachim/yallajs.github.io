@@ -17,5 +17,5 @@ function $render(props){
             fontWeight : fullSize ? '100' : '300',
             color : colorCombo.font
         }
-    },'Yalla JS']
+    },'YallaJS']
 }
