@@ -12,7 +12,7 @@ function $render(props){
             transform : fullSize ? 'translateY(25%) translateX(-50%)' : 'translateY(0) translateX(0)',
             "-webkit-transform" : fullSize ? 'translateY(25%) translateX(-50%)' : 'translateY(0) translateX(0)',
             transition : '0.5s',
-            fontSize : fullSize ? '2em' : '0.7em',
+            fontSize : fullSize ? '2.2em' : '0.7em',
             fontWeight : fullSize ? '100' : '300',
             color : colorCombo.font
         }

@@ -7,7 +7,8 @@ var header = $inject('layout/header');
 var browserSize = $inject('layout/browser-size');
 var _scrollLastYPos = 0;
 var _showFull = false;
-var _heroHeight = browserSize.height() * 0.3;
+//var _heroHeight = browserSize.height() * 0.3;
+var _heroHeight = 200;
 var _heroMinHeight = 50;
 var _transitionSpeed = '0.5s';
 
