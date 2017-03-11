@@ -3,10 +3,14 @@
  */
 var container = $inject('components/ui-container');
 var item = $inject('components/ui-container-item');
+var colorCombo = $inject('layout/color-combination');
+var hero = $inject('layout/hero');
+
+
 var browserSize = $inject('layout/browser-size');
 var _scrollLastYPos = 0;
 var _showFull = false;
-var _heroHeight = browserSize.height * 0.6;
+var _heroHeight = browserSize.height * 0.3;
 var _heroMinHeight = 50;
 
 var _transitionSpeed = '0.5s';
@@ -28,7 +32,6 @@ function $render(props) {
             left : '0',
             right : '0',
             bottom : _showFull ? '0px' : '30px',
-            backgroundColor : 'white',
             overflow : 'auto',
             transition : _transitionSpeed
         },
@@ -56,12 +59,22 @@ function $render(props) {
             left : '0',
             right : '0',
             height : _heroHeight+'px',
-            backgroundColor : _showFull ? '#CCCCCC' : '#EFEFEF',
+            backgroundColor : _showFull ? colorCombo.selection : colorCombo.font,
             boxShadow : '0px 0px 10px 0px rgba(0,0,0,0.5)',
             transition : _transitionSpeed
         }
-    },'header'];
+    },['div',{
+        style : {
+            position : 'relative',
+            width : '100vw',
+            height : '100%'
+        }
+    },[hero,{fullSize : !_showFull}]]];
 
-    return ['div',content,header]
+    return ['div',{
+        style :{
+            backgroundColor : colorCombo.base
+        }
+    },content,header]
 
 }
