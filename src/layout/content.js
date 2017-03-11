@@ -6,15 +6,14 @@ var item = $inject('components/ui-container-item');
 
 var _scrollLastYPos = 0;
 var _showFull = false;
-var _heroHeight = 200;
-
+var _heroHeight = 400;
+var _transitionSpeed = '0.5s';
 function $render(props) {
 
     var contentData = ['div',{
         style : {
             height : '3000px'
         }
-
     }
     ,'Content'];
 
@@ -27,30 +26,23 @@ function $render(props) {
             bottom : _showFull ? '0px' : '30px',
             backgroundColor : '#CCCCCC',
             overflow : 'auto',
-            transition : '0.5s'
+            transition : _transitionSpeed
         },
-        onscroll : function(e){
+        onscroll :  yalla.debounce(function(e){
             var topPos = e.target.scrollTop;
             if(_scrollLastYPos > topPos){
-                // its moving up
-                console.log('scroll move up');
-                if(_showFull){
-                    console.log('We should not show full');
+                if(topPos <= _heroHeight && _showFull){
                     _showFull = false;
                     yalla.markAsDirty();
                 }
             }else{
-                // its moving down
-                console.log('scroll move down');
-                if(topPos > _heroHeight &&  !_showFull){
-                    console.log('We should show full');
+                if(topPos >= _heroHeight &&  !_showFull){
                     _showFull = true;
                     yalla.markAsDirty();
                 }
             }
             _scrollLastYPos = topPos;
-            console.log(_scrollLastYPos);
-        }
+        },100,false)
     },contentData];
 
     return ['div',content,['div',{
@@ -61,7 +53,7 @@ function $render(props) {
             right : '0',
             height : _heroHeight+'px',
             boxShadow : '0px 0px 5px 0px rgba(0,0,0,0.5)',
-            transition : '0.5s'
+            transition : _transitionSpeed
         }
     },'header']]
 
