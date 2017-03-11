@@ -3,8 +3,8 @@
  */
 
 $export = {
-    base : '#F1F1F2', // bluesky
-    heading : '#BCBABE', //granite
-    font : '#A1D6E2', //pine
-    selection : '#1995AD' // fields
+    base : '#FAFAFA', // bluesky
+    heading : '#F9F9F9', //granite
+    font : '#1995AD', //pine
+    selection : '#A1D6E2' // fields
 };

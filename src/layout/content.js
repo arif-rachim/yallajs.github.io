@@ -1,20 +1,15 @@
 /**
  * Created by developer on 3/10/2017.
  */
-var container = $inject('components/ui-container');
-var item = $inject('components/ui-container-item');
 var colorCombo = $inject('layout/color-combination');
-var hero = $inject('layout/hero');
-
+var header = $inject('layout/header');
 
 var browserSize = $inject('layout/browser-size');
 var _scrollLastYPos = 0;
 var _showFull = false;
-var _heroHeight = browserSize.height * 0.3;
+var _heroHeight = browserSize.height() * 0.3;
 var _heroMinHeight = 50;
-
 var _transitionSpeed = '0.5s';
-
 
 function $render(props) {
 
@@ -33,6 +28,7 @@ function $render(props) {
             right : '0',
             bottom : _showFull ? '0px' : '30px',
             overflow : 'auto',
+            backgroundColor : 'white',
             transition : _transitionSpeed
         },
         onscroll :  yalla.debounce(function(e){
@@ -49,32 +45,18 @@ function $render(props) {
                 }
             }
             _scrollLastYPos = topPos;
-        },100,false)
+        },0,false)
     },contentData];
-
-    var header = ['div',{
-        style : {
-            position : 'absolute',
-            top : _showFull ? '-'+(_heroHeight-_heroMinHeight)+'px' : '0px',
-            left : '0',
-            right : '0',
-            height : _heroHeight+'px',
-            backgroundColor : _showFull ? colorCombo.selection : colorCombo.font,
-            boxShadow : '0px 0px 10px 0px rgba(0,0,0,0.5)',
-            transition : _transitionSpeed
-        }
-    },['div',{
-        style : {
-            position : 'relative',
-            width : '100vw',
-            height : '100%'
-        }
-    },[hero,{fullSize : !_showFull}]]];
 
     return ['div',{
         style :{
             backgroundColor : colorCombo.base
         }
-    },content,header]
+    },content,[header,{
+        showFull : _showFull,
+        heroHeight : _heroHeight,
+        heroMinHeight : _heroMinHeight,
+        transitionSpeed : _transitionSpeed
+    }]]
 
 }

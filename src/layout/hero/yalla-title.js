@@ -1,6 +1,7 @@
 /**
  * Created by developer on 3/11/2017.
  */
+var colorCombo = $inject('layout/color-combination');
 function $render(props){
     var fullSize = props.fullSize;
     return ['div',{
@@ -12,6 +13,7 @@ function $render(props){
             transition : '0.5s',
             fontSize : fullSize ? '2em' : '0.7em',
             fontWeight : fullSize ? '100' : '300',
+            color : colorCombo.font
         }
     },'Yalla JS']
 }
