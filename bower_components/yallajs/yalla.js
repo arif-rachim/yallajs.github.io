@@ -168,6 +168,9 @@ var yalla = (function () {
             function YallaComponent(attributes) {
                 attributes = attributes || {};
                 var elements = $render(attributes);
+                if(!elements){
+                    throw new Error('There is no return in $render function "'+path+'", did you forget the return keyword ?');
+                }
                 var prop = elements[1];
                 if (typeof prop !== 'object' || prop.constructor === Array) {
                     prop = {};
@@ -176,7 +179,6 @@ var yalla = (function () {
                 prop.element = elementName;
                 prop.id = attributes.id;
                 prop.$storeTobeAttachedToDom = attributes.$storeTobeAttachedToDom;
-
                 return elements;
             }
 
@@ -947,10 +949,8 @@ var yalla = (function () {
                 // ok now its time to delegate all of this to the constructor
                 elementAttributes.$storeTobeAttachedToDom = attrsObj.$storeTobeAttachedToDom;
                 elementAttributes.$view = attrsObj.$view;
-
                 parse(jsonmlData);
             } else if (isView) {
-                debugger;
                 parse(head.$view(head));
             } else {
                 var tagName = openTag(head, keyAttr);
@@ -996,7 +996,7 @@ var yalla = (function () {
             }
         });
 
-        nodes.splice().reverse().forEach(function (node) {
+        nodes.slice().reverse().forEach(function (node) {
             if (node.onload) {
                 node.onload(node);
             }
@@ -1048,6 +1048,19 @@ var yalla = (function () {
                         params.$elementName = pathUi.split('/').join('.');
                         params.$children = [];
                         params.$store = function (reducer, state, middleware) {
+                            var currentPointer = yalla.idom.currentPointer();
+                            if(currentPointer && DATA_PROP in currentPointer){
+                                if(currentPointer[DATA_PROP].attrs.element == params.$elementName && currentPointer.$store){
+                                    return currentPointer.$store;
+                                }else if(currentPointer.children && currentPointer.children.length == 1){
+                                    // kita harus tambahin check kalau dia levelnya body
+                                    var child = currentPointer.children[0];
+                                    if(child[DATA_PROP] && child[DATA_PROP].attrs.element == params.$elementName && child.$store){
+                                        return child.$store;
+                                    }
+                                }
+
+                            }
                             params.$storeTobeAttachedToDom = params.$storeTobeAttachedToDom || yalla.createStore(reducer, state, middleware);
                             return params.$storeTobeAttachedToDom;
                         };
@@ -1075,7 +1088,7 @@ var yalla = (function () {
             output = renderer(attributes);
         }
         yalla.idom.patch(dom, yalla.toDom, output);
-    }
+    };
 
     yalla.start = function (startFile, el, baseLib) {
         yalla.baselib = baseLib || yalla.baseLib;
@@ -1087,7 +1100,7 @@ var yalla = (function () {
 
     if ("onhashchange" in window) {
         window.onhashchange = function () {
-            var address = window.location.hash.substring(1, window.location.hash.length).split("/");
+            var address = location.hash.substring(1, window.location.hash.length).split("/");
             renderChain(address);
         }
     } else {
@@ -1138,7 +1151,7 @@ var yalla = (function () {
         };
         Store.prototype.getState = function () {
             return this.state;
-        }
+        };
         return new Store();
     };
 
