@@ -2,7 +2,7 @@ var icon = $inject('components/ui-icon');
 function $render() {
     return ['div', {
         style: {
-            fontSize : '22px',
+            fontSize : '32px',
         }
     },
         ['div', {
