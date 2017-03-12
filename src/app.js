@@ -1,7 +1,7 @@
 /**
  * Created by developer on 3/8/2017.
  */
-var content = $inject('layout/content');
+var shell = $inject('layout/shell');
 function $render(){
-    return ['div',[content]];
+    return ['div',[shell]];
 }
