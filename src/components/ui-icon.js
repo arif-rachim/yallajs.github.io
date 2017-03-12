@@ -2,14 +2,14 @@
  * Created by developer on 3/3/2017.
  */
 function $render(params){
-    var size = params.size || 'small';
+    var size = params.size || '24px';
     var icon = params.icon|| 'face';
     return ['i',{
         style : {
             fontFamily: 'Material Icons',
             fontWeight: "normal",
             fontStyle: "normal",
-            fontSize: SIZE_MAPPER[size],  /* Preferred icon size */
+            fontSize: size,  /* Preferred icon size */
             display: "inline-block",
             lineHeight: "1",
             textTransform: "none",
@@ -41,4 +41,4 @@ var SIZE_MAPPER = {
     medium : '24px',
     large : '30px',
     xlarge : '36px'
-}
+};
