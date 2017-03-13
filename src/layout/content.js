@@ -3,50 +3,68 @@ var browserSize = $inject('layout/browser-size');
 function $render() {
     debugger;
     var videoWidth = browserSize.width() * 0.8;
+    videoWidth = videoWidth > 800 ? 800 : videoWidth;
     var videoHeight = (videoWidth / 560 ) * 315;
     return ['div', {
         style: {
-            fontSize : '32px',
+            fontSize: '26px',
         }
     },
-        ['div',{
-            style : {
-                marginTop : '10px',
-                position : 'relative',
-                overflow : 'hidden',
-                textAlign : 'center'
+        ['div', {
+            style: containerStyle('row')
+        }, ['div', {
+            style: contentStyle(true)
+        }, ['div', 'Yallajs is a javascript framework for building scalable HTML 5 application. ' +
+        'Yallajs uses the concept of stateless component combined with a unidirectional state container to aim scalable javascript application. ' +
+        'Yallajs equipped with module management and routing management out of the box. By using Incremental ' +
+        'DOM instead of Virtual DOM, yallajs left small memory footprint and still achieve good performance.']]],
+
+        ['div', {
+            style: containerStyle('row')
+        }, ['div', {
+            style: contentStyle(false)
+        }, [icon, {icon: 'work', size: '80px'}]], ['div', {
+            style: contentStyle(true)
+        }, ['div', 'Framework yallaJS very light and is equipped with all the necessities to build large and scalable applications.']]],
+        ['div', {
+            style: {
+                textAlign: 'center'
             }
-        },['iframe',{
-            width : videoWidth,
-            height : videoHeight,
-            src : 'https://www.youtube.com/embed/9QIR2DdwBnM',
-            frameborder : '0',
-            allowfullscreen : true
+        }, ['iframe', {
+            width: videoWidth,
+            height: videoHeight,
+            src: 'https://www.youtube.com/embed/ul_GNb6NHl0',
+            frameborder: '0',
+            allowfullscreen: true
         }]],
         ['div', {
             style: containerStyle('row')
         }, ['div', {
-            style: contentStyle(false)
-        }, [icon,{icon : 'work',size : '80px'}]], ['div', {
             style: contentStyle(true)
-        }, ['div', 'Framework yallaJS very light and is equipped with all the necessities to build large and scalable applications. Yallajs is equipped with a management module, and routing management']]],
-
-        ['div', {
-            style: containerStyle('row')
-        }, ['div', {
-            style: contentStyle(true)
-        }, ['div', 'Easy to learn, because yallajs is using the concept of stateless functional component combined with unidirectional flow state container.Stateless functional components (SFC) have very attractive features, its easy to understand because its just a pure function that can accept input and provide output based on the input without mutating the data or causing side effect. SFC is generally only used for rendering dumb components such as a container.However if an SFC given a state container that can manage data in a unidirectional flow, it can be turned into a smart components without losing the beauty of a stateless components.']],
+        }, ['div', 'Easy to learn, yallajs is using the concept of stateless functional component combined with unidirectional flow state container.']],
             ['div', {
                 style: contentStyle(false)
-            }, [icon,{icon : 'school',size : '120px'}]]],
-
+            }, [icon, {icon: 'school', size: '120px'}]]],
+        ['div', {
+            style : {
+                textAlign : 'center'
+            }
+        },
+            ['iframe', {
+                width: videoWidth,
+                height: videoHeight,
+                src: 'https://www.youtube.com/embed/9QIR2DdwBnM',
+                frameborder: '0',
+                allowfullscreen: true
+            }]
+        ],
         ['div', {
             style: containerStyle('row')
         }, ['div', {
             style: contentStyle(false)
-        }, [icon,{icon : 'check_circle',size : '80px'}]], ['div', {
+        }, [icon, {icon: 'check_circle', size: '80px'}]], ['div', {
             style: contentStyle(true)
-        }, ['div', 'Easy to test because each component built on yallajs, can be called directly without the need for parent component. Making it easier to do the testing on each individual component']]],
+        }, ['div', 'Easy to test. Each component built on yallajs, can be called directly without the need for parent component. Making it easier to do the testing on each individual component']]],
 
     ];
 }
@@ -72,9 +90,9 @@ var containerStyle = function (direction) {
         '-webkit-align-items': 'flex-start',
         '-ms-flex-align': 'start',
         'align-items': 'flex-start',
-        margin : 'auto',
-        padding : '1em',
-        maxWidth : '800px'
+        margin: 'auto',
+        padding: '1em',
+        maxWidth: '800px'
     }
 };
 
@@ -89,6 +107,6 @@ var contentStyle = function (grow) {
         '-webkit-align-self': 'stretch',
         '-ms-flex-item-align': 'stretch',
         'align-self': 'stretch',
-        'margin' : '1em'
+        'margin': '1em'
     }
 };

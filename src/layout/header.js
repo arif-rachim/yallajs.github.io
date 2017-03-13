@@ -23,5 +23,5 @@ function $render(props){
             margin : '10px',
             fontWeight : '300'
         }
-    },'Build unidirectional app with stateles components']]
+    },'The raise of dumb components']]
 }
