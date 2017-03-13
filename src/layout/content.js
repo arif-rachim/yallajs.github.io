@@ -1,10 +1,28 @@
 var icon = $inject('components/ui-icon');
+var browserSize = $inject('layout/browser-size');
 function $render() {
+    debugger;
+    var videoWidth = browserSize.width() * 0.8;
+    var videoHeight = (videoWidth / 560 ) * 315;
     return ['div', {
         style: {
             fontSize : '32px',
         }
     },
+        ['div',{
+            style : {
+                marginTop : '10px',
+                position : 'relative',
+                overflow : 'hidden',
+                textAlign : 'center'
+            }
+        },['iframe',{
+            width : videoWidth,
+            height : videoHeight,
+            src : 'https://www.youtube.com/embed/9QIR2DdwBnM',
+            frameborder : '0',
+            allowfullscreen : true
+        }]],
         ['div', {
             style: containerStyle('row')
         }, ['div', {
