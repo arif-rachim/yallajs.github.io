@@ -33,7 +33,7 @@ function $render() {
         }, ['iframe', {
             width: videoWidth,
             height: videoHeight,
-            src: 'https://www.youtube.com/embed/ul_GNb6NHl0',
+            src: 'https://www.youtube.com/embed/Ab6_tfH283c',
             frameborder: '0',
             allowfullscreen: true
         }]],
@@ -53,7 +53,7 @@ function $render() {
             ['iframe', {
                 width: videoWidth,
                 height: videoHeight,
-                src: 'https://www.youtube.com/embed/9QIR2DdwBnM',
+                src: 'https://www.youtube.com/embed/aXBFOM89xVI',
                 frameborder: '0',
                 allowfullscreen: true
             }]
