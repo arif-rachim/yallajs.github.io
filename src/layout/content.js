@@ -1,7 +1,6 @@
 var icon = $inject('components/ui-icon');
 var browserSize = $inject('layout/browser-size');
 function $render() {
-    debugger;
     var videoWidth = browserSize.width() * 0.8;
     videoWidth = videoWidth > 800 ? 800 : videoWidth;
     var videoHeight = (videoWidth / 560 ) * 315;
@@ -14,7 +13,7 @@ function $render() {
             style: containerStyle('row')
         }, ['div', {
             style: contentStyle(true)
-        }, ['div', 'Yallajs is a javascript framework for building scalable HTML 5 application. ' +
+        }, ['div', 'Yallajs! is a javascript framework for building scalable HTML 5 application. ' +
         'Yallajs uses the concept of stateless component combined with a unidirectional state container to aim scalable javascript application. ' +
         'Yallajs equipped with module management and routing management out of the box. By using Incremental ' +
         'DOM instead of Virtual DOM, yallajs left small memory footprint and still achieve good performance.']]],
@@ -35,6 +34,7 @@ function $render() {
             height: videoHeight,
             src: 'https://www.youtube.com/embed/Ab6_tfH283c',
             frameborder: '0',
+            scrolling: 'no',
             allowfullscreen: true
         }]],
         ['div', {
@@ -55,6 +55,7 @@ function $render() {
                 height: videoHeight,
                 src: 'https://www.youtube.com/embed/aXBFOM89xVI',
                 frameborder: '0',
+                scrolling: 'no',
                 allowfullscreen: true
             }]
         ],
