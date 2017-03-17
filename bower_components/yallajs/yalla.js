@@ -11,7 +11,7 @@
  */
 
 var yalla = (function () {
-
+    "use strict";
     var mixin = function (destObject, sourceClass) {
         var props = Object.keys(sourceClass.prototype);
         for (var i = 0; i < props.length; i++) {
@@ -75,35 +75,299 @@ var yalla = (function () {
     yalla.loader = (function (context) {
         context._promisesToResolve = {};
 
-        var loadScript = function (path) {
+        var loadScript = function (uri) {
+            var path = uri;
+            if (path.indexOf('@') == 0) {
+                path = path.substr(1, path.length) + '.js';
+            } else {
+                path = path + '.html';
+            }
+
+            function pullOutChildren(element) {
+                var result = [];
+                if (!element.children) {
+                    return result;
+                }
+                for (var i = 0; i < element.children.length; i++) {
+                    var attributes = element.children[i].attributes;
+                    for (var j = 0; j < attributes.length; j++) {
+                        var attribute = attributes[j];
+                        if (attribute.name == 'value') {
+                            result.push(attribute.value);
+                        }
+                    }
+                    result = result.concat(pullOutChildren(element.children[i]));
+                }
+                return result;
+            }
 
             function lookDependency(responseText) {
-                var injectText = "$inject(";
-                var position = 0;
-                var dependency = [];
-                while ((position = responseText.indexOf(injectText, position + 1)) > 0) {
-                    var closingIndex = responseText.indexOf(")", position);
-                    var dep = responseText.substring(position + injectText.length, closingIndex).split(",")[0].replace(/['|"]/g, '');
-                    dependency.push(dep);
-                }
+                var dependenciesRaw = responseText.match(/\$inject\(.*?\)/g) || [];
+                var dependency = dependenciesRaw.map(function (dep) {
+                    return dep.substring('$inject("'.length, dep.length - 2);
+                });
+                dependenciesRaw = responseText.match(/<injec.*?>/g) || [];
+                var doc = document.createElement('div');
+                doc.innerHTML = dependenciesRaw.join('');
+                dependency = dependency.concat(pullOutChildren(doc));
                 return dependency;
             }
 
 
-            function executeScript(responseText, path) {
+            function generateEvalStringForJS(responseText, path) {
                 var evalString = "";
                 if (responseText.indexOf('$render') > 0) {
                     evalString = "(function($inject)" +
-                        "{\n//" + path + "\n" +
-                        "\n\n" + responseText + ";\n\n" +
+                        "{\n//" + path + "------------------------------------------------------------\n" +
+                        "" + responseText + ";\n//--------------------------------------------------------------------\n" +
                         "return $render;})" +
                         "(yalla.inject.bind(yalla));";
                 } else {
                     evalString = "(function($inject)" +
-                        "{\n//" + path + "\nvar $export = {};" +
-                        "\n\n" + responseText + ";\n\n" +
+                        "{\n//" + path + "-------------------------------------------------------------\nvar $export = {};" +
+                        "" + responseText + ";\n//--------------------------------------------------------------------\n" +
                         "return $export;})" +
                         "(yalla.inject.bind(yalla));";
+                }
+                return evalString;
+            }
+
+            function removeItemIfItsEmptyString(array) {
+                return array.filter(function (item) {
+                    return item && item !== '';
+                }).map(function (item) {
+                    if (item.constructor.name === 'Array') {
+                        return removeItemIfItsEmptyString(item);
+                    }
+                    return item;
+                });
+            }
+
+            function replaceBracket(string) {
+
+                return (string.match(/{.*?}/g) || []).reduce(function (text, match) {
+                    var newMatch = '"+(' + match.substring(1, match.length - 1) + ')+"';
+                    return text.replace(match, newMatch);
+                }, string);
+            }
+
+            function replaceBracketWithExpression(array) {
+                return array.map(function (item) {
+                    if (typeof item == 'string') {
+                        return replaceBracket(item);
+                    }
+                    if (typeof item == 'object') {
+                        if (item.constructor.name == 'Array') {
+                            return replaceBracketWithExpression(item);
+                        } else {
+                            for (var key in item) {
+                                item[key] = replaceBracket(item[key]);
+                            }
+                            return item;
+                        }
+                    }
+                    return item;
+                });
+            }
+
+            function markTagIfItsVariable(variables, array) {
+                return array.map(function (item, index) {
+                    if (index == 0 && typeof item == 'string') {
+                        if (item in variables) {
+                            return "#@" + variables[item] + "@#";
+                        }
+                    }
+                    if (typeof item == 'object' && item.constructor.name == 'Array') {
+                        return markTagIfItsVariable(variables, item);
+                    }
+                    return item;
+                });
+            }
+
+            function checkForDataChildrenAndPatchToSibling(array) {
+                var hasChildrenFlag = false;
+                array.forEach(function (item) {
+                    if (typeof item == 'object' && item.constructor.name != 'Array') {
+                        if ('data-$children' in item) {
+                            hasChildrenFlag = true;
+                        }
+                        delete item['data-$children'];
+                    }
+                    if (typeof item == 'object' && item.constructor.name == 'Array') {
+                        checkForDataChildrenAndPatchToSibling(item);
+                    }
+                });
+                if (hasChildrenFlag) {
+                    array.push('$props.$children');
+                }
+                return array;
+            }
+
+            function checkForForEachAndPatchToSibling(array) {
+                var hasForEach = false;
+                var forEachValue = "";
+                array.forEach(function (item) {
+                    if (typeof item == 'object' && item.constructor.name != 'Array') {
+                        if ('foreach' in item) {
+                            hasForEach = true;
+                            forEachValue = item.foreach;
+                        }
+                    }
+                    if (typeof item == 'object' && item.constructor.name == 'Array') {
+                        checkForForEachAndPatchToSibling(item);
+                    }
+                });
+                if (hasForEach) {
+                    array.push('$foreach:' + forEachValue.trim());
+                }
+                return array;
+            }
+
+            function checkForStyleAndAppendElementName(array, path) {
+
+                return array.map(function (item, index, array) {
+
+                    if (index > 0 && typeof item == 'string' && array[0] == 'style') {
+                        var matches = item.match(/\s.*?\{/g);
+                        item = matches.reduce(function (text, match, index, array) {
+                            var trimmedMatch = match.trim();
+                            if(trimmedMatch.indexOf('root')<0){
+                                trimmedMatch = 'root '+trimmedMatch;
+                            }
+                            var rootSelector = '[element="' + path + '"]';
+                            trimmedMatch = trimmedMatch.replace('root',rootSelector);
+                            var newText = '\n ' + trimmedMatch;
+                            return text.replace(match, newText);
+                        }, item);
+                        return item;
+                        // lets process the item
+                    }
+
+                    if (typeof item == 'object' && item.constructor.name == 'Array') {
+                        return checkForStyleAndAppendElementName(item, path)
+                    }
+
+                    return item;
+                });
+            }
+
+
+            function updateScriptForChildrenTag(script) {
+                var propsChildren = script.match(/"\$props\.\$children"/g) || [];
+                script = propsChildren.reduce(function (text, match) {
+                    var positionOfMatchItem = text.indexOf(match);
+                    var endIndexOfPropsChildren = text.indexOf("]", positionOfMatchItem);
+                    var beginComma = script.substring(0, positionOfMatchItem).lastIndexOf(",");
+                    text = text.substring(0, beginComma) + '].concat($props.$children)' + text.substring(endIndexOfPropsChildren + 1, script.length);
+                    return text;
+                }, script);
+                return script;
+
+            }
+
+            function updateScriptForForeachTag(script) {
+                var forEachAttributes = script.match(/"\$foreach:.*?"/g) || [];
+                script = forEachAttributes.reduce(function (text, forEachAttr) {
+                    var forEachAttrIndex = text.indexOf(forEachAttr);
+                    // lets find last comma
+                    var firstClosingBracketAfterForEachAttrIndex = text.indexOf(']', forEachAttrIndex);
+
+                    var forEachArraySource = forEachAttr.substring(forEachAttr.indexOf(" in ") + 4, forEachAttr.length - 1);
+                    var forEachItem = forEachAttr.substring('"$foreach:'.length, forEachAttr.indexOf(" in "));
+
+                    var endOfBracket = text.substring(0, forEachAttrIndex).lastIndexOf(",");
+                    var forEachExpression = forEachAttr.substring(forEachAttr.indexOf(":") + 1, forEachAttr.length - 1);
+                    var forEachString = '"foreach": "' + forEachExpression + '"';
+                    var beginOfTag = text.substring(0, forEachAttrIndex).lastIndexOf(forEachString);
+                    var startOfBracket = text.indexOf("[", beginOfTag);
+                    var childExpression = text.substring(startOfBracket, endOfBracket);
+
+                    var beginComma = text.substring(0, startOfBracket).lastIndexOf(",");
+
+                    text = text.substring(0, beginComma) + '].concat(' + forEachArraySource + '.map(function(' + forEachItem + '){ console.log(' + forEachItem + ');return  ' + childExpression + ';}))' + text.substring(firstClosingBracketAfterForEachAttrIndex + 1, script.length);
+                    text = text.replace(forEachString, '');
+                    return text;
+                }, script);
+                return script;
+            }
+
+
+            function generateEvalStringForHTML(responseText, path) {
+                // this line we are cleaning the text wich have immediate closing bracket
+                responseText = (responseText.match(/<.*?\/>/g) || []).reduce(function (text, match, index, array) {
+                    var emptyStringIndex = match.indexOf(" ");
+                    if (emptyStringIndex < 0) {
+                        emptyStringIndex = match.indexOf("/>");
+                    }
+                    var tagName = match.substring(1, emptyStringIndex);
+                    if (tagName == 'br') {
+                        return text;
+                    }
+                    var newText = match.substring(0, match.length - 2) + '></' + tagName + '>';
+                    return text.replace(match, newText);
+                }, responseText);
+                var jsonMl = yalla.jsonMlFromText(responseText);
+
+                jsonMl = checkForDataChildrenAndPatchToSibling(jsonMl);
+                jsonMl = checkForForEachAndPatchToSibling(jsonMl);
+                jsonMl = checkForStyleAndAppendElementName(jsonMl, path.replace(/\//g, '.').substring(0,path.lastIndexOf('.')));
+
+                // here we convert to JSONML then we stringify them. We need to do this to get consistent format of the code
+                var resultString = JSON.stringify(jsonMl);
+
+                // take out all var
+                var vars = resultString.match(/\["var".*?}]/g) || [];
+                var injects = resultString.match(/\["inject".*?}]/g) || [];
+
+                var varsJson = JSON.parse('[' + vars.join(',') + ']');
+                var injectsJson = JSON.parse('[' + injects.join(',') + ']');
+
+                var variablesJson = varsJson.reduce(function (result, _var) {
+                    var item = _var[1];
+                    var value = item.value;
+                    if (value.indexOf('{') == 0) {
+                        value = '(' + value.substring(1, value.length - 1) + ')';
+                    } else {
+                        value = '"' + replaceBracket(value) + '"';
+                    }
+                    result.text += 'var ' + item.name + ' = ' + value + ';\n';
+
+                    var name = item.name.replace(/([A-Z]+)/g, ' $1').trim().replace(/\s/g, '-').toLowerCase();
+                    result.variables[name] = item.name;
+                    return result;
+                }, {text: '', variables: {}});
+
+                variablesJson = injectsJson.reduce(function (result, _var) {
+                    var item = _var[1];
+                    var value = '$inject("' + item.value + '")';
+                    result.text += 'var ' + item.name + ' = ' + value + ';\n';
+                    var name = item.name.replace(/([A-Z]+)/g, ' $1').trim().replace(/\s/g, '-').toLowerCase();
+                    result.variables[name] = item.name;
+                    return result;
+                }, variablesJson);
+                var arrayToBeCleanedString = vars.concat(injects).reduce(function (text, match) {
+                    return text.replace(match, '""');
+                }, resultString);
+                var arrayToBeCleaned = JSON.parse(arrayToBeCleanedString);
+                var afterVarsRemoved = markTagIfItsVariable(variablesJson.variables, replaceBracketWithExpression(removeItemIfItsEmptyString(arrayToBeCleaned)));
+                //later we need to compose the vars again to script
+                var script = JSON.stringify(afterVarsRemoved, false, '  ');
+                script = script.replace(/\\"\+\(/g, '"+(').replace(/\)\+\\"/g, ')+"');
+                script = script.replace(/": ""\+\(/g, '":(').replace(/\)\+""/g, ')');
+                script = script.replace(/"#@/g, '').replace(/@#"/g, '');
+                script = script.replace(/"sub-view"/g, '$props.$subView');
+                script = updateScriptForChildrenTag(script);
+                script = updateScriptForForeachTag(script);
+
+                return generateEvalStringForJS(variablesJson.text + 'function $render($props){ return ' + script + '; }', path);
+            }
+
+            function executeScript(responseText, path) {
+                var evalString = "";
+                if (path.indexOf(".html") >= 0) {
+                    evalString = generateEvalStringForHTML(responseText, path);
+                } else {
+                    evalString = generateEvalStringForJS(responseText, path);
                 }
                 return eval(evalString);
             }
@@ -143,7 +407,7 @@ var yalla = (function () {
                     if (path in context && (typeof context[path] !== 'undefined')) {
                         resolve(context[path]);
                     } else {
-                        loadScript(path + ".js").then(function (object) {
+                        loadScript(path).then(function (object) {
                             context[path] = object;
                             resolve(object);
                             delete context._promisesToResolve[path];
@@ -162,14 +426,14 @@ var yalla = (function () {
     yalla.inject = function (path) {
         var dependencyObject = this.globalContext[path];
         if (typeof dependencyObject === 'function') {
-            var $render = dependencyObject;
+            var $render = dependencyObject
             var elementName = path.replace(/\//g, '.');
 
-            function YallaComponent(attributes) {
+            var yallaComponent = function (attributes) {
                 attributes = attributes || {};
                 var elements = $render(attributes);
-                if(!elements){
-                    throw new Error('There is no return in $render function "'+path+'", did you forget the return keyword ?');
+                if (!elements) {
+                    throw new Error('There is no return in $render function "' + path + '", did you forget the return keyword ?');
                 }
                 var prop = elements[1];
                 if (typeof prop !== 'object' || prop.constructor === Array) {
@@ -180,11 +444,11 @@ var yalla = (function () {
                 prop.id = attributes.id;
                 prop.$storeTobeAttachedToDom = attributes.$storeTobeAttachedToDom;
                 return elements;
-            }
+            };
 
-            YallaComponent.prototype.elementName = elementName;
-            YallaComponent.prototype.path = path;
-            return YallaComponent;
+            yallaComponent.prototype.elementName = elementName;
+            yallaComponent.prototype.path = path;
+            return yallaComponent;
         } else {
             return dependencyObject;
         }
@@ -980,6 +1244,7 @@ var yalla = (function () {
                 elementClose(tagName);
             }
         }
+
         return parse
     })();
 
@@ -1049,13 +1314,13 @@ var yalla = (function () {
                         params.$children = [];
                         params.$store = function (reducer, state, middleware) {
                             var currentPointer = yalla.idom.currentPointer();
-                            if(currentPointer && DATA_PROP in currentPointer){
-                                if(currentPointer[DATA_PROP].attrs.element == params.$elementName && currentPointer.$store){
+                            if (currentPointer && DATA_PROP in currentPointer) {
+                                if (currentPointer[DATA_PROP].attrs.element == params.$elementName && currentPointer.$store) {
                                     return currentPointer.$store;
-                                }else if(currentPointer.children && currentPointer.children.length == 1){
+                                } else if (currentPointer.children && currentPointer.children.length == 1) {
                                     // kita harus tambahin check kalau dia levelnya body
                                     var child = currentPointer.children[0];
-                                    if(child[DATA_PROP] && child[DATA_PROP].attrs.element == params.$elementName && child.$store){
+                                    if (child[DATA_PROP] && child[DATA_PROP].attrs.element == params.$elementName && child.$store) {
                                         return child.$store;
                                     }
                                 }
@@ -1200,6 +1465,219 @@ var yalla = (function () {
         }
     };
 
+    yalla.jsonMlFromText = (function () {
+
+        var addChildren = function (/*DOM*/ elem, /*function*/ filter, /*JsonML*/ jml) {
+            if (elem.hasChildNodes()) {
+                for (var i = 0; i < elem.childNodes.length; i++) {
+                    var child = elem.childNodes[i];
+                    child = fromHTML(child, filter);
+                    if (child) {
+                        jml.push(child);
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
+
+        /**
+         * @param {Node} elem
+         * @param {function} filter
+         * @return {array} JsonML
+         */
+        var fromHTML = function (elem, filter) {
+            if (!elem || !elem.nodeType) {
+                // free references
+                return (elem = null);
+            }
+
+            var i, jml;
+            switch (elem.nodeType) {
+                case 1:  // element
+                case 9:  // document
+                case 11: // documentFragment
+                    jml = [elem.tagName || ''];
+
+                    var attr = elem.attributes,
+                        props = {},
+                        hasAttrib = false;
+
+                    for (i = 0; attr && i < attr.length; i++) {
+                        if (attr[i].specified) {
+                            if (attr[i].name === 'style') {
+                                props.style = elem.style.cssText || attr[i].value;
+                            } else if ('string' === typeof attr[i].value) {
+                                props[attr[i].name] = attr[i].value;
+                            }
+                            hasAttrib = true;
+                        }
+                    }
+                    if (hasAttrib) {
+                        jml.push(props);
+                    }
+
+                    var child;
+
+                    switch (jml[0].toLowerCase()) {
+                        case 'frame':
+                        case 'iframe':
+                            try {
+                                if ('undefined' !== typeof elem.contentDocument) {
+                                    // W3C
+                                    child = elem.contentDocument;
+                                } else if ('undefined' !== typeof elem.contentWindow) {
+                                    // Microsoft
+                                    child = elem.contentWindow.document;
+                                } else if ('undefined' !== typeof elem.document) {
+                                    // deprecated
+                                    child = elem.document;
+                                }
+
+                                child = fromHTML(child, filter);
+                                if (child) {
+                                    jml.push(child);
+                                }
+                            } catch (ex) {
+                            }
+                            break;
+                        case 'style':
+                            child = elem.styleSheet && elem.styleSheet.cssText;
+                            if (child && 'string' === typeof child) {
+                                // unwrap comment blocks
+                                child = child.replace('<!--', '').replace('-->', '');
+                                jml.push(child);
+                            } else if (elem.hasChildNodes()) {
+                                for (i = 0; i < elem.childNodes.length; i++) {
+                                    child = elem.childNodes[i];
+                                    child = fromHTML(child, filter);
+                                    if (child && 'string' === typeof child) {
+                                        // unwrap comment blocks
+                                        child = child.replace('<!--', '').replace('-->', '');
+                                        jml.push(child);
+                                    }
+                                }
+                            }
+                            break;
+                        case 'input':
+                            addChildren(elem, filter, jml);
+                            child = (elem.type !== 'password') && elem.value;
+                            if (child) {
+                                if (!hasAttrib) {
+                                    // need to add an attribute object
+                                    jml.shift();
+                                    props = {};
+                                    jml.unshift(props);
+                                    jml.unshift(elem.tagName || '');
+                                }
+                                props.value = child;
+                            }
+                            break;
+                        case 'textarea':
+                            if (!addChildren(elem, filter, jml)) {
+                                child = elem.value || elem.innerHTML;
+                                if (child && 'string' === typeof child) {
+                                    jml.push(child);
+                                }
+                            }
+                            break;
+                        default:
+                            addChildren(elem, filter, jml);
+                            break;
+                    }
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                case 3: // text node
+                case 4: // CDATA node
+                    var str = String(elem.nodeValue);
+                    // free references
+                    elem = null;
+                    return str;
+                case 10: // doctype
+                    jml = ['!'];
+                    var type = ['DOCTYPE', (elem.name || 'html').toLowerCase()];
+
+                    if (elem.publicId) {
+                        type.push('PUBLIC', '"' + elem.publicId + '"');
+                    }
+
+                    if (elem.systemId) {
+                        type.push('"' + elem.systemId + '"');
+                    }
+
+                    jml.push(type.join(' '));
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                case 8: // comment node
+                    if ((elem.nodeValue || '').indexOf('DOCTYPE') !== 0) {
+                        // free references
+                        elem = null;
+                        return null;
+                    }
+
+                    jml = ['!',
+                        elem.nodeValue];
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                default: // etc.
+                    // free references
+                    return (elem = null);
+            }
+        };
+
+        /**
+         * @param {string} html HTML text
+         * @param {function} filter
+         * @return {array} JsonML
+         */
+        return function (html, filter) {
+            filter = filter || function (jml, el) {
+                    jml.splice(0, 1);
+                    return [el.localName].concat(jml.filter(function (item) {
+                        if (typeof item === 'string') {
+                            return item.trim().length > 0
+                        }
+                        return true;
+                    }));
+                };
+
+            var elem = document.createElement('div');
+            elem.innerHTML = html;
+            var jml = fromHTML(elem, filter);
+            // free references
+            elem = null;
+
+            if (jml.length === 2) {
+                return jml[1];
+            }
+
+            // make wrapper a document fragment
+            jml[0] = '';
+            return jml;
+        };
+    })();
+
     return yalla;
 })();
 
@@ -1211,7 +1689,7 @@ function scriptStart() {
             if (script.getAttribute('src').indexOf('yalla.js') >= 0) {
                 var main = script.getAttribute('data-main');
                 var base = script.getAttribute('data-base');
-                if(main && base){
+                if (main && base) {
                     yalla.start(main, document.getElementsByName('body')[0], base);
                     return true;
                 }

@@ -1,0 +1,111 @@
+<div class="content">
+    <inject name="clock" value="site/clock"></inject>
+    <style>
+        root.content{
+            max-width: 1200px;
+            text-align: center;
+            margin-top: 1em;
+            margin: auto;
+        }
+        .features {
+            font-size: 1.5em;
+            font-style: italic;
+            margin-bottom:1.5em;
+        }
+        .line {
+            margin-top:1em;
+            margin-bottom:0.4em;
+            border-bottom:1px solid #CCCCCC;
+        }
+        section {
+            text-align: left;
+        }
+    </style>
+    <div class="line"></div>
+    <div class="features">Build clean Javascript apps today</div>
+    <h3>Untuk Management</h3>
+    <section>
+        <h4>Cukup satu library untuk memulai membangun aplikasi anda</h4>
+        Membangun aplikasi HTML5 membutuhkan banyak library misalnya,library untuk memanage module, library untuk
+        membangun komponen, library untuk routing, library untuk memanage state.
+        Anda tidak lagi membutuhkan library library yg terpisah, karena semua library diatas anda dapatkan dari yallajs.
+    </section>
+    <section>
+        <h4>Ringan dan cepat</h4>
+        Walaupun sudah dilengkapi dengan berbagai macam tools, besarnya yallajs tidak lebih dari 20kb. Ini dikarenakan
+        yallajs ditulis langsung dan tidak menggunakan code generation atau transpiler.
+    </section>
+    <section>
+        <h4>Fokus ke aplikasi yang dibangun</h4>
+        Yallajs membantu anda untuk memulai membangun aplikasi HTML 5 dengan cepat dan mudah. Anda cukup memasukkan
+        yallajs script ke index html dan kemudian anda dapat memulai membangun aplikasi anda.
+    </section>
+    <section>
+        <h4>Kode yang bersih membantu anda dalam jangka panjang</h4>
+        Yallajs membantu anda untuk membangun aplikasi dengan bersih, dengan menghindari adanya kode javascript di html,
+        ataupun kode html didalam javascript. Yallajs mengharuskan developer anda untuk mengikuti aturan tersebut,
+        karena yallajs tidak akan memproses javascript yang berasal dari html.
+    </section>
+    <section>
+        <h4>Sederhana dan mudah dipelajari</h4>
+        Yallajs tidak membutuhkan programmer anda untuk memahami konsep baru, jika programmer anda sudah memahami html,
+        css dan javascript, mereka dengan mudah akan dapat memulai membangun aplikasi berbasi yallajs.
+    </section>
+
+    <h3>Untuk Front End Arsitek</h3>
+    <section>
+        <h4>Stateless functional component</h4>
+        Yang terjadi dibelakang adalah transformasi html component menjadi stateless functional component. Stateless
+        functional komponen sangat ringan karena tidak adanya state dan lifecycle di komponen tersebut. Dengan tidak adanya
+        state dan lifecycle, maka kita mendapatkan beberapa keuntungan seperti mudah diprediksi behaviour dari komponen
+        tersebut, dan mudah ditest.
+    </section>
+    <section>
+        <h4>Unidirectional State</h4>
+        Karena yallajs menggunakan stateless komponen, maka yallajs dilengkapi dengan state container. State container
+        yang dipakai oleh yallajs mengambil konsep Redux. Dimana data akan diproses secara unidirectional, sehingga
+        mudah bagi developer untuk memprediksi atau men-test state dari aplikasi.
+    </section>
+    <section>
+        <h4>Incremental DOM</h4>
+        Yalla js menggunakan incremental dom dalam melakukan proses update DOM. Dengan menggunakan Incremental DOM, yalla
+        js tetap dapat menghasilkan aplikasi dengan kecepatan yang baik, tanpa harus mengorbankan memory usage.
+    </section>
+
+    <section>
+        <h4>Component Routing</h4>
+        Komponen yang dibangun diatas yallajs dapat langsung dipanggil dari browser address bar. Dengan demikian, komponen dapat
+        berfungsi sebagai View (jika langsung dipanggil dari address bar) atau sebagai subcomponent dari komponen yang
+        lebih besar.
+    </section>
+
+    <section>
+        <h4>Mustache Expression</h4>
+        Yallajs menggunkan mustache expression untuk membantu templating di html. Akan tetapi mustache expression yallajs
+        sangat sederhana, karena expression tersebut hanya digunakan untuk memanggil function atau variable.
+    </section>
+
+    <h3>Untuk Developer</h3>
+    <section>
+        <h4>Kabar baik, akhirnya ada javascript komponen yang berbasis HTML</h4>
+        Jika anda terbiasa membangun komponen dengan kode html yang dicampur kedalam javascript, anda pasti mengerti
+        susahnya untuk mengintegrasikan hasil kerja dari team designer kedalam aplikasi anda.
+    </section>
+    <section>
+        <h4>Logic code anda tersimpan dengan aman</h4>
+        Jika anda terbiasa memanggil element melalui id (atau refs), anda pasti mengerti resiko dari nullpointer excepction,
+        karena element anda belum siap ketika anda panggil.
+        Apabila anda menggunakan two-way binding, maka anda juga mengerti apabila aplikasi anda melakukan repaint
+        beberapa kali karena adanya event yang tertrigger akibat two way binding tersebut.
+        Dengan yallajs, logic dari kode anda tersimpan dengan baik didalam reducer dan middleware. Sehingga anda dapet
+        memonitor behaviour dari aplikasi anda dengan mudah.
+    </section>
+    <section>
+        <h4>State disimpan di Store, logic disimpan di Reducer dan Middleware</h4>
+        Jika anda memiliki pengalaman membangun aplikasi yang besar, anda pasti sadar butuhnya sebuah state container untuk
+        memanage state dari aplikasi anda. Akan tetapi tetapi mengapa harus menunggu sampai aplikasi anda besar.
+        Anda sudah dapat memanfaatkan benefit dari state container walaupun aplikasi anda kecil.
+
+        Jika anda belum terbiasa menggunakan state container, silahkan merefer ke Redux, karena yallajs mengambil konsep redux.
+    </section>
+</div>
