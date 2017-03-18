@@ -1,0 +1,14 @@
+<div>
+    <inject name="mediator" value="@example/todo"></inject>
+    <inject name="itemRenderer" value="example/todo/todo-item-renderer"></inject>
+    <form onsubmit="{mediator.onSubmit(e)}">
+        <input type="text" name="addText">
+        <input type="submit" value="add">
+    </form>
+    <div foreach="item,index in mediator.getStoreState().todos">
+        <item-renderer label="{item.todo}">
+            <button onclick="{mediator.removeItem(index)}">Remove</button>
+        </item-renderer>
+    </div>
+
+</div>
