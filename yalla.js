@@ -1,1 +1,1732 @@
-function scriptStart(){if("complete"==document.readyState)for(var e=document.getElementsByTagName("script"),t=0;t<e.length;t++){var n=e[t];if(n.getAttribute("src").indexOf("yalla.js")>=0){var r=n.getAttribute("data-main"),a=n.getAttribute("data-base");if(r&&a)return yalla.start(r,document.getElementsByName("body")[0],a),!0;throw new Error("Please specify data-main and data-base in the script tag")}}return!1}function startYalla(){scriptStart()||setTimeout(function(){startYalla()},0)}var yalla=function(){"use strict";function renderChain(e){e.reverse().reduce(function(e,t,n,r){return e.then(function(e){var a=t.split(":"),o=a[0];a.splice(0,1);var i=a.reduce(function(e,t){var n=t.split("=");return e[n[0]]=n[1],e},{});return new Promise(function(t){var a=o.split(".").join("/");yalla.loader(a).then(function(){i.$view=yalla.inject(a),i.$subView=e,i.$elementName=a.split("/").join("."),i.$children=[],i.$store=function(e,t,n){var r=yalla.idom.currentPointer();if(r&&DATA_PROP in r){if(r[DATA_PROP].attrs.element==i.$elementName&&r.$store)return r.$store;if(r.children&&1==r.children.length){var a=r.children[0];if(a[DATA_PROP]&&a[DATA_PROP].attrs.element==i.$elementName&&a.$store)return a.$store}}return i.$storeTobeAttachedToDom=i.$storeTobeAttachedToDom||yalla.createStore(e,t,n),i.$storeTobeAttachedToDom},n==r.length-1&&(yalla.uiRoot=i,yalla.markAsDirty()),t(i)})})})},Promise.resolve(!1))}var mixin=function(e,t){for(var n=Object.keys(t.prototype),r=0;r<n.length;r++)"function"==typeof e?e.prototype[n[r]]=t.prototype[n[r]]:n[r]in e||(e[n[r]]=t.prototype[n[r]]);return e},merge=function(e,t){for(var n in t)t.hasOwnProperty(n)&&e[n]!==t[n]&&(e[n]=t[n]);return e},clone=function(e){var t;if(null==e||"object"!=typeof e)return e;if(e instanceof Date)return t=new Date,t.setTime(e.getTime()),t;if(e instanceof Array){t=[];for(var n=0,r=e.length;r>n;n++)t[n]=clone(e[n]);return t}if(e instanceof Object){t={};for(var a in e)e.hasOwnProperty(a)&&(t[a]=clone(e[a]));return t}throw new Error("Unable to copy obj! Its type isn't supported.")},yalla={};yalla.mixin=mixin,yalla.merge=merge,yalla.clone=clone,yalla.baselib="libs",yalla.globalContext={};var DATA_PROP="$domData";return yalla.loader=function(context){context._promisesToResolve={};var loadScript=function(uri){function pullOutChildren(e){var t=[];if(!e.children)return t;for(var n=0;n<e.children.length;n++){for(var r=e.children[n].attributes,a=0;a<r.length;a++){var o=r[a];"value"==o.name&&t.push(o.value)}t=t.concat(pullOutChildren(e.children[n]))}return t}function lookDependency(e){var t=e.match(/\$inject\(.*?\)/g)||[],n=t.map(function(e){return e.substring('$inject("'.length,e.length-2)});t=e.match(/<injec.*?>/g)||[];var r=document.createElement("div");return r.innerHTML=t.join(""),n=n.concat(pullOutChildren(r))}function generateEvalStringForJS(e,t){var n="";return n=e.indexOf("$render")>0?"(function($inject){\n//"+t+"------------------------------------------------------------\n"+e+";\n//--------------------------------------------------------------------\nreturn $render;})(yalla.inject.bind(yalla));":"(function($inject){\n//"+t+"-------------------------------------------------------------\nvar $export = {};"+e+";\n//--------------------------------------------------------------------\nreturn $export;})(yalla.inject.bind(yalla));"}function removeItemIfItsEmptyString(e){return e.filter(function(e){return e&&""!==e}).map(function(e){return"Array"===e.constructor.name?removeItemIfItsEmptyString(e):e})}function replaceBracket(e){return(e.match(/{.*?}/g)||[]).reduce(function(e,t){var n='"+('+t.substring(1,t.length-1)+')+"';return e.replace(t,n)},e)}function replaceBracketWithExpression(e){return e.map(function(e){if("string"==typeof e)return replaceBracket(e);if("object"==typeof e){if("Array"==e.constructor.name)return replaceBracketWithExpression(e);for(var t in e)e[t]=replaceBracket(e[t]);return e}return e})}function markTagIfItsVariable(e,t){return t.map(function(t,n){return 0==n&&"string"==typeof t&&t in e?"#@"+e[t]+"@#":"object"==typeof t&&"Array"==t.constructor.name?markTagIfItsVariable(e,t):t})}function checkForDataChildrenAndPatchToSibling(e){var t=!1;return e.forEach(function(e){"object"==typeof e&&"Array"!=e.constructor.name&&("data-$children"in e&&(t=!0),delete e["data-$children"]),"object"==typeof e&&"Array"==e.constructor.name&&checkForDataChildrenAndPatchToSibling(e)}),t&&e.push("$props.$children"),e}function checkForForEachAndPatchToSibling(e){var t=!1,n="";return e.forEach(function(e){"object"==typeof e&&"Array"!=e.constructor.name&&"foreach"in e&&(t=!0,n=e.foreach),"object"==typeof e&&"Array"==e.constructor.name&&checkForForEachAndPatchToSibling(e)}),t&&e.push("$foreach:"+n.trim()),e}function checkForStyleAndAppendElementName(e,t){return e.map(function(e,n,r){if(n>0&&"string"==typeof e&&"style"==r[0]){var a=e.match(/\s.*?\{/g);return e=a.reduce(function(e,n,r,a){var o=n.trim();o.indexOf("root")<0&&(o="root "+o);var i='[element="'+t+'"]';o=o.replace("root",i);var l="\n "+o;return e.replace(n,l)},e)}return"object"==typeof e&&"Array"==e.constructor.name?checkForStyleAndAppendElementName(e,t):e})}function updateScriptForChildrenTag(e){var t=e.match(/"\$props\.\$children"/g)||[];return e=t.reduce(function(t,n){var r=t.indexOf(n),a=t.indexOf("]",r),o=e.substring(0,r).lastIndexOf(",");return t=t.substring(0,o)+"].concat($props.$children)"+t.substring(a+1,e.length)},e)}function updateScriptForForeachTag(e){var t=e.match(/"\$foreach:.*?"/g)||[];return e=t.reduce(function(t,n){var r=t.indexOf(n),a=t.indexOf("]",r),o=n.substring(n.indexOf(" in ")+4,n.length-1),i=n.substring('"$foreach:'.length,n.indexOf(" in ")),l=t.substring(0,r).lastIndexOf(","),c=n.substring(n.indexOf(":")+1,n.length-1),u='"foreach": "'+c+'"',s=t.substring(0,r).lastIndexOf(u),f=t.indexOf("[",s),d=t.substring(f,l),p=t.substring(0,f).lastIndexOf(",");return t=t.substring(0,p)+"].concat("+o+".map(function("+i+"){ console.log("+i+");return  "+d+";}))"+t.substring(a+1,e.length),t=t.replace(u,"")},e)}function generateEvalStringForHTML(e,t){e=(e.match(/<.*?\/>/g)||[]).reduce(function(e,t,n,r){var a=t.indexOf(" ");0>a&&(a=t.indexOf("/>"));var o=t.substring(1,a);if("br"==o)return e;var i=t.substring(0,t.length-2)+"></"+o+">";return e.replace(t,i)},e);var n=yalla.jsonMlFromText(e);n=checkForDataChildrenAndPatchToSibling(n),n=checkForForEachAndPatchToSibling(n),n=checkForStyleAndAppendElementName(n,t.replace(/\//g,".").substring(0,t.lastIndexOf(".")));var r=JSON.stringify(n),a=r.match(/\["var".*?}]/g)||[],o=r.match(/\["inject".*?}]/g)||[],i=JSON.parse("["+a.join(",")+"]"),l=JSON.parse("["+o.join(",")+"]"),c=i.reduce(function(e,t){var n=t[1],r=n.value;r=0==r.indexOf("{")?"("+r.substring(1,r.length-1)+")":'"'+replaceBracket(r)+'"',e.text+="var "+n.name+" = "+r+";\n";var a=n.name.replace(/([A-Z]+)/g," $1").trim().replace(/\s/g,"-").toLowerCase();return e.variables[a]=n.name,e},{text:"",variables:{}});c=l.reduce(function(e,t){var n=t[1],r='$inject("'+n.value+'")';e.text+="var "+n.name+" = "+r+";\n";var a=n.name.replace(/([A-Z]+)/g," $1").trim().replace(/\s/g,"-").toLowerCase();return e.variables[a]=n.name,e},c);var u=a.concat(o).reduce(function(e,t){return e.replace(t,'""')},r),s=JSON.parse(u),f=markTagIfItsVariable(c.variables,replaceBracketWithExpression(removeItemIfItsEmptyString(s))),d=JSON.stringify(f,!1,"  ");return d=d.replace(/\\"\+\(/g,'"+(').replace(/\)\+\\"/g,')+"'),d=d.replace(/": ""\+\(/g,'":(').replace(/\)\+""/g,")"),d=d.replace(/"#@/g,"").replace(/@#"/g,""),d=d.replace(/"sub-view"/g,"$props.$subView"),d=updateScriptForChildrenTag(d),d=updateScriptForForeachTag(d),generateEvalStringForJS(c.text+"function $render($props){ return "+d+"; }",t)}function executeScript(responseText,path){var evalString="";return evalString=path.indexOf(".html")>=0?generateEvalStringForHTML(responseText,path):generateEvalStringForJS(responseText,path),eval(evalString)}var path=uri;return 0==path.indexOf("@")?path=path.substr(1,path.length)+".js":path+=".html",new Promise(function(e,t){var n=new XMLHttpRequest;n.open("GET",yalla.baselib+"/"+path),n.onreadystatechange=function(){if(4==n.readyState){var r=lookDependency(n.responseText);if(r.length>0)Promise.all(r.map(function(e){return yalla.loader(e)})).then(function(){e(executeScript(n.responseText,path))})["catch"](function(e){t(e)});else try{e(executeScript(n.responseText,path))}catch(a){t(a)}}},n.send()})};return function(e){if(e in context._promisesToResolve)return context._promisesToResolve[e];var t=new Promise(function(t,n){e in context&&"undefined"!=typeof context[e]?t(context[e]):loadScript(e).then(function(n){context[e]=n,t(n),delete context._promisesToResolve[e]})["catch"](function(t){n(t),delete context._promisesToResolve[e]})});return context._promisesToResolve[e]=t,t}}(yalla.globalContext),yalla.inject=function(e){var t=this.globalContext[e];if("function"==typeof t){var n=t,r=e.replace(/\//g,"."),a=function(t){t=t||{};var a=n(t);if(!a)throw new Error('There is no return in $render function "'+e+'", did you forget the return keyword ?');var o=a[1];return("object"!=typeof o||o.constructor===Array)&&(o={},a.splice(1,0,o)),o.element=r,o.id=t.id,o.$storeTobeAttachedToDom=t.$storeTobeAttachedToDom,a};return a.prototype.elementName=r,a.prototype.path=e,a}return t},yalla.idom=function(){function e(){}function t(e,t){this.attrs=i(),this.attrsArr=[],this.newAttrs=i(),this.staticsApplied=!1,this.key=t,this.keyMap=i(),this.keyMapValid=!0,this.focused=!1,this.nodeName=e,this.text=null}function n(){this.created=p.nodesCreated&&[],this.deleted=p.nodesDeleted&&[]}var r={},a=Object.prototype.hasOwnProperty;e.prototype=Object.create(null);var o=function(e,t){return a.call(e,t)},i=function(){return new e},l=function(e,n,r){var a=new t(n,r);return e[DATA_PROP]=a,a},c=function(e){return u(e),e[DATA_PROP]},u=function(e){if(!e[DATA_PROP]){var t=e instanceof Element,n=t?e.localName:e.nodeName,r=t?e.getAttribute("key"):null,a=l(e,n,r);if(r&&(c(e.parentNode).keyMap[r]=e),t)for(var o=e.attributes,i=a.attrs,s=a.newAttrs,f=a.attrsArr,d=0;d<o.length;d+=1){var p=o[d],h=p.name,m=p.value;i[h]=m,s[h]=void 0,f.push(h),f.push(m)}for(var v=e.firstChild;v;v=v.nextSibling)u(v)}},s=function(e,t){return"svg"===e?"http://www.w3.org/2000/svg":"foreignObject"===c(t).nodeName?null:t.namespaceURI},f=function(e,t,n,r){var a=s(n,t),o=void 0;return o=a?e.createElementNS(a,n):e.createElement(n),l(o,n,r),o},d=function(e){var t=e.createTextNode("");return l(t,"#text",null),t},p={nodesCreated:null,nodesDeleted:null};n.prototype.markCreated=function(e){this.created&&this.created.push(e)},n.prototype.markDeleted=function(e){this.deleted&&this.deleted.push(e)},n.prototype.notifyChanges=function(){this.created&&this.created.length>0&&p.nodesCreated(this.created),this.deleted&&this.deleted.length>0&&p.nodesDeleted(this.deleted)};var h=function(e){return e instanceof Document||e instanceof DocumentFragment},m=function(e,t){for(var n=[],r=e;r!==t;)n.push(r),r=r.parentNode;return n},v=function(e){for(var t=e,n=t;t;)n=t,t=t.parentNode;return n},y=function(e){var t=v(e);return h(t)?t.activeElement:null},g=function(e,t){var n=y(e);return n&&e.contains(n)?m(n,t):[]},b=function(e,t,n){for(var r=t.nextSibling,a=n;a!==t;){var o=a.nextSibling;e.insertBefore(a,r),a=o}},x=null,T=null,A=null,w=null,$=function(e,t){for(var n=0;n<e.length;n+=1)c(e[n]).focused=t},S=function(e){var t=function(t,r,a){var o=x,i=w,l=T,c=A;x=new n,w=t.ownerDocument,A=t.parentNode;var u=g(t,A);$(u,!0);var s=e(t,r,a);return $(u,!1),x.notifyChanges(),x=o,w=i,T=l,A=c,s};return t},O=S(function(e,t,n){return T=e,j(),t(n),F(),e}),k=S(function(e,t,n){var r={nextSibling:e};return T=r,t(n),e!==T&&e.parentNode&&N(A,e,c(A).keyMap),r===T?null:T}),D=function(e,t,n){var r=c(e);return t===r.nodeName&&n==r.key},E=function(e,t){if(!T||!D(T,e,t)){var n=c(A),r=T&&c(T),a=n.keyMap,o=void 0;if(t){var i=a[t];i&&(D(i,e,t)?o=i:i===T?x.markDeleted(i):N(A,i,a))}o||(o="#text"===e?d(w):f(w,A,e,t),t&&(a[t]=o),x.markCreated(o)),c(o).focused?b(A,o,T):r&&r.key&&!r.focused?(A.replaceChild(o,T),n.keyMapValid=!1):A.insertBefore(o,T),T=o}},N=function(e,t,n){e.removeChild(t),x.markDeleted(t);var r=c(t).key;r&&delete n[r]},P=function(){var e=A,t=c(e),n=t.keyMap,r=t.keyMapValid,a=e.lastChild,o=void 0;if(a!==T||!r){for(;a!==T;)N(e,a,n),a=e.lastChild;if(!r){for(o in n)a=n[o],a.parentNode!==e&&(x.markDeleted(a),delete n[o]);t.keyMapValid=!0}}},j=function(){A=T,T=null},C=function(){return T?T.nextSibling:A?A.firstChild:document.getElementsByTagName("body")[0]},I=function(){T=C()},F=function(){P(),T=A,A=A.parentNode},_=function(e,t){return I(),E(e,t),j(),A},R=function(){return F(),T},M=function(){return I(),E("#text",null),T},B=function(){return A},V=function(){return C()},L=function(){T=A.lastChild},J=I,Y={"default":"__default"},H=function(e){return 0===e.lastIndexOf("xml:",0)?"http://www.w3.org/XML/1998/namespace":0===e.lastIndexOf("xlink:",0)?"http://www.w3.org/1999/xlink":void 0},W=function(e,t,n){if(null==n)e.removeAttribute(t);else{var r=H(t);r?e.setAttributeNS(r,t,n):e.setAttribute(t,n)}},U=function(e,t,n){e[t]=n},X=function(e,t,n){t.indexOf("-")>=0?e.setProperty(t,n):e[t]=n},Z=function(e,t,n){if("string"==typeof n)e.style.cssText=n;else{e.style.cssText="";var r=e.style,a=n;for(var i in a)o(a,i)&&X(r,i,a[i])}},q=function(e,t,n){var r=typeof n;"object"===r||"function"===r?U(e,t,n):W(e,t,n)},G=function(e,t,n){var r=c(e),a=r.attrs;if(a[t]!==n){var o=z[t]||z[Y["default"]];o(e,t,n),a[t]=n}},z=i();z[Y["default"]]=q,z.style=Z;var K=3,Q=[],ee=function(e,t,n,r){var a=_(e,t),o=c(a);if(!o.staticsApplied){if(n)for(var i=0;i<n.length;i+=2){var l=n[i],u=n[i+1];G(a,l,u)}o.staticsApplied=!0}for(var s=o.attrsArr,f=o.newAttrs,d=!s.length,p=K,h=0;p<arguments.length;p+=2,h+=2){var m=arguments[p];if(d)s[h]=m,f[m]=void 0;else if(s[h]!==m)break;var u=arguments[p+1];(d||s[h+1]!==u)&&(s[h+1]=u,G(a,m,u))}if(p<arguments.length||h<s.length){for(;p<arguments.length;p+=1,h+=1)s[h]=arguments[p];for(h<s.length&&(s.length=h),p=0;p<s.length;p+=2){var l=s[p],u=s[p+1];f[l]=u}for(var v in f)G(a,v,f[v]),f[v]=void 0}return a},te=function(e,t,n){Q[0]=e,Q[1]=t,Q[2]=n},ne=function(e,t){Q.push(e),Q.push(t)},re=function(){var e=ee.apply(null,Q);return Q.length=0,e},ae=function(e){var t=R();return t},oe=function(e,t,n,r){return ee.apply(null,arguments),ae(e)},ie=function(e,t){var n=M(),r=c(n);if(r.text!==e){r.text=e;for(var a=e,o=1;o<arguments.length;o+=1){var i=arguments[o];a=i(a)}n.data=a}return n};return r.patch=O,r.patchInner=O,r.patchOuter=k,r.currentElement=B,r.currentPointer=V,r.skip=L,r.skipNode=J,r.elementVoid=oe,r.elementOpenStart=te,r.elementOpenEnd=re,r.elementOpen=ee,r.elementClose=ae,r.text=ie,r.attr=ne,r.symbols=Y,r.attributes=z,r.applyAttr=W,r.applyProp=U,r.notifications=p,r.importNode=u,r}(),yalla.toDom=function(){function e(e,t){try{var n=e.split("."),a=n[0].split("#"),o=a[0]||"div",i=a[1],l=n.slice(1).join(" ");return r(o,t),i&&u("id",i),l&&u("class",l),o}catch(c){}}function t(e){for(var t in e)u(t,e[t])}function n(r){var u=r[0];if(u===!1||void 0===u)return void 0;var f=r[1],d=f&&f.constructor===Object,p=d?2:1,h=d&&f.key,m=d&&f.skip,v="function"==typeof u,y="object"==typeof u&&"$view"in u;if(v){if(f=d?f:{},f.$view=u,f.$subView=!1,f.$elementName=u.prototype.elementName,f.$children=r.slice(p,r.length),!u.prototype.elementName)throw new Error("Something wrong elementName does not exist in the "+u);var g=l();g&&g[DATA_PROP].attrs.element==f.$elementName&&(f.$node=f.$node||g),f.$store=function(e,t,n){return f.$node?f.$node.$store:(f.$storeTobeAttachedToDom=yalla.createStore(e,t,n),f.$storeTobeAttachedToDom)};var b=u(f);b=1==b.length?b.push({}):b,"object"==typeof b[1]&&"Array"===b[1].constructor.name&&b.splice(1,0,{});var x=b[1];x.$storeTobeAttachedToDom=f.$storeTobeAttachedToDom,x.$view=f.$view,n(b)}else if(y)n(u.$view(u));else{var T=e(u,h);if(d&&t(f),a(),m)c();else for(var A=p,w=r.length;w>A;A++){var $=r[A];if(null!==$&&void 0!==$)switch($.constructor){case Array:n($);break;case Function:$(i());break;default:s($)}}o(T)}}var r=yalla.idom.elementOpenStart,a=yalla.idom.elementOpenEnd,o=yalla.idom.elementClose,i=yalla.idom.currentElement,l=yalla.idom.currentPointer,c=yalla.idom.skip,u=yalla.idom.attr,s=yalla.idom.text;return n}(),yalla.idom.notifications.nodesCreated=function(e){e.forEach(function(e){var t=e[DATA_PROP].attrs;t.$node=e,t.$storeTobeAttachedToDom&&(e.$store=t.$storeTobeAttachedToDom,e.$store.subscribe(function(){yalla.markAsDirty()}))}),e.slice().reverse().forEach(function(e){e.onload&&e.onload(e)})},yalla.idom.notifications.nodesDeleted=function(e){e.forEach(function(e){delete e[DATA_PROP].attrs.$node,e.onunload&&e.onunload(e)})},yalla.debounce=function(e,t,n){var r;return function(){var a=this,o=arguments,i=function(){r=null,n||e.apply(a,o)},l=n&&!r;clearTimeout(r),r=setTimeout(i,t),l&&e.apply(a,o)}},yalla.markAsDirty=function(){var e=yalla.rootElement,t=yalla.uiRoot.$view,n=yalla.uiRoot,r=[];2===arguments.length?(e=arguments[0],r=arguments[1]):r=t(n),yalla.idom.patch(e,yalla.toDom,r)},yalla.start=function(e,t,n){yalla.baselib=n||yalla.baseLib,yalla.rootElement=t||document.getElementsByTagName("body")[0];var r=window.location.hash.substring(1,window.location.hash.length).split("/");r=r.length>0&&""!=r[0]?r:[e],renderChain(r)},"onhashchange"in window?window.onhashchange=function(){var e=location.hash.substring(1,window.location.hash.length).split("/");renderChain(e)}:alert("Browser not supported"),yalla.createStore=function(e,t,n){function r(){this._subscribers=this._subscribers||[]}var a=n,o=t;return t&&"function"==typeof t&&(a=t,o={}),r.prototype.reducer=e,r.prototype.state=o,r.prototype.dispatch=function(e){if(null==e)throw new Error("You are calling dispatch but did not pass action to it");if(!("type"in e))throw new Error("You are calling dispatch but did not pass type to it");this.reducer&&(this.state=this.reducer(this.state,e),this.updateSubscribers())},r.prototype.updateSubscribers=function(){for(var e=0;e<this._subscribers.length;e++)this._subscribers[e].apply(this)},r.prototype.subscribe=function(e){this._subscribers.push(e)},r.prototype.unSubscribe=function(e){this._subscribers.splice(this._subscribers.indexOf(e),1)},r.prototype.getState=function(){return this.state},new r},yalla.combineReducers=function(e){return function(t,n){var r=yalla.clone(t);for(var a in e)if(e.hasOwnProperty(a)){var o=e[a],i=t[a],l=o(i,n);r[a]=l}return r}},yalla.applyMiddleware=function(e){return function(t){return function(n,r){var a=t(n,r),o=a.dispatch.bind(a),i=(a.getState.bind(a),[]),l={getState:a.getState.bind(a),dispatch:function(e){o(e)}};return i=e.map(function(e){return e(l)}),i.push(a.dispatch.bind(a)),o=i.reduceRight(function(e,t){return t(e)}),a.dispatch=o,a}}},yalla.jsonMlFromText=function(){var e=function(e,n,r){if(e.hasChildNodes()){for(var a=0;a<e.childNodes.length;a++){var o=e.childNodes[a];o=t(o,n),o&&r.push(o)}return!0}return!1},t=function(n,r){if(!n||!n.nodeType)return n=null;var a,o;switch(n.nodeType){case 1:case 9:case 11:o=[n.tagName||""];var i=n.attributes,l={},c=!1;for(a=0;i&&a<i.length;a++)i[a].specified&&("style"===i[a].name?l.style=n.style.cssText||i[a].value:"string"==typeof i[a].value&&(l[i[a].name]=i[a].value),c=!0);c&&o.push(l);var u;switch(o[0].toLowerCase()){case"frame":case"iframe":try{"undefined"!=typeof n.contentDocument?u=n.contentDocument:"undefined"!=typeof n.contentWindow?u=n.contentWindow.document:"undefined"!=typeof n.document&&(u=n.document),u=t(u,r),u&&o.push(u)}catch(s){}break;case"style":if(u=n.styleSheet&&n.styleSheet.cssText,u&&"string"==typeof u)u=u.replace("<!--","").replace("-->",""),o.push(u);else if(n.hasChildNodes())for(a=0;a<n.childNodes.length;a++)u=n.childNodes[a],u=t(u,r),u&&"string"==typeof u&&(u=u.replace("<!--","").replace("-->",""),o.push(u));break;case"input":e(n,r,o),u="password"!==n.type&&n.value,u&&(c||(o.shift(),l={},o.unshift(l),o.unshift(n.tagName||"")),l.value=u);break;case"textarea":e(n,r,o)||(u=n.value||n.innerHTML,u&&"string"==typeof u&&o.push(u));break;default:e(n,r,o)}return"function"==typeof r&&(o=r(o,n)),n=null,o;case 3:case 4:var f=String(n.nodeValue);return n=null,f;case 10:o=["!"];var d=["DOCTYPE",(n.name||"html").toLowerCase()];return n.publicId&&d.push("PUBLIC",'"'+n.publicId+'"'),n.systemId&&d.push('"'+n.systemId+'"'),o.push(d.join(" ")),"function"==typeof r&&(o=r(o,n)),n=null,o;case 8:return 0!==(n.nodeValue||"").indexOf("DOCTYPE")?(n=null,null):(o=["!",n.nodeValue],"function"==typeof r&&(o=r(o,n)),n=null,o);default:return n=null}};return function(e,n){n=n||function(e,t){return e.splice(0,1),[t.localName].concat(e.filter(function(e){return"string"==typeof e?e.trim().length>0:!0}))};var r=document.createElement("div");r.innerHTML=e;var a=t(r,n);return r=null,2===a.length?a[1]:(a[0]="",a)}}(),yalla}();startYalla();
+/*
+ UI Framework Callback
+ $render : callback function
+ $render : function(
+ {
+ $subView : // for placing subView element,
+ $children : // for placing children as An Element
+ $store(reducer,initialState,middleware) : // mechanism to create componentStore
+ }
+ )
+ */
+
+var yalla = (function () {
+    "use strict";
+    var mixin = function (destObject, sourceClass) {
+        var props = Object.keys(sourceClass.prototype);
+        for (var i = 0; i < props.length; i++) {
+            if (typeof destObject === 'function') {
+                destObject.prototype[props[i]] = sourceClass.prototype[props[i]];
+            } else {
+                if (!(props[i] in destObject)) {
+                    destObject[props[i]] = sourceClass.prototype[props[i]];
+                }
+            }
+        }
+        return destObject;
+    };
+
+    var merge = function (obj, outAttributes) {
+        for (var property in outAttributes) {
+            if (outAttributes.hasOwnProperty(property)) {
+                if (obj[property] !== outAttributes[property]) {
+                    obj[property] = outAttributes[property];
+                }
+            }
+        }
+        return obj;
+    };
+
+    var clone = function (obj) {
+        var copy;
+        if (null == obj || "object" != typeof obj) return obj;
+        if (obj instanceof Date) {
+            copy = new Date();
+            copy.setTime(obj.getTime());
+            return copy;
+        }
+        if (obj instanceof Array) {
+            copy = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = clone(obj[i]);
+            }
+            return copy;
+        }
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+            }
+            return copy;
+        }
+        throw new Error("Unable to copy obj! Its type isn't supported.");
+    };
+
+    var yalla = {};
+
+    yalla.mixin = mixin;
+    yalla.merge = merge;
+    yalla.clone = clone;
+    yalla.isArray = function (obj) {
+        return Object.prototype.toString.call(obj) === '[object Array]';
+    };
+
+    yalla.baselib = "libs";
+    yalla.globalContext = {};
+
+    var DATA_PROP = '$domData';
+
+    yalla.loader = (function (context) {
+        context._promisesToResolve = {};
+
+        var loadScript = function (uri) {
+            var path = uri;
+            if (path.indexOf('@') == 0) {
+                path = path.substr(1, path.length) + '.js';
+            } else {
+                path = path + '.html';
+            }
+
+            function pullOutChildren(element) {
+                var result = [];
+                if (!element.children) {
+                    return result;
+                }
+                for (var i = 0; i < element.children.length; i++) {
+                    var attributes = element.children[i].attributes;
+                    for (var j = 0; j < attributes.length; j++) {
+                        var attribute = attributes[j];
+                        if (attribute.name == 'value') {
+                            result.push(attribute.value);
+                        }
+                    }
+                    result = result.concat(pullOutChildren(element.children[i]));
+                }
+                return result;
+            }
+
+            function lookDependency(responseText) {
+                var dependenciesRaw = responseText.match(/\$inject\(.*?\)/g) || [];
+                var dependency = dependenciesRaw.map(function (dep) {
+                    return dep.substring('$inject("'.length, dep.length - 2);
+                });
+                dependenciesRaw = responseText.match(/<injec.*?>/g) || [];
+                var doc = document.createElement('div');
+                doc.innerHTML = dependenciesRaw.join('');
+                dependency = dependency.concat(pullOutChildren(doc));
+                return dependency;
+            }
+
+
+            function generateEvalStringForJS(responseText, path) {
+                var evalString = "";
+                if (responseText.indexOf('$render') > 0) {
+                    evalString = "(function($inject)" +
+                        "{\n//" + path + "------------------------------------------------------------\n" +
+                        "" + responseText + ";\n//--------------------------------------------------------------------\n" +
+                        "return $render;})" +
+                        "(yalla.inject.bind(yalla));";
+                } else {
+                    evalString = "(function($inject)" +
+                        "{\n//" + path + "-------------------------------------------------------------\nvar $export = {};" +
+                        "" + responseText + ";\n//--------------------------------------------------------------------\n" +
+                        "return $export;})" +
+                        "(yalla.inject.bind(yalla));";
+                }
+                return evalString;
+            }
+
+            function removeItemIfItsEmptyString(array) {
+
+                return array.filter(function (item) {
+                    return item && item !== '';
+                }).map(function (item) {
+                    if (yalla.isArray(item)) {
+                        return removeItemIfItsEmptyString(item);
+                    }
+                    return item;
+                });
+            }
+
+            function replaceBracket(param) {
+                if(typeof param == 'string'){
+                    return (param.match(/{.*?}/g) || []).reduce(function (text, match) {
+                        var newMatch = '"+(' + match.substring(1, match.length - 1) + ')+"';
+                        return text.replace(match, newMatch);
+                    }, param);
+                }
+
+                return param;
+            }
+
+            function replaceBracketForEventListener(param) {
+                if(typeof param == 'string') {
+                    return (param.match(/{.*?}/g) || []).reduce(function (text, match) {
+                        var newMatch = '"+(function(e){ return ' + match.substring(1, match.length - 1) + '})+"';
+                        return text.replace(match, newMatch);
+                    }, param);
+                }
+                return param;
+            }
+
+
+            function replaceBracketWithExpression(array) {
+
+                return array.map(function (item) {
+                    if (typeof item == 'string') {
+                        return replaceBracket(item);
+                    }
+                    if (typeof item == 'object') {
+                        if (yalla.isArray(item)) {
+                            return replaceBracketWithExpression(item);
+                        } else {
+                            for (var key in item) {
+
+                                item[key] = key.indexOf('on') == 0 ? replaceBracketForEventListener(item[key]) : replaceBracket(item[key]);
+
+                            }
+                            return item;
+                        }
+                    }
+                    return item;
+                });
+            }
+
+            function markTagIfItsVariable(variables, array) {
+                return array.map(function (item, index) {
+                    if (index == 0 && typeof item == 'string') {
+                        if (item in variables) {
+                            return "#@" + variables[item] + "@#";
+                        }
+                    }
+                    if (yalla.isArray(item)) {
+                        return markTagIfItsVariable(variables, item);
+                    }
+                    return item;
+                });
+            }
+
+            function checkForDataChildrenAndPatchToSibling(array) {
+                var hasChildrenFlag = false;
+                array.forEach(function (item) {
+                    if (typeof item == 'object' && !yalla.isArray(item)) {
+                        if ('$children' in item) {
+                            hasChildrenFlag = true;
+                        }
+                        delete item['$children'];
+                    }
+                    if (yalla.isArray(item)) {
+                        checkForDataChildrenAndPatchToSibling(item);
+                    }
+                });
+                if (hasChildrenFlag) {
+                    array.push('$props.$children');
+                }
+                return array;
+            }
+
+            function checkForForEachAndPatchToSibling(array) {
+                var hasForEach = false;
+                var forEachValue = "";
+                array.forEach(function (item) {
+                    if (typeof item == 'object' && !yalla.isArray(item)) {
+                        if ('foreach' in item) {
+                            hasForEach = true;
+                            forEachValue = item.foreach;
+                        }
+                    }
+                    if (yalla.isArray(item)) {
+                        checkForForEachAndPatchToSibling(item);
+                    }
+                });
+                if (hasForEach) {
+                    array.push('$foreach:' + forEachValue.trim());
+                }
+                return array;
+            }
+
+            function checkForStyleAndAppendElementName(array, path) {
+
+                return array.map(function (item, index, array) {
+
+                    if (index > 0 && typeof item == 'string' && array[0] == 'style') {
+                        var matches = item.match(/\s.*?\{/g);
+                        item = matches.reduce(function (text, match, index, array) {
+                            var trimmedMatch = match.trim();
+                            if(trimmedMatch.indexOf('root')<0){
+                                trimmedMatch = 'root '+trimmedMatch;
+                            }
+                            var rootSelector = '[element="' + path + '"]';
+                            trimmedMatch = trimmedMatch.replace('root',rootSelector);
+                            var newText = '\n ' + trimmedMatch;
+                            return text.replace(match, newText);
+                        }, item);
+                        return item;
+                        // lets process the item
+                    }
+
+                    if (typeof item == 'object' && yalla.isArray(item)) {
+                        return checkForStyleAndAppendElementName(item, path)
+                    }
+
+                    return item;
+                });
+            }
+
+
+            function updateScriptForChildrenTag(script) {
+                var propsChildren = script.match(/"\$props\.\$children"/g) || [];
+                script = propsChildren.reduce(function (text, match) {
+                    var positionOfMatchItem = text.indexOf(match);
+                    var endIndexOfPropsChildren = text.indexOf("]", positionOfMatchItem);
+                    var beginComma = script.substring(0, positionOfMatchItem).lastIndexOf(",");
+                    text = text.substring(0, beginComma) + '].concat($props.$children)' + text.substring(endIndexOfPropsChildren + 1, script.length);
+                    return text;
+                }, script);
+                return script;
+
+            }
+
+            function updateScriptForForeachTag(script) {
+                var forEachAttributes = script.match(/"\$foreach:.*?"/g) || [];
+                script = forEachAttributes.reduce(function (text, forEachAttr) {
+                    var forEachAttrIndex = text.indexOf(forEachAttr);
+                    // lets find last comma
+                    var firstClosingBracketAfterForEachAttrIndex = text.indexOf(']', forEachAttrIndex);
+
+                    var forEachArraySource = forEachAttr.substring(forEachAttr.indexOf(" in ") + 4, forEachAttr.length - 1);
+                    var forEachItem = forEachAttr.substring('"$foreach:'.length, forEachAttr.indexOf(" in "));
+
+                    var endOfBracket = text.substring(0, forEachAttrIndex).lastIndexOf(",");
+                    var forEachExpression = forEachAttr.substring(forEachAttr.indexOf(":") + 1, forEachAttr.length - 1);
+                    var forEachString = '"foreach": "' + forEachExpression + '"';
+                    var beginOfTag = text.substring(0, forEachAttrIndex).lastIndexOf(forEachString);
+                    var startOfBracket = text.indexOf("[", beginOfTag);
+                    var childExpression = text.substring(startOfBracket, endOfBracket);
+
+                    var beginComma = text.substring(0, startOfBracket).lastIndexOf(",");
+
+                    text = text.substring(0, beginComma) + '].concat(' + forEachArraySource + '.map(function(' + forEachItem + '){ console.log(' + forEachItem + ');return  ' + childExpression + ';}))' + text.substring(firstClosingBracketAfterForEachAttrIndex + 1, script.length);
+                    text = text.replace(forEachString, '');
+                    return text;
+                }, script);
+                return script;
+            }
+
+
+            function generateEvalStringForHTML(responseText, path) {
+                // this line we are cleaning the text wich have immediate closing bracket
+                responseText = (responseText.match(/<.*?\/>/g) || []).reduce(function (text, match, index, array) {
+                    var emptyStringIndex = match.indexOf(" ");
+                    if (emptyStringIndex < 0) {
+                        emptyStringIndex = match.indexOf("/>");
+                    }
+                    var tagName = match.substring(1, emptyStringIndex);
+                    if (tagName == 'br') {
+                        return text;
+                    }
+                    var newText = match.substring(0, match.length - 2) + '></' + tagName + '>';
+                    return text.replace(match, newText);
+                }, responseText);
+                var jsonMl = yalla.jsonMlFromText(responseText);
+
+                jsonMl = checkForDataChildrenAndPatchToSibling(jsonMl);
+                jsonMl = checkForForEachAndPatchToSibling(jsonMl);
+                jsonMl = checkForStyleAndAppendElementName(jsonMl, path.replace(/\//g, '.').substring(0,path.lastIndexOf('.')));
+
+                // here we convert to JSONML then we stringify them. We need to do this to get consistent format of the code
+                var resultString = JSON.stringify(jsonMl);
+
+                // take out all var
+                var vars = resultString.match(/\["var".*?}]/g) || [];
+                var injects = resultString.match(/\["inject".*?}]/g) || [];
+
+                var varsJson = JSON.parse('[' + vars.join(',') + ']');
+                var injectsJson = JSON.parse('[' + injects.join(',') + ']');
+
+                var variablesJson = varsJson.reduce(function (result, _var) {
+                    var item = _var[1];
+                    var value = item.value;
+                    if (value.indexOf('{') == 0) {
+                        value = '(' + value.substring(1, value.length - 1) + ')';
+                    } else {
+                        value = '"' + replaceBracket(value) + '"';
+                    }
+                    result.text += 'var ' + item.name + ' = ' + value + ';\n';
+
+                    var name = item.name.replace(/([A-Z]+)/g, ' $1').trim().replace(/\s/g, '-').toLowerCase();
+                    result.variables[name] = item.name;
+                    return result;
+                }, {text: '', variables: {}});
+
+                variablesJson = injectsJson.reduce(function (result, _var) {
+                    var item = _var[1];
+                    var value = '$inject("' + item.value + '")';
+                    result.text += 'var ' + item.name + ' = ' + value + ';\n';
+                    var name = item.name.replace(/([A-Z]+)/g, ' $1').trim().replace(/\s/g, '-').toLowerCase();
+                    result.variables[name] = item.name;
+                    return result;
+                }, variablesJson);
+                var arrayToBeCleanedString = vars.concat(injects).reduce(function (text, match) {
+                    return text.replace(match, '""');
+                }, resultString);
+                var arrayToBeCleaned = JSON.parse(arrayToBeCleanedString);
+                var afterVarsRemoved = markTagIfItsVariable(variablesJson.variables, replaceBracketWithExpression(removeItemIfItsEmptyString(arrayToBeCleaned)));
+                //later we need to compose the vars again to script
+                var script = JSON.stringify(afterVarsRemoved, false, '  ');
+                script = script.replace(/\\"\+\(/g, '"+(').replace(/\)\+\\"/g, ')+"');
+                script = script.replace(/": ""\+\(/g, '":(').replace(/\)\+""/g, ')');
+                script = script.replace(/"#@/g, '').replace(/@#"/g, '');
+                script = script.replace(/"router-view"/g, '$props.$subView');
+                script = updateScriptForChildrenTag(script);
+                script = updateScriptForForeachTag(script);
+
+                return generateEvalStringForJS(variablesJson.text + 'function $render($props){ return ' + script + '; }', path);
+            }
+
+            function executeScript(responseText, path) {
+                var evalString = "";
+                if (path.indexOf(".html") >= 0) {
+                    evalString = generateEvalStringForHTML(responseText, path);
+                } else {
+                    evalString = generateEvalStringForJS(responseText, path);
+                }
+                return eval(evalString);
+            }
+
+            return new Promise(function (resolve, reject) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("GET", yalla.baselib + "/" + path);
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4) {
+                        var dependency = lookDependency(xmlhttp.responseText);
+                        if (dependency.length > 0) {
+                            Promise.all(dependency.map(function (dependency) {
+                                return yalla.loader(dependency);
+                            })).then(function () {
+                                resolve(executeScript(xmlhttp.responseText, path));
+                            }).catch(function (err) {
+                                reject(err);
+                            });
+                        } else {
+                            try {
+                                resolve(executeScript(xmlhttp.responseText, path));
+                            } catch (err) {
+                                reject(err);
+                            }
+                        }
+                    }
+                };
+                xmlhttp.send();
+            });
+        };
+
+        return function (path) {
+            if (path in context._promisesToResolve) {
+                return context._promisesToResolve[path];
+            } else {
+                var promise = new Promise(function (resolve, reject) {
+                    if (path in context && (typeof context[path] !== 'undefined')) {
+                        resolve(context[path]);
+                    } else {
+                        loadScript(path).then(function (object) {
+                            context[path] = object;
+                            resolve(object);
+                            delete context._promisesToResolve[path];
+                        }).catch(function (err) {
+                            reject(err);
+                            delete context._promisesToResolve[path];
+                        });
+                    }
+                });
+                context._promisesToResolve[path] = promise;
+                return promise;
+            }
+        }
+    })(yalla.globalContext);
+
+    yalla.inject = function (path) {
+        var dependencyObject = this.globalContext[path];
+        if (typeof dependencyObject === 'function') {
+            var $render = dependencyObject
+            var elementName = path.replace(/\//g, '.');
+
+            var yallaComponent = function (attributes) {
+                attributes = attributes || {};
+                var elements = $render(attributes);
+                if (!elements) {
+                    throw new Error('There is no return in $render function "' + path + '", did you forget the return keyword ?');
+                }
+                var prop = elements[1];
+                if (typeof prop !== 'object' || prop.constructor === Array) {
+                    prop = {};
+                    elements.splice(1, 0, prop);
+                }
+                prop.element = elementName;
+                prop.id = attributes.id;
+                prop.$storeTobeAttachedToDom = attributes.$storeTobeAttachedToDom;
+                return elements;
+            };
+
+            yallaComponent.prototype.elementName = elementName;
+            yallaComponent.prototype.path = path;
+            return yallaComponent;
+        } else {
+            return dependencyObject;
+        }
+
+    };
+
+    yalla.idom = (function () {
+        var exports = {};
+
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        function Blank() {
+        }
+
+        Blank.prototype = Object.create(null);
+
+        var has = function (map, property) {
+            return hasOwnProperty.call(map, property);
+        };
+
+        var createMap = function () {
+            return new Blank();
+        };
+
+
+        function NodeData(nodeName, key) {
+            this.attrs = createMap();
+            this.attrsArr = [];
+            this.newAttrs = createMap();
+            this.staticsApplied = false;
+            this.key = key;
+            this.keyMap = createMap();
+            this.keyMapValid = true;
+            this.focused = false;
+            this.nodeName = nodeName;
+            this.text = null;
+        }
+
+        var initData = function (node, nodeName, key) {
+            var data = new NodeData(nodeName, key);
+            node[DATA_PROP] = data;
+            return data;
+        };
+
+        var getData = function (node) {
+            importNode(node);
+            return node[DATA_PROP];
+        };
+
+        var importNode = function (node) {
+            if (node[DATA_PROP]) {
+                return;
+            }
+
+            var isElement = node instanceof Element;
+            var nodeName = isElement ? node.localName : node.nodeName;
+            var key = isElement ? node.getAttribute('key') : null;
+            var data = initData(node, nodeName, key);
+
+            if (key) {
+                getData(node.parentNode).keyMap[key] = node;
+            }
+
+            if (isElement) {
+                var attributes = node.attributes;
+                var attrs = data.attrs;
+                var newAttrs = data.newAttrs;
+                var attrsArr = data.attrsArr;
+
+                for (var i = 0; i < attributes.length; i += 1) {
+                    var attr = attributes[i];
+                    var name = attr.name;
+                    var value = attr.value;
+
+                    attrs[name] = value;
+                    newAttrs[name] = undefined;
+                    attrsArr.push(name);
+                    attrsArr.push(value);
+                }
+            }
+
+            for (var child = node.firstChild; child; child = child.nextSibling) {
+                importNode(child);
+            }
+        };
+
+        var getNamespaceForTag = function (tag, parent) {
+            if (tag === 'svg') {
+                return 'http://www.w3.org/2000/svg';
+            }
+
+            if (getData(parent).nodeName === 'foreignObject') {
+                return null;
+            }
+
+            return parent.namespaceURI;
+        };
+
+        var createElement = function (doc, parent, tag, key) {
+            var namespace = getNamespaceForTag(tag, parent);
+            var el = undefined;
+
+            if (namespace) {
+                el = doc.createElementNS(namespace, tag);
+            } else {
+                el = doc.createElement(tag);
+            }
+
+            initData(el, tag, key);
+
+            return el;
+        };
+
+        var createText = function (doc) {
+            var node = doc.createTextNode('');
+            initData(node, '#text', null);
+            return node;
+        };
+
+
+        var notifications = {
+            nodesCreated: null,
+            nodesDeleted: null
+        };
+
+        function Context() {
+            this.created = notifications.nodesCreated && [];
+            this.deleted = notifications.nodesDeleted && [];
+        }
+
+        Context.prototype.markCreated = function (node) {
+            if (this.created) {
+                this.created.push(node);
+            }
+        };
+
+        Context.prototype.markDeleted = function (node) {
+            if (this.deleted) {
+                this.deleted.push(node);
+            }
+        };
+
+        Context.prototype.notifyChanges = function () {
+            if (this.created && this.created.length > 0) {
+                notifications.nodesCreated(this.created);
+            }
+            if (this.deleted && this.deleted.length > 0) {
+                notifications.nodesDeleted(this.deleted);
+            }
+        };
+
+
+        var isDocumentRoot = function (node) {
+            return node instanceof Document || node instanceof DocumentFragment;
+        };
+
+        var getAncestry = function (node, root) {
+            var ancestry = [];
+            var cur = node;
+            while (cur !== root) {
+                ancestry.push(cur);
+                cur = cur.parentNode;
+            }
+            return ancestry;
+        };
+
+        var getRoot = function (node) {
+            var cur = node;
+            var prev = cur;
+
+            while (cur) {
+                prev = cur;
+                cur = cur.parentNode;
+            }
+
+            return prev;
+        };
+
+        var getActiveElement = function (node) {
+            var root = getRoot(node);
+            return isDocumentRoot(root) ? root.activeElement : null;
+        };
+
+        var getFocusedPath = function (node, root) {
+            var activeElement = getActiveElement(node);
+            if (!activeElement || !node.contains(activeElement)) {
+                return [];
+            }
+            return getAncestry(activeElement, root);
+        };
+
+        var moveBefore = function (parentNode, node, referenceNode) {
+            var insertReferenceNode = node.nextSibling;
+            var cur = referenceNode;
+            while (cur !== node) {
+                var next = cur.nextSibling;
+                parentNode.insertBefore(cur, insertReferenceNode);
+                cur = next;
+            }
+        };
+
+        var context = null;
+        var currentNode = null;
+        var currentParent = null;
+        var doc = null;
+
+        var markFocused = function (focusPath, focused) {
+            for (var i = 0; i < focusPath.length; i += 1) {
+                getData(focusPath[i]).focused = focused;
+            }
+        };
+
+        var patchFactory = function (run) {
+            var f = function (node, fn, data) {
+                var prevContext = context;
+                var prevDoc = doc;
+                var prevCurrentNode = currentNode;
+                var prevCurrentParent = currentParent;
+                var previousInAttributes = false;
+                var previousInSkip = false;
+
+                context = new Context();
+                doc = node.ownerDocument;
+                currentParent = node.parentNode;
+
+                if ('production' !== 'production') {
+                }
+
+                var focusPath = getFocusedPath(node, currentParent);
+                markFocused(focusPath, true);
+                var retVal = run(node, fn, data);
+                markFocused(focusPath, false);
+
+                if ('production' !== 'production') {
+                }
+
+                context.notifyChanges();
+                context = prevContext;
+                doc = prevDoc;
+                currentNode = prevCurrentNode;
+                currentParent = prevCurrentParent;
+                return retVal;
+            };
+            return f;
+        };
+
+        var patchInner = patchFactory(function (node, fn, data) {
+            currentNode = node;
+
+            enterNode();
+            fn(data);
+            exitNode();
+
+            if ('production' !== 'production') {
+            }
+
+            return node;
+        });
+
+        var patchOuter = patchFactory(function (node, fn, data) {
+            var startNode = {nextSibling: node};
+            var expectedNextNode = null;
+            var expectedPrevNode = null;
+
+            if ('production' !== 'production') {
+            }
+
+            currentNode = startNode;
+            fn(data);
+
+            if ('production' !== 'production') {
+            }
+
+            if (node !== currentNode && node.parentNode) {
+                removeChild(currentParent, node, getData(currentParent).keyMap);
+            }
+
+            return startNode === currentNode ? null : currentNode;
+        });
+
+        var matches = function (matchNode, nodeName, key) {
+            var data = getData(matchNode);
+
+            return nodeName === data.nodeName && key == data.key;
+        };
+
+        var alignWithDOM = function (nodeName, key) {
+            if (currentNode && matches(currentNode, nodeName, key)) {
+                return;
+            }
+            var parentData = getData(currentParent);
+            var currentNodeData = currentNode && getData(currentNode);
+            var keyMap = parentData.keyMap;
+            var node = undefined;
+
+            if (key) {
+                var keyNode = keyMap[key];
+                if (keyNode) {
+                    if (matches(keyNode, nodeName, key)) {
+                        node = keyNode;
+                    } else if (keyNode === currentNode) {
+                        context.markDeleted(keyNode);
+                    } else {
+                        removeChild(currentParent, keyNode, keyMap);
+                    }
+                }
+            }
+
+            if (!node) {
+                if (nodeName === '#text') {
+                    node = createText(doc);
+                } else {
+                    node = createElement(doc, currentParent, nodeName, key);
+                }
+
+                if (key) {
+                    keyMap[key] = node;
+                }
+
+                context.markCreated(node);
+            }
+
+            if (getData(node).focused) {
+                moveBefore(currentParent, node, currentNode);
+            } else if (currentNodeData && currentNodeData.key && !currentNodeData.focused) {
+                currentParent.replaceChild(node, currentNode);
+                parentData.keyMapValid = false;
+            } else {
+                currentParent.insertBefore(node, currentNode);
+            }
+
+            currentNode = node;
+        };
+
+        var removeChild = function (node, child, keyMap) {
+            node.removeChild(child);
+            context.markDeleted(child);
+            var key = getData(child).key;
+            if (key) {
+                delete keyMap[key];
+            }
+        };
+
+        var clearUnvisitedDOM = function () {
+            var node = currentParent;
+            var data = getData(node);
+            var keyMap = data.keyMap;
+            var keyMapValid = data.keyMapValid;
+            var child = node.lastChild;
+            var key = undefined;
+
+            if (child === currentNode && keyMapValid) {
+                return;
+            }
+
+            while (child !== currentNode) {
+                removeChild(node, child, keyMap);
+                child = node.lastChild;
+            }
+
+            if (!keyMapValid) {
+                for (key in keyMap) {
+                    child = keyMap[key];
+                    if (child.parentNode !== node) {
+                        context.markDeleted(child);
+                        delete keyMap[key];
+                    }
+                }
+
+                data.keyMapValid = true;
+            }
+        };
+
+        var enterNode = function () {
+            currentParent = currentNode;
+            currentNode = null;
+        };
+
+        var getNextNode = function () {
+            if (currentNode) {
+                return currentNode.nextSibling;
+            } else if (currentParent) {
+                return currentParent.firstChild;
+            } else {
+                return document.getElementsByTagName('body')[0];
+            }
+        };
+
+        var nextNode = function () {
+            currentNode = getNextNode();
+        };
+
+        var exitNode = function () {
+            clearUnvisitedDOM();
+            currentNode = currentParent;
+            currentParent = currentParent.parentNode;
+        };
+
+        var coreElementOpen = function (tag, key) {
+            nextNode();
+            alignWithDOM(tag, key);
+            enterNode();
+            return (currentParent
+            );
+        };
+
+        var coreElementClose = function () {
+            if ('production' !== 'production') {
+            }
+            exitNode();
+            return (currentNode
+            );
+        };
+
+        var coreText = function () {
+            nextNode();
+            alignWithDOM('#text', null);
+            return (currentNode
+            );
+        };
+
+        var currentElement = function () {
+            if ('production' !== 'production') {
+            }
+            return (currentParent
+            );
+        };
+
+        var currentPointer = function () {
+            if ('production' !== 'production') {
+            }
+            return getNextNode();
+        };
+
+        var skip = function () {
+            if ('production' !== 'production') {
+            }
+            currentNode = currentParent.lastChild;
+        };
+
+        var skipNode = nextNode;
+
+
+        var symbols = {
+            default: '__default'
+        };
+
+        var getNamespace = function (name) {
+            if (name.lastIndexOf('xml:', 0) === 0) {
+                return 'http://www.w3.org/XML/1998/namespace';
+            }
+
+            if (name.lastIndexOf('xlink:', 0) === 0) {
+                return 'http://www.w3.org/1999/xlink';
+            }
+        };
+
+        var applyAttr = function (el, name, value) {
+            if (value == null) {
+                el.removeAttribute(name);
+            } else {
+                var attrNS = getNamespace(name);
+                if (attrNS) {
+                    el.setAttributeNS(attrNS, name, value);
+                } else {
+                    el.setAttribute(name, value);
+                }
+            }
+        };
+
+        var applyProp = function (el, name, value) {
+            el[name] = value;
+        };
+
+        var setStyleValue = function (style, prop, value) {
+            if (prop.indexOf('-') >= 0) {
+                style.setProperty(prop, value);
+            } else {
+                style[prop] = value;
+            }
+        };
+
+        var applyStyle = function (el, name, style) {
+            if (typeof style === 'string') {
+                el.style.cssText = style;
+            } else {
+                el.style.cssText = '';
+                var elStyle = el.style;
+                var obj = style;
+
+                for (var prop in obj) {
+                    if (has(obj, prop)) {
+                        setStyleValue(elStyle, prop, obj[prop]);
+                    }
+                }
+            }
+        };
+
+        var applyAttributeTyped = function (el, name, value) {
+            var type = typeof value;
+
+            if (type === 'object' || type === 'function') {
+                applyProp(el, name, value);
+            } else {
+                applyAttr(el, name, value);
+            }
+        };
+
+        var updateAttribute = function (el, name, value) {
+            var data = getData(el);
+            var attrs = data.attrs;
+
+            if (attrs[name] === value) {
+                return;
+            }
+
+            var mutator = attributes[name] || attributes[symbols.default];
+            mutator(el, name, value);
+
+            attrs[name] = value;
+        };
+
+        var attributes = createMap();
+
+        attributes[symbols.default] = applyAttributeTyped;
+
+        attributes['style'] = applyStyle;
+
+        var ATTRIBUTES_OFFSET = 3;
+
+        var argsBuilder = [];
+
+        var elementOpen = function (tag, key, statics, var_args) {
+            if ('production' !== 'production') {
+            }
+
+            var node = coreElementOpen(tag, key);
+            var data = getData(node);
+
+            if (!data.staticsApplied) {
+                if (statics) {
+                    for (var _i = 0; _i < statics.length; _i += 2) {
+                        var name = statics[_i];
+                        var value = statics[_i + 1];
+                        updateAttribute(node, name, value);
+                    }
+                }
+                data.staticsApplied = true;
+            }
+
+            var attrsArr = data.attrsArr;
+            var newAttrs = data.newAttrs;
+            var isNew = !attrsArr.length;
+            var i = ATTRIBUTES_OFFSET;
+            var j = 0;
+
+            for (; i < arguments.length; i += 2, j += 2) {
+                var _attr = arguments[i];
+                if (isNew) {
+                    attrsArr[j] = _attr;
+                    newAttrs[_attr] = undefined;
+                } else if (attrsArr[j] !== _attr) {
+                    break;
+                }
+
+                var value = arguments[i + 1];
+                if (isNew || attrsArr[j + 1] !== value) {
+                    attrsArr[j + 1] = value;
+                    updateAttribute(node, _attr, value);
+                }
+            }
+
+            if (i < arguments.length || j < attrsArr.length) {
+                for (; i < arguments.length; i += 1, j += 1) {
+                    attrsArr[j] = arguments[i];
+                }
+
+                if (j < attrsArr.length) {
+                    attrsArr.length = j;
+                }
+
+                for (i = 0; i < attrsArr.length; i += 2) {
+                    var name = attrsArr[i];
+                    var value = attrsArr[i + 1];
+                    newAttrs[name] = value;
+                }
+
+                for (var _attr2 in newAttrs) {
+                    updateAttribute(node, _attr2, newAttrs[_attr2]);
+                    newAttrs[_attr2] = undefined;
+                }
+            }
+            return node;
+        };
+
+        var elementOpenStart = function (tag, key, statics) {
+            if ('production' !== 'production') {
+            }
+
+            argsBuilder[0] = tag;
+            argsBuilder[1] = key;
+            argsBuilder[2] = statics;
+        };
+
+        var attr = function (name, value) {
+            if ('production' !== 'production') {
+            }
+
+            argsBuilder.push(name);
+            argsBuilder.push(value);
+        };
+
+        var elementOpenEnd = function () {
+            if ('production' !== 'production') {
+            }
+
+            var node = elementOpen.apply(null, argsBuilder);
+            argsBuilder.length = 0;
+            return node;
+        };
+
+        var elementClose = function (tag) {
+            if ('production' !== 'production') {
+            }
+            var node = coreElementClose();
+            if ('production' !== 'production') {
+            }
+            return node;
+        };
+
+        var elementVoid = function (tag, key, statics, var_args) {
+            elementOpen.apply(null, arguments);
+            return elementClose(tag);
+        };
+
+        var text = function (value, var_args) {
+            if ('production' !== 'production') {
+            }
+
+            var node = coreText();
+            var data = getData(node);
+
+            if (data.text !== value) {
+                data.text = value;
+
+                var formatted = value;
+                for (var i = 1; i < arguments.length; i += 1) {
+                    var fn = arguments[i];
+                    formatted = fn(formatted);
+                }
+
+                node.data = formatted;
+            }
+
+            return node;
+        };
+
+        exports.patch = patchInner;
+        exports.patchInner = patchInner;
+        exports.patchOuter = patchOuter;
+        exports.currentElement = currentElement;
+        exports.currentPointer = currentPointer;
+        exports.skip = skip;
+        exports.skipNode = skipNode;
+        exports.elementVoid = elementVoid;
+        exports.elementOpenStart = elementOpenStart;
+        exports.elementOpenEnd = elementOpenEnd;
+        exports.elementOpen = elementOpen;
+        exports.elementClose = elementClose;
+        exports.text = text;
+        exports.attr = attr;
+        exports.symbols = symbols;
+        exports.attributes = attributes;
+        exports.applyAttr = applyAttr;
+        exports.applyProp = applyProp;
+        exports.notifications = notifications;
+        exports.importNode = importNode;
+        return exports;
+    })();
+
+    yalla.toDom = (function () {
+        var elementOpenStart = yalla.idom.elementOpenStart;
+        var elementOpenEnd = yalla.idom.elementOpenEnd;
+        var elementClose = yalla.idom.elementClose;
+        var currentElement = yalla.idom.currentElement;
+        var currentPointer = yalla.idom.currentPointer;
+        var skip = yalla.idom.skip;
+        var attr = yalla.idom.attr;
+        var text = yalla.idom.text;
+
+        function openTag(head, keyAttr) {
+            try {
+                var dotSplit = head.split('.');
+                var hashSplit = dotSplit[0].split('#');
+                var tagName = hashSplit[0] || 'div';
+                var id = hashSplit[1];
+                var className = dotSplit.slice(1).join(' ');
+                elementOpenStart(tagName, keyAttr);
+                if (id) attr('id', id);
+                if (className) attr('class', className);
+                return tagName
+            } catch (err) {
+                debugger;
+            }
+
+        }
+
+        function applyAttrsObj(attrsObj) {
+            for (var k in attrsObj) {
+                attr(k, attrsObj[k])
+            }
+        }
+
+        function parse(markup) {
+            var head = markup[0];
+            if (head === false || head === undefined) {
+                return undefined;
+            }
+            var attrsObj = markup[1];
+            var hasAttrs = attrsObj && attrsObj.constructor === Object;
+            var firstChildPos = hasAttrs ? 2 : 1;
+            var keyAttr = hasAttrs && attrsObj.key;
+            var skipAttr = hasAttrs && attrsObj.skip;
+
+            var isComponent = typeof head === 'function';
+            var isView = typeof head === 'object' && '$view' in head;
+            if (isComponent) {
+                attrsObj = hasAttrs ? attrsObj : {};
+                attrsObj.$view = head;
+                attrsObj.$subView = false;
+                attrsObj.$elementName = head.prototype.elementName;
+                attrsObj.$children = markup.slice(firstChildPos, markup.length);
+
+                if (!head.prototype.elementName) {
+                    throw new Error('Something wrong elementName does not exist in the ' + head);
+                }
+
+                // lets assign the node here!
+                var currentNode = currentPointer();
+                if (currentNode && currentNode[DATA_PROP].attrs.element == attrsObj.$elementName) {
+                    attrsObj.$node = attrsObj.$node || currentNode;
+                }
+
+                // ok after node is assigned lets create the $store function here
+                attrsObj.$store = function (reducer, state, middleware) {
+                    if (attrsObj.$node) {
+                        return attrsObj.$node.$store;
+                    } else {
+                        attrsObj.$storeTobeAttachedToDom = yalla.createStore(reducer, state, middleware);
+                        return attrsObj.$storeTobeAttachedToDom;
+                    }
+                };
+
+                var jsonmlData = head(attrsObj);
+
+                jsonmlData = jsonmlData.length == 1 ? jsonmlData.push({}) : jsonmlData;
+                if (typeof jsonmlData[1] === 'object' && yalla.isArray(jsonmlData[1])) {
+                    jsonmlData.splice(1, 0, {});
+                }
+
+                var elementAttributes = jsonmlData[1];
+                // ok now its time to delegate all of this to the constructor
+                elementAttributes.$storeTobeAttachedToDom = attrsObj.$storeTobeAttachedToDom;
+                elementAttributes.$view = attrsObj.$view;
+                parse(jsonmlData);
+            } else if (isView) {
+                parse(head.$view(head));
+            } else {
+                var tagName = openTag(head, keyAttr);
+                if (hasAttrs) {
+                    applyAttrsObj(attrsObj);
+                }
+                elementOpenEnd();
+                if (skipAttr) {
+                    skip()
+                } else {
+                    for (var i = firstChildPos, len = markup.length; i < len; i++) {
+                        var node = markup[i];
+
+                        if (node === null || node === undefined) continue;
+                        switch (node.constructor) {
+                            case Array:
+                                parse(node);
+                                break;
+                            case Function:
+                                node(currentElement());
+                                break;
+                            default:
+                                text(node)
+                        }
+                    }
+                }
+                elementClose(tagName);
+            }
+        }
+
+        return parse
+    })();
+
+
+    yalla.idom.notifications.nodesCreated = function (nodes) {
+        nodes.forEach(function (node) {
+            var nodeAttrs = node[DATA_PROP].attrs;
+            nodeAttrs.$node = node;
+            if (nodeAttrs.$storeTobeAttachedToDom) {
+                node.$store = nodeAttrs.$storeTobeAttachedToDom;
+                node.$store.subscribe(function () {
+                    yalla.markAsDirty();
+                });
+            }
+        });
+
+        nodes.slice().reverse().forEach(function (node) {
+            if (node.onload) {
+                node.onload(node);
+            }
+        })
+
+    };
+
+    yalla.idom.notifications.nodesDeleted = function (nodes) {
+        nodes.forEach(function (node) {
+            delete node[DATA_PROP].attrs.$node;
+            if (node.onunload) {
+                node.onunload(node);
+            }
+        });
+    };
+
+    yalla.debounce = function (func, wait, immediate) {
+        var timeout;
+        return function () {
+            var context = this, args = arguments;
+            var later = function () {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    function renderChain(address) {
+        address.reverse().reduce(function (current, pathQuery, index, array) {
+            return current.then(function (subView) {
+                // first we need to remove all params
+                var valParams = pathQuery.split(':');
+                var path = valParams[0];
+                valParams.splice(0, 1);
+                var params = valParams.reduce(function (current, param) {
+                    var parVal = param.split('=');
+                    current[parVal[0]] = parVal[1];
+                    return current;
+                }, {});
+                return new Promise(function (resolve) {
+                    var pathUi = path.split(".").join("/");
+                    yalla.loader(pathUi).then(function () {
+                        params.$view = yalla.inject(pathUi);
+                        params.$subView = subView;
+                        params.$elementName = pathUi.split('/').join('.');
+                        params.$children = [];
+                        params.$store = function (reducer, state, middleware) {
+                            var currentPointer = yalla.idom.currentPointer();
+                            if (currentPointer && DATA_PROP in currentPointer) {
+                                if (currentPointer[DATA_PROP].attrs.element == params.$elementName && currentPointer.$store) {
+                                    return currentPointer.$store;
+                                } else if (currentPointer.children && currentPointer.children.length == 1) {
+                                    // kita harus tambahin check kalau dia levelnya body
+                                    var child = currentPointer.children[0];
+                                    if (child[DATA_PROP] && child[DATA_PROP].attrs.element == params.$elementName && child.$store) {
+                                        return child.$store;
+                                    }
+                                }
+
+                            }
+                            params.$storeTobeAttachedToDom = params.$storeTobeAttachedToDom || yalla.createStore(reducer, state, middleware);
+                            return params.$storeTobeAttachedToDom;
+                        };
+
+                        if (index == array.length - 1) {
+                            yalla.uiRoot = params;
+                            yalla.markAsDirty();
+                        }
+                        resolve(params);
+                    });
+                });
+            });
+        }, Promise.resolve(false));
+    }
+
+    yalla.markAsDirty = function () {
+        var dom = yalla.rootElement;
+        var renderer = yalla.uiRoot.$view;
+        var attributes = yalla.uiRoot;
+        var output = [];
+        if (arguments.length === 2) {
+            dom = arguments[0];
+            output = arguments[1];
+        } else {
+            output = renderer(attributes);
+        }
+        yalla.idom.patch(dom, yalla.toDom, output);
+    };
+
+    yalla.start = function (startFile, el, baseLib) {
+        yalla.baselib = baseLib || yalla.baseLib;
+        yalla.rootElement = el || document.getElementsByTagName("body")[0];
+        var address = window.location.hash.substring(1, window.location.hash.length).split("/");
+        address = (address.length > 0 && address[0] != "") ? address : [startFile];
+        renderChain(address);
+    };
+
+    if ("onhashchange" in window) {
+        window.onhashchange = function () {
+            var address = location.hash.substring(1, window.location.hash.length).split("/");
+            renderChain(address);
+        }
+    } else {
+        alert('Browser not supported');
+    }
+
+    yalla.createStore = function (reducer, _state, _middleware) {
+        var middleware = _middleware;
+        var state = _state;
+        if (_state) {
+            if (typeof _state === 'function') {
+                middleware = _state;
+                state = {};
+            }
+        }
+
+        function Store() {
+            this._subscribers = this._subscribers || [];
+        }
+
+        Store.prototype.reducer = reducer;
+        Store.prototype.state = state;
+
+        Store.prototype.dispatch = function (action) {
+            if (action == null) {
+                throw new Error('You are calling dispatch but did not pass action to it');
+            }
+            if (!('type' in action)) {
+                throw new Error('You are calling dispatch but did not pass type to it');
+            }
+            if (this.reducer) {
+                this.state = this.reducer(this.state, action);
+                this.updateSubscribers();
+            }
+        };
+
+        Store.prototype.updateSubscribers = function () {
+            for (var i = 0; i < this._subscribers.length; i++) {
+                this._subscribers[i].apply(this);
+            }
+        };
+
+        Store.prototype.subscribe = function (fct) {
+            this._subscribers.push(fct);
+        };
+        Store.prototype.unSubscribe = function (fct) {
+            this._subscribers.splice(this._subscribers.indexOf(fct), 1);
+        };
+        Store.prototype.getState = function () {
+            return this.state;
+        };
+        return new Store();
+    };
+
+    yalla.combineReducers = function (stateReducers) {
+        return function (state, action) {
+            var resultState = yalla.clone(state);
+            for (var key in stateReducers) {
+                if (stateReducers.hasOwnProperty(key)) {
+                    var reducer = stateReducers[key];
+                    var stateVal = state[key];
+                    var newState = reducer(stateVal, action);
+                    resultState[key] = newState;
+                }
+            }
+            return resultState;
+        }
+    };
+
+    yalla.applyMiddleware = function (middlewares) {
+        // the first next will be create store !!
+        return function (createStoreFunction) {
+            return function (reducer, initialState) {
+                var store = createStoreFunction(reducer, initialState);
+                var dispatch = store.dispatch.bind(store);
+                var getState = store.getState.bind(store);
+                var chain = [];
+
+                var middlewareStore = {
+                    getState: store.getState.bind(store),
+                    dispatch: function (action) {
+                        dispatch(action);
+                    }
+                };
+
+                chain = middlewares.map(function (middleware) {
+                    return middleware(middlewareStore);
+                });
+                chain.push(store.dispatch.bind(store));
+                dispatch = chain.reduceRight(function (composed, f) {
+                    return f(composed);
+                });
+
+                store.dispatch = dispatch;
+                return store;
+            };
+        }
+    };
+
+    yalla.jsonMlFromText = (function () {
+
+        var addChildren = function (/*DOM*/ elem, /*function*/ filter, /*JsonML*/ jml) {
+            if (elem.hasChildNodes()) {
+                for (var i = 0; i < elem.childNodes.length; i++) {
+                    var child = elem.childNodes[i];
+                    child = fromHTML(child, filter);
+                    if (child) {
+                        jml.push(child);
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
+
+        /**
+         * @param {Node} elem
+         * @param {function} filter
+         * @return {array} JsonML
+         */
+        var fromHTML = function (elem, filter) {
+            if (!elem || !elem.nodeType) {
+                // free references
+                return (elem = null);
+            }
+
+            var i, jml;
+            switch (elem.nodeType) {
+                case 1:  // element
+                case 9:  // document
+                case 11: // documentFragment
+                    jml = [elem.tagName || ''];
+
+                    var attr = elem.attributes,
+                        props = {},
+                        hasAttrib = false;
+
+                    for (i = 0; attr && i < attr.length; i++) {
+                        if (attr[i].specified) {
+                            if (attr[i].name === 'style') {
+                                props.style = elem.style.cssText || attr[i].value;
+                            } else if ('string' === typeof attr[i].value) {
+                                props[attr[i].name] = attr[i].value;
+                            }
+                            hasAttrib = true;
+                        }
+                    }
+                    if (hasAttrib) {
+                        jml.push(props);
+                    }
+
+                    var child;
+
+                    switch (jml[0].toLowerCase()) {
+                        case 'frame':
+                        case 'iframe':
+                            try {
+                                if ('undefined' !== typeof elem.contentDocument) {
+                                    // W3C
+                                    child = elem.contentDocument;
+                                } else if ('undefined' !== typeof elem.contentWindow) {
+                                    // Microsoft
+                                    child = elem.contentWindow.document;
+                                } else if ('undefined' !== typeof elem.document) {
+                                    // deprecated
+                                    child = elem.document;
+                                }
+
+                                child = fromHTML(child, filter);
+                                if (child) {
+                                    jml.push(child);
+                                }
+                            } catch (ex) {
+                            }
+                            break;
+                        case 'style':
+                            child = elem.styleSheet && elem.styleSheet.cssText;
+                            if (child && 'string' === typeof child) {
+                                // unwrap comment blocks
+                                child = child.replace('<!--', '').replace('-->', '');
+                                jml.push(child);
+                            } else if (elem.hasChildNodes()) {
+                                for (i = 0; i < elem.childNodes.length; i++) {
+                                    child = elem.childNodes[i];
+                                    child = fromHTML(child, filter);
+                                    if (child && 'string' === typeof child) {
+                                        // unwrap comment blocks
+                                        child = child.replace('<!--', '').replace('-->', '');
+                                        jml.push(child);
+                                    }
+                                }
+                            }
+                            break;
+                        case 'input':
+                            addChildren(elem, filter, jml);
+                            child = (elem.type !== 'password') && elem.value;
+                            if (child) {
+                                if (!hasAttrib) {
+                                    // need to add an attribute object
+                                    jml.shift();
+                                    props = {};
+                                    jml.unshift(props);
+                                    jml.unshift(elem.tagName || '');
+                                }
+                                props.value = child;
+                            }
+                            break;
+                        case 'textarea':
+                            if (!addChildren(elem, filter, jml)) {
+                                child = elem.value || elem.innerHTML;
+                                if (child && 'string' === typeof child) {
+                                    jml.push(child);
+                                }
+                            }
+                            break;
+                        default:
+                            addChildren(elem, filter, jml);
+                            break;
+                    }
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                case 3: // text node
+                case 4: // CDATA node
+                    var str = String(elem.nodeValue);
+                    // free references
+                    elem = null;
+                    return str;
+                case 10: // doctype
+                    jml = ['!'];
+                    var type = ['DOCTYPE', (elem.name || 'html').toLowerCase()];
+
+                    if (elem.publicId) {
+                        type.push('PUBLIC', '"' + elem.publicId + '"');
+                    }
+
+                    if (elem.systemId) {
+                        type.push('"' + elem.systemId + '"');
+                    }
+
+                    jml.push(type.join(' '));
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                case 8: // comment node
+                    if ((elem.nodeValue || '').indexOf('DOCTYPE') !== 0) {
+                        // free references
+                        elem = null;
+                        return null;
+                    }
+
+                    jml = ['!',
+                        elem.nodeValue];
+
+                    // filter result
+                    if ('function' === typeof filter) {
+                        jml = filter(jml, elem);
+                    }
+
+                    // free references
+                    elem = null;
+                    return jml;
+                default: // etc.
+                    // free references
+                    return (elem = null);
+            }
+        };
+
+        /**
+         * @param {string} html HTML text
+         * @param {function} filter
+         * @return {array} JsonML
+         */
+        return function (html, filter) {
+            filter = filter || function (jml, el) {
+                    jml.splice(0, 1);
+                    return [el.localName].concat(jml.filter(function (item) {
+                        if (typeof item === 'string') {
+                            return item.trim().length > 0
+                        }
+                        return true;
+                    }));
+                };
+
+            var elem = document.createElement('div');
+            elem.innerHTML = html;
+            var jml = fromHTML(elem, filter);
+            // free references
+            elem = null;
+
+            if (jml.length === 2) {
+                return jml[1];
+            }
+
+            // make wrapper a document fragment
+            jml[0] = '';
+            return jml;
+        };
+    })();
+
+    return yalla;
+})();
+
+function scriptStart() {
+    if (document.readyState == 'complete') {
+        var list = document.getElementsByTagName('script');
+        for (var i = 0; i < list.length; i++) {
+            var script = list[i];
+            if (script.getAttribute('src').indexOf('yalla.js') >= 0) {
+                var main = script.getAttribute('data-main');
+                var base = script.getAttribute('data-base');
+                if (main && base) {
+                    yalla.start(main, document.getElementsByName('body')[0], base);
+                    return true;
+                }
+                throw new Error('Please specify data-main and data-base in the script tag');
+            }
+        }
+    }
+    return false;
+}
+
+function startYalla() {
+    if (!scriptStart()) {
+        setTimeout(function () {
+            startYalla();
+        }, 0);
+    }
+}
+startYalla();
