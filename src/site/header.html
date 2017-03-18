@@ -2,11 +2,19 @@
     <style>
         root.container{
             text-align: center;
+            border-bottom: 1px solid #EEEEEE;
+            padding-bottom:0.5em;
+            background-color: #FCFCFC;
         }
         .title{
             font-size: 6.5em;
             font-weight: 100;
             text-align: center;
+            transition : 0.5s;
+        }
+        .title.title-small{
+            font-size: 3em;
+            font-weight: 300;
         }
         .subtitle{
             font-size: 1.7em;
@@ -14,9 +22,35 @@
             padding-left: 0.5em;
             padding-right: 0.5em;
         }
+        button {
+            -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            box-shadow:inset 0px 1px 0px 0px #ffffff;
+            background-color:#ffffff;
+            -moz-border-radius:6px;
+            -webkit-border-radius:6px;
+            border-radius:6px;
+            border:1px solid #dcdcdc;
+            display:inline-block;
+            cursor:pointer;
+            color:#666666;
+            padding:6px 24px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #ffffff;
+            margin-top : 1em;
+        }
+        button:hover {
+            background-color:#f6f6f6;
+        }
+        button:active {
+            position:relative;
+            top:1px;
+        }
+        button:focus {
+            outline:0;
+        }
     </style>
-    <label class="title">YallaJS</label>
-    <br>
-    <label class="subtitle">Html Component with Zero Boilerplate</label>
-    <button>Get Started</button>
+    <div class="title {$props.titleStyle === 'small' ? 'title-small' : ''}">YallaJS</div>
+    <div class="subtitle" $includeWhen="{$props.titleStyle != 'small'}">Html Component with Zero Boilerplate</div>
+    <button onclick="{window.location.hash = 'app/quick-start.index'}" $includewhen="{$props.titleStyle != 'small'}">Get Started</button>
 </div>

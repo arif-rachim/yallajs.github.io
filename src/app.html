@@ -1,9 +1,13 @@
-
 <div>
     <inject name="header" value="site/header" ></inject>
     <inject name="content" value="site/content" ></inject>
+    <inject name="landingPage" value="site/landing-page" ></inject>
     <inject name="footer" value="site/footer" ></inject>
-    <header></header>
-    <content></content>
+    <inject name="mediator" value="@app"></inject>
+    <header title-style="{mediator.isAtIndexPage() ? 'big' : 'small'}"></header>
+    <content>
+        <landing-page $includewhen="{mediator.isAtIndexPage()}"></landing-page>
+        <router-view></router-view>
+    </content>
     <footer></footer>
 </div>
