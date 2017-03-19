@@ -3,10 +3,11 @@
         .opening {
             margin-top: 1em;
             font-weight: 300;
+            line-height: 1.8em;
         }
 
         .title {
-            font-size: 1.5em;
+            font-size: 2.5em;
             margin-bottom: 0.5em;
         }
 
@@ -22,36 +23,331 @@
         }
 
         pre {
-            font-size: 0.9em;
-            font-family: "Arial";
+            font-size: 0.8em;
+            font-family: "monospace";
             padding: 1em
+        }
+
+        h3{
+            font-weight: 300;
+            font-size : 2em;
         }
 
 
     </style>
-    <section class="opening">
+    <section class="opening" onload="{Prism.highlightAll()}">
         <div class="title">
-            Selamat datang di Yallajs
+            Welcome to YallaJs
         </div>
         <div>
-            This quick start guide will take you through createding a Todo app using Yallajs and briefly
-            explain its main concepts. We assume you are familiar with Javascript, Html, and CSS.
+            The purpose of this quick start is to guide you to build todo application using Yallajs and briefly explain the concept yallajs.
+            We assume that you are already familiar with javascript, html and css.
         </div>
         <div>
-            Untuk memulai membangun aplikasi anda, mari kita mulai dengan membuat file <label class="file-link">index.html</label>
+            <h3>We start our project with 4 files</h3>
+            <ul>
+                <li>The first file is a library <label class="file-link">yalla.js</label>,you can download via this link. </li>
+                <li>The second file is <label class="file-link">index.html</label>. This file will be called first by the browser.
+                    In this file we declare what is the application entry point component and what is the name of the folder where we put our component component.
+                    In this example our entry point component is "app.html", and our source folder is "src".
+                </li>
+                <li>The third file is <label class="file-link">app.html</label> in the src folder.
+                    This file is the "html component", and the component name is app (following the name of the file).
+                    Inside this component we write markup that is used to render the UI components.</li>
+                <li>The fourth file is <label class="file-link">app-actions.js</label>. This file is javascript file, it contains the actions that can be invoked by component app.
+                    In app-actions.js we can define store for the state container, reducer for the logic of the app, and the action object as delegate object which will be invoked by component.</li>
+            </ul>
+            This is how the project structure look like.
+
         </div>
-        <div onload="{Prism.highlightAll()}">
-            <pre>
-                <code class="language-html">&lt;!doctype html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;script src="https://yallajs.github.io/yalla.js" data-main="app" data-base="src"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code>
+        <img src="samples/todo-project-structure.png" width="300px"/>
+        <div>
+            <h3>Let's start with<label class="file-link">index.html</label></h3>Following the code from index.html.
+        </div>
+        <div>
+            <pre data-line="5">
+                <code class="language-markup">    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;script src="yalla.js" data-main="app" data-base="src"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+    &lt;/html&gt</code>
             </pre>
+        </div>
+        <div>
+            <ul>
+                <li>On line 5 we set yalla.js library and provides two properties:</li>
+                <li>The first property data-main,this contain the name of component which will be called when the application is run.</li>
+                <li>The second property data-base,this contain the name of the folder, where it will be the base folder of the components.</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Let's look at our first component: <label class="file-link">app.html.</label></h3>
+        </div>
+        <div>
+            <pre data-line="2,3,8,12,14-16">
+                <code class="language-markup">&lt;div&gt;
+    &lt;inject name=&quot;action&quot; value=&quot;@app-actions&quot;&gt;&lt;/inject&gt;
+    &lt;style&gt;
+        .complete {
+            text-decoration: line-through;
+        }
+    &lt;/style&gt;
+    &lt;form onsubmit=&quot;{action.submit(this.elements.inputTodo.value)}&quot;&gt;
+        &lt;input type=&quot;text&quot; name=&quot;inputTodo&quot;&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Add&quot;&gt;
+    &lt;/form&gt;
+    &lt;ul foreach=&quot;todoItem,index in action.getState().todos&quot;&gt;
+        &lt;li&gt;
+            &lt;input type=&quot;checkbox&quot; onchange=&quot;{action.toggleTodo(index)}&quot; checked=&quot;{todoItem.complete}&quot;&gt;
+            &lt;label class=&quot;{todoItem.complete ? 'complete' : ''}&quot;&gt;{todoItem.todo}&lt;/label&gt;
+            &lt;button onclick=&quot;{action.removeTodo(index)}&quot;&gt;Delete&lt;/button&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code>
+            </pre>
+            <ul>
+                <li>
+                    In line 2 we inject the app-actions.js and store it into a variable named action.
+                    Element tag "inject" is non ui element. This element is used to declare an object dependencies required by the component. Besides "inject", there are also non-ui tags such as "router-view" and "var".
+                </li>
+                <li>
+                    On line 3 we declare the style for the component. This style is isolated in the component, so if you declare style in a component, the style will not spill into other components.
+                </li>
+                <li>
+                    On line 8 we declare onsubmit listener. Here we call the submit method of action object, and send parameters inputTodo.value. Yallajs use single mustache expression to call actions.
+                </li>
+                <li>
+                    On line 12 we declare foreach, with variable todoItem and index from the array coming from from action.getState().todos.
+                </li>
+                <li>
+                    On line 14 to 15 we make item renderer of todoItem. The item renderer can access todoItem and index that we declare in the foreach expression.
+                </li>
+            </ul>
+
+        </div>
+        <div>
+            <h3>Now let's see <label class="file-link">app-actions.js</label></h3>
+        </div>
+
+        <div>
+            We begin by defining the initial state of our application. We will create an array with 2 items as the initial state as follows.
+            <pre>
+                <code class="language-js">var initialState = {
+    todos : [
+        {
+            todo : 'Sample One',
+            complete : false
+        },
+        {
+            todo : 'Sample Two',
+            complete : true
+        }
+    ]
+};</code>
+            </pre>
+
+        </div>
+        <div>
+            Then we create a function 'reducer' that return application a new state based on the action type.
+            The reducer is a pure function that takes the previous state and an action, and returns the next state.
+            <pre data-line="2,3,5-8,12,16-17">
+                <code class="language-js">var reducer = function(prevState,action){
+    var newState = yalla.clone(prevState);
+    switch (action.type){
+        case 'add' : {
+            newState.todos.push({
+                todo : action.todo,
+                complete : false
+            });
+            break;
+        }
+        case 'remove' : {
+            newState.todos.splice(action.index,1);
+            break;
+        }
+        case 'toggleMark' : {
+            var todoItem = newState.todos[action.index];
+            todoItem.complete = !todoItem.complete;
+            break;
+        }
+    }
+    return newState;
+}</code>
+            </pre>
+            <ul>
+                <li>
+                    On line 2 we see yalla.clone syntax. This is for copying the initial state.
+                    We make a new copy of the state because we do not want to change the previous state object, but we want return the new state object.
+                </li>
+                <li>
+                    On line 3 line we perform switch case statement based on action.type.
+                    Switch statement read action.type and modify the new state accordingly.
+                </li>
+                <li>
+                    On line 5 we see if the action type is "add", then we will have to push a new todo object into todos array.
+                </li>
+                <li>
+                    On line 12 we see if the action type is "remove", then we will remove the todo based action.index.
+                </li>
+                <li>
+                    On line 16 we see if the action type is "toggleMark", then we will take the todo based on action.index, then toggle the value of todoItem.complete.
+                </li>
+            </ul>
+        </div>
+        <div>
+            Then we create a store to manage the state. A store holds the whole state tree of your application.
+            The only way to change the state inside it is to dispatch an action on it.
+
+            A store is not a class. It's just an object with a few methods on it.
+            To create it, pass your reducing function to createStore.
+            <ul>
+                <li>
+                    The first parameter is a function reducer.
+                </li>
+                <li>
+                    The second parameter is the store initial state.
+                </li>
+            </ul>
+            <pre data-line="1,3-5">
+                <code class="language-js">    var store = yalla.createStore(reducer,initialState);
+
+    store.subscribe(function(){
+        yalla.markAsDirty();
+    });</code>
+            </pre>
+            <ul>
+                <li>On line 1 we create an object store with mempassing function reducer, and the initial state of the store
+                </li>
+                <li>On line 3 until 5, we listen to the store if there is a state change, then we call yalla.markAsDirty()
+                    to inform yalla to patch the dom.
+                </li>
+            </ul>
+        </div>
+        <div>
+            Now we'll create an action object which will be called by component.
+            <pre data-line="3-6,29">
+                <code class="language-js">    var actions = {
+        addTodo : function(text){
+            store.dispatch({
+                type : 'add',
+                todo : text
+            });
+        },
+        submit : function(text){
+            this.addTodo(text);
+            return false;
+        },
+        removeTodo : function(index){
+            store.dispatch({
+                type : 'remove',
+                index : index
+            })
+        },
+        toggleTodo : function (index){
+            store.dispatch({
+                type : 'toggleMark',
+                index : index
+            })
+        },
+        getState : function(){
+            return store.getState();
+        }
+    }
+
+    $export = actions;
+                </code>
+            </pre>
+            <ul>
+                <li>action object is the mediator of the component.
+                    In action functions we can see that the object call store.dispatch.
+                    We call store.dispatch, by passing the action payload.
+                </li>
+                <li>In line 29, we set the value of $export to action object. Thus this file app-actions.js will return action object when injected to component.
+                </li>
+            </ul>
+
+        </div>
+        <div>
+            Here is the complete code of the app-actions.js.
+            <pre style="font-size: 0.7em;">
+                <code class="language-js">var initialState = {
+    todos : [
+        {
+            todo : 'Sample One',
+            complete : false
+        },
+        {
+            todo : 'Sample Two',
+            complete : true
+        }
+    ]
+};
+
+var reducer = function(prevState,action){
+    var newState = yalla.clone(prevState);
+    switch (action.type){
+        case 'add' : {
+            newState.todos.push({
+                todo : action.todo,
+                complete : false
+            });
+            break;
+        }
+        case 'remove' : {
+            newState.todos.splice(action.index,1);
+            break;
+        }
+        case 'toggleMark' : {
+            var todoItem = newState.todos[action.index];
+            todoItem.complete = !todoItem.complete;
+            break;
+        }
+    }
+    return newState;
+}
+
+var store = yalla.createStore(reducer,initialState);
+
+store.subscribe(function(){
+    yalla.markAsDirty();
+});
+
+var actions = {
+    addTodo : function(text){
+        store.dispatch({
+            type : 'add',
+            todo : text
+        });
+    },
+    submit : function(text){
+        this.addTodo(text);
+        return false;
+    },
+    removeTodo : function(index){
+        store.dispatch({
+            type : 'remove',
+            index : index
+        })
+    },
+    toggleTodo : function (index){
+        store.dispatch({
+            type : 'toggleMark',
+            index : index
+        })
+    },
+    getState : function(){
+        return store.getState();
+    }
+}
+
+$export = actions;
+                </code>
+            </pre>
+            Run LocalServer and call index.html from the browser.
         </div>
     </section>
 </div>
