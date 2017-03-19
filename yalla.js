@@ -1,13 +1,7 @@
 /*
- UI Framework Callback
- $render : callback function
- $render : function(
- {
- $subView : // for placing subView element,
- $children : // for placing children as An Element
- $store(reducer,initialState,middleware) : // mechanism to create componentStore
- }
- )
+ * Released under the MIT License
+ * Copyright © 2017 Arif Rachim
+ * a.arif.r@gmail.com
  */
 
 var yalla = (function () {
