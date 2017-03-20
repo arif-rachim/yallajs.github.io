@@ -1,0 +1,48 @@
+<div>
+
+    <style>
+        root {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        .table {
+            display: table;
+            width: 100%;
+        }
+
+        .row {
+            display: table-row;
+        }
+
+        .cell {
+            display: table-cell;
+            vertical-align: top;
+        }
+
+        .cell-content {
+            width: 80%;
+        }
+
+        .cell-list {
+            width: 20%;
+        }
+    </style>
+    <inject name="contactList" value="contact-manager/list"/>
+    <inject name="browserSize" value="@contact-manager/browser-size"/>
+    <var name="isMobile" value="{browserSize.getWidth() <= 760}"/>
+    <div class="table" $includewhen="{!isMobile}">
+        <div class="cell cell-list">
+            <contact-list></contact-list>
+        </div>
+        <div class="cell cell-content">
+            <router-view></router-view>
+        </div>
+    </div>
+    <div $includewhen="{isMobile}">
+        <contact-list></contact-list>
+        <div style="margin-top: 1em">
+            <router-view></router-view>
+        </div>
+    </div>
+</div>
