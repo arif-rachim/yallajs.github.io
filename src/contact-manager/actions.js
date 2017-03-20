@@ -29,7 +29,7 @@ var initialState = {
             id : 'd'
         }
     ],
-    selectedContact: null
+    selectedContact: {}
 };
 
 var reducer = function (prevState, action) {

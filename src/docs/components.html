@@ -1,0 +1,104 @@
+<div>
+    <style>
+        root {
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
+
+        .title {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        pre {
+            font-size: 0.8em;
+        }
+    </style>
+    <div onload="{Prism.highlightAll()}">
+
+        <div class="title">
+            Components
+        </div>
+        <div>
+            Component help you make your UI becomes independent, reusable and can be tested individually.
+        </div>
+        <div>
+            In yallajs you build your components using simple HTML. You can declare your stylesheeet in the component
+            and the stylesheet will be isolated in the component.
+        </div>
+        <div>
+            <h3>Let's create our first component "hello-world".</h3>
+            <ul>
+                <li>Create a file named hello-world.html in the base folder</li>
+                <li>Now in the hello-world.html you can start writing html</li>
+            </ul>
+
+            <pre onload="{Prism.highlightAll()}">
+            <code class="language-markup">hello-world.html
+&lt;div&gt;Hello World&lt;/div&gt;</code>
+        </pre>
+            <ul>
+                <li>Now from browser you can start calling your components by using HTML5 hashbang</li>
+                <li>http://localhost:8080/index.html#hello-world</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Lets give properties to component</h3>
+            <ul>
+                <li>We want to use name properties in the component</li>
+                <li>We can use curly braces to input expression in the component</li>
+            </ul>
+
+            <pre onload="{Prism.highlightAll()}">
+                <code class="language-markup">hello-world.html
+&lt;div&gt;Hello World {$props.name}&lt;/div&gt;</code>
+            </pre>
+            <ul>
+                <li>Now from browser you can start passing the properties to the component</li>
+                <li>http://localhost:8080/index.html#hello-world:name=Jonny Papa</li>
+                <li>Your component will render Hello World Jonny Papa</li>
+                <li>Properties passed from browser is colon separated.</li>
+
+            </ul>
+            <pre onload="{Prism.highlightAll()}">
+                <code class="language-markup">hello-world.html
+&lt;div&gt;Hello World {$props.firstName} {$props.lastName}&lt;/div&gt;</code>
+            </pre>
+            <ul>
+                <li>Now from browser you can start passing the properties to the component</li>
+                <li>http://localhost:8080/index.html#hello-world:firstName=Jonny Jonny:lastName=Yes Papa</li>
+                <li>Your component will render Hello World Jonny Jonny Yes Papa</li>
+
+            </ul>
+        </div>
+        <div>
+            <h3>Lets put some styles to the component</h3>
+            <ul>
+                <li>We want to style the component</li>
+                <li>We can use style tag in inside the component</li>
+            </ul>
+
+            <pre onload="{Prism.highlightAll()}">
+                <code class="language-markup">hello-world.html
+&lt;div&gt;
+  &lt;style&gt;
+      root{
+         font-size : 1em;
+      }
+      .label {
+         background-color : #CCCCCC;
+      }
+  &lt;/style&gt;
+   Hello World &lt;label class="label"&gt;{$props.firstName} {$props.lastName}&lt;/label&gt;
+&lt;/div&gt;</code>
+            </pre>
+            <ul>
+                <li>root selector will be apply to the component root (in this example it is a DIV tag)</li>
+                <li>We can define all the rules in style tag and the rules will be isolated in this component</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+</div>

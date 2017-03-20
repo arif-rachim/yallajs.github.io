@@ -35,7 +35,7 @@
 
 
     </style>
-    <section class="opening" onload="{Prism.highlightAll()}">
+    <section class="opening" >
         <div class="title">
             Welcome to YallaJs
         </div>
@@ -65,7 +65,7 @@
             <h3>Let's start with : index.html</h3>Following the code from index.html.
         </div>
         <div>
-            <pre data-line="5">
+            <pre data-line="5" onload="{Prism.highlightAll()}">
                 <code class="language-markup">    &lt;!doctype html&gt;
     &lt;html lang="en"&gt;
     &lt;head&gt;
@@ -88,7 +88,7 @@
             <h3>Let's look at our first component: app.html</h3>
         </div>
         <div>
-            <pre data-line="2,3,8,12,14-16">
+            <pre data-line="2,3,8,12,14-16" onload="{Prism.highlightAll()}">
                 <code class="language-markup">&lt;div&gt;
     &lt;inject name=&quot;action&quot; value=&quot;@app-actions&quot;&gt;&lt;/inject&gt;
     &lt;style&gt;
@@ -135,7 +135,7 @@
 
         <div>
             We begin by defining the initial state of our application. We will create an array with 2 items as the initial state as follows.
-            <pre>
+            <pre onload="{Prism.highlightAll()}">
                 <code class="language-js">var initialState = {
     todos : [
         {
@@ -154,7 +154,7 @@
         <div>
             Then we create a function 'reducer' that return application a new state based on the action type.
             The reducer is a pure function that takes the previous state and an action, and returns the next state.
-            <pre data-line="2,3,5-8,12,16-17">
+            <pre data-line="2,3,5-8,12,16-17" onload="{Prism.highlightAll()}">
                 <code class="language-js">var reducer = function(prevState,action){
     var newState = yalla.clone(prevState);
     switch (action.type){
@@ -177,7 +177,7 @@
     }
     return newState;
 }</code>
-            </pre>
+            </pre >
             <ul>
                 <li>
                     On line 2 we see yalla.clone syntax. This is for copying the initial state.
@@ -212,7 +212,7 @@
                     The second parameter is the store initial state.
                 </li>
             </ul>
-            <pre data-line="1,3-5">
+            <pre data-line="1,3-5" onload="{Prism.highlightAll()}">
                 <code class="language-js">    var store = yalla.createStore(reducer,initialState);
 
     store.subscribe(function(){
@@ -229,7 +229,7 @@
         </div>
         <div>
             Now we'll create an action object which will be called by component.
-            <pre data-line="3-6,29">
+            <pre data-line="3-6,29" onload="{Prism.highlightAll()}">
                 <code class="language-js">    var actions = {
         addTodo : function(text){
             store.dispatch({
@@ -273,7 +273,7 @@
         </div>
         <div>
             Here is the complete code of the app-actions.js.
-            <pre style="font-size: 0.7em;">
+            <pre style="font-size: 0.7em;" onload="{Prism.highlightAll()}">
                 <code class="language-js">var initialState = {
     todos : [
         {
