@@ -1,16 +1,17 @@
 <div>
-    <table>
+    <var name="contacts" value="{actions.getContacts()}" />
+    <table $includewhen="{contacts && contacts.length > 0}">
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
             <th>Phone</th>
         </tr>
-        <tr>
-            <td>John</td>
-            <td>Rohn</td>
-            <td>john.rohn@gmail.com</td>
-            <td>06092982</td>
+        <tr foreach="contact in contacts">
+            <td>{contact.firstName}</td>
+            <td>{contact.lastName}</td>
+            <td>{contact.emailName}</td>
+            <td>{contact.phoneNo}</td>
         </tr>
     </table>
 </div>

@@ -88,17 +88,19 @@ $export = {
         window.location = '#app/contact-manager.index/contact-manager.detail:id='+id;
     },
     getContact : function(id) {
-        if(id == 'new'){
+        if(!id || id == ''){
             return {};
         }else{
             var contacts = store.getState().contacts.filter(function (contact) {
                 return contact.id == id;
             });
             if (contacts.length > 0) {
-                store.dispatch({
-                    type : 'selectContact',
-                    id : id
-                });
+                if(store.getState().selectedContact.id != id){
+                    store.dispatch({
+                        type : 'selectContact',
+                        id : id
+                    });
+                }
                 return contacts[0];
             }
         }
@@ -132,12 +134,6 @@ $export = {
     },
     isContactSelected : function(id){
         var state = store.getState();
-        console.log(id);
-        if(state.selectedContact){
-            console.log(state.selectedContact.id);
-        }else{
-            console.log('no selected contact');
-        }
         return state.selectedContact && state.selectedContact.id == id;
     }
 

@@ -26,7 +26,34 @@
             attribute display: none,it will not going to make dom in the browser at all instead hiding it
             , hence it will reduce the memory usage.
         </div>
-
-
+        <div>
+            <h3>Lets update the table in 'user-list'</h3>
+            <ul>
+            <li>To check Conditional Rendering we can use attribute $includewhen just like following example</li>
+            </ul>
+            <pre onload="{Prism.highlightAll()}">
+                <code class="language-markup">contact-manager/user-list.html
+&lt;div&gt;
+    &lt;var name="contacts" value="{actions.getContacts()}" /&gt;
+    &lt;table $includewhen="{contacts &amp;&amp; contacts.length &gt; 0}"&gt;
+        &lt;tr&gt;
+            &lt;th&gt;First Name&lt;/th&gt;
+            &lt;th&gt;Last Name&lt;/th&gt;
+            &lt;th&gt;Email&lt;/th&gt;
+            &lt;th&gt;Phone&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr foreach="contact in contacts"&gt;
+            &lt;td&gt;{contact.firstName}&lt;/td&gt;
+            &lt;td&gt;{contact.lastName}&lt;/td&gt;
+            &lt;td&gt;{contact.emailName}&lt;/td&gt;
+            &lt;td&gt;{contact.phoneNo}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/div&gt;</code>
+            </pre>
+            <ul>
+                <li>Above code means we will render the table if we have contacts data</li>
+            </ul>
+        </div>
     </div>
 </div>
