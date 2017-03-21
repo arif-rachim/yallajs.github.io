@@ -76,9 +76,6 @@ var reducer = function (prevState, action) {
 
 var store = yalla.createStore(reducer, initialState);
 
-store.subscribe(function () {
-    yalla.markAsDirty();
-});
 
 $export = {
     getState: function () {

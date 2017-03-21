@@ -212,18 +212,11 @@
                     The second parameter is the store initial state.
                 </li>
             </ul>
-            <pre data-line="1,3-5" onload="{Prism.highlightAll()}">
-                <code class="language-js">    var store = yalla.createStore(reducer,initialState);
-
-    store.subscribe(function(){
-        yalla.markAsDirty();
-    });</code>
+            <pre data-line="1" onload="{Prism.highlightAll()}">
+                <code class="language-js">var store = yalla.createStore(reducer,initialState);</code>
             </pre>
             <ul>
                 <li>On line 1 we create an object store with mempassing function reducer, and the initial state of the store
-                </li>
-                <li>On line 3 until 5, we listen to the store if there is a state change, then we call yalla.markAsDirty()
-                    to inform yalla to patch the dom.
                 </li>
             </ul>
         </div>
@@ -312,9 +305,6 @@ var reducer = function(prevState,action){
 
 var store = yalla.createStore(reducer,initialState);
 
-store.subscribe(function(){
-    yalla.markAsDirty();
-});
 
 var actions = {
     addTodo : function(text){

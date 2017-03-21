@@ -37,10 +37,6 @@ var reducer = function(prevState,action){
 
 var store = yalla.createStore(reducer,initialState);
 
-store.subscribe(function(){
-    yalla.markAsDirty();
-});
-
 var actions = {
     addTodo : function(text){
         store.dispatch({

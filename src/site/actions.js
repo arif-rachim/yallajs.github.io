@@ -16,9 +16,6 @@ var store = yalla.createStore(function(prevState,action){
     displayMenu : false
 });
 
-store.subscribe(function(){
-    yalla.markAsDirty();
-});
 
 store.openMenu = function(){
     store.dispatch({
