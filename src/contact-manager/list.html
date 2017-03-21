@@ -88,8 +88,9 @@
         <button onclick="{action.addNewItem()}" class="button">Add</button>
     </div>
     <div class="card-holder">
-        <div foreach="contact in contacts" class="card-container">
-            <div class="card {action.isContactSelected(contact.id)? 'selected' : ''}" onclick="{action.showContact(contact.id)}">
+        <div class="card-container">
+
+            <div class="card {action.isContactSelected(contact.id)? 'selected' : ''}" foreach="contact in contacts"  onclick="{action.showContact(contact.id)}">
                 <div class="deleteIcon" onclick="{action.delete(contact.id)}"><i class="fa fa-times fa-lg"></i></div>
                 <div class="name">{contact.firstName} {contact.lastName}</div>
                 <div>{contact.email}</div>
