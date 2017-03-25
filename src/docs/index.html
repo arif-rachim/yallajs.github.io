@@ -1,0 +1,485 @@
+<div>
+    <h1 id="yallajs">Component with Zero Boilerplate</h1>
+
+    <p>Component in Yallajs is just an <em>HTML</em>,
+        there is no need to create javascript controller. HTML Component in Yallajs basicly its just
+        a <strong>stateless functional component</strong>.</p>
+
+    <p>Yallajs is bundled with <strong>state-container</strong> Redux. Therefore, Yallajs enforce the
+        component to remain stateles and work only in accordance to the state container.</p>
+
+    <p>Yallajs is equipped with routing and module management. Yallajs routing mechanism in very simple
+        but quite powerful. Each component can be called directly from the browser address bar
+        by using hashbang operator. If the component is invoked via the browser address bar, then these
+        components function as a View, but when its being used as a component of a <strong><em>composite component</em></strong>, then
+        it works as a subcomponent.</p>
+
+    <h2 id="setup">Setup</h2>
+
+    <p>To setup yallajs application you can add following script tag in the head element in your index.html</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;script src="http://yallajs.io/yalla.js" data-main="first-component" data-base="src"&gt;
+</code></pre>
+
+    <p>When importing yalla.js, we need to specify two attributes in the script tag : </p>
+
+    <blockquote>
+        <ul>
+            <li>data-main : This is the main component which will be called if there is no value in hashbang operator.</li>
+
+            <li>data-base : This is the base folder where we keep our source code.</li>
+        </ul>
+    </blockquote>
+
+    <pre onload="{Prism.highlightAll()}"><code>.
+├── src
+|   └── first-component.html
+└── index.html
+</code></pre>
+
+    <h2 id="creatingfirstcomponenthtml">Creating first-component.html</h2>
+
+    <p>Inside first-component.html we can start writing our html code. </p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;Hello World&lt;/div&gt;
+</code></pre>
+
+    <p>Now if we run index html from browser it should print Hello World.</p>
+
+    <h4 id="whenbuildingyallacomponenttherearesomerulesthatweneedtofollow"><em>When building yalla component, there are some rules that we need to follow:</em></h4>
+
+    <blockquote>
+        <ul>
+            <li>Component should only return single element.</li>
+
+            <li>Script tag is not allowed (or yallajs will ignore them)</li>
+        </ul>
+    </blockquote>
+
+    <p>Yallajs is equiped with its own routing framework </p>
+
+    <p>Therefore Component can be <strong>called directly</strong> from browser by using hashbang operator :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>http://localhost:8080/index.html#first-component
+</code></pre>
+
+    <h2 id="componentrouting">Component Routing  </h2>
+
+    <p>Yallajs equipped with simple but powerful routing framework. We can call a component directly from the
+        browser by using hashbang. </p>
+
+    <p>For example,if we have a component named component-a.html placed directly below the base folder,
+        we can call component-a from browser with following address (assuming the localserver port is 8080):</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">http://localhost:8080/index.html#component-a
+</code></pre>
+
+    <p>In order to access to component which is stored under subfolder or package, we can use  dot <code>.</code> to access them :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>.
+└── src
+    ├── first-component.html
+    └── package-a
+         ├── second-component.html
+         └── package-b
+             └── third-compoent.html
+</code></pre>
+
+    <p>To render first-component in browser :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">http://localhost:8080/index.html#first-component
+</code></pre>
+
+    <p>To render second-component in browser :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">http://localhost:8080/index.html#package-a.second-component
+</code></pre>
+
+    <p>To render third-component in browser :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">http://localhost:8080/index.html#package-a.package-b.third-component
+</code></pre>
+
+    <h3 id="routingwithrouterview">Routing with <code>&lt;router-view&gt;</code></h3>
+
+    <p>Yallajs also support subrouting using slash <code>/</code>. Subrouting in yallajs means we call the other components
+        to be rendered in the browser.</p>
+
+    <p>For Example:
+        We can request to render second-component after first-component in the browser address bar with following address :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>http://localhost:8080/index.html#first-component/package-a.second-component
+</code></pre>
+
+    <p>And in our first-component we need to place the <code>&lt;router-view&gt;</code> tag, to inform the browser where they should place the second-component.</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;!-- fisrt-component.html --&gt;
+&lt;div&gt;
+    Hello World
+    &lt;router-view&gt;&lt;/router-view&gt;
+&lt;/div&gt;
+
+&lt;!-- package-a/second-component.html --&gt;
+&lt;div&gt;
+    &lt;label&gt;This is second component&lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <p>Above code will generate following code in browser :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;!-- browser result --&gt;
+&lt;div&gt;
+     Hello World
+     &lt;div&gt;
+        &lt;label&gt;This is second component&lt;/label&gt;
+     &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <h2 id="expressionwithbracket"><code>{expression}</code> with Bracket</h2>
+
+    <p>We can use bracket to render simple expression. For example :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;What is 1 + 2 = {1+2} &lt;/div&gt;
+</code></pre>
+
+    <p>This will print in the browser <em>What is 1 + 2 = 3</em></p>
+
+    <h4 id="rulesonyallajsexpression"><em>Rules on yallajs <code>{expression}</code> :</em></h4>
+
+    <blockquote>
+        <ul>
+            <li>There should not be new line in the expression</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;div&gt;What is 1 + 2 = {1
+                    + 2} &lt;/div&gt;
+</code></pre>
+
+        <ul>
+            <li>It doesn't accept function</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;div&gt;What is 1 + 2 = {function(){return 1 + 2}()} &lt;/div&gt;
+</code></pre>
+
+        <ul>
+            <li>It should not contain bracket</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;div&gt;What is 1 + 2 = { {one : 1 + 2}.one } &lt;/div&gt;
+</code></pre>
+    </blockquote>
+
+    <p>Following expression are valid</p>
+
+    <blockquote>
+        <ul>
+            <li>Ternary operator</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">CORRECT !!
+&lt;div&gt;What is 1 + 2 = { (1 + 1) == 2 ? 'ITS TWO' : 'I DONT KNOW' } &lt;/div&gt;
+</code></pre>
+
+        <ul>
+            <li>Calling actions method</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">CORRECT !!
+&lt;div&gt;What is 1 + 2 = { actions.getTheResult(1+2) } &lt;/div&gt;
+</code></pre>
+
+        <ul>
+            <li>Used in component attribute except 'style' attribute</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">CORRECT !!
+&lt;div&gt;
+  &lt;first-component
+      name="{user.name}"
+      address="{user.address}"
+      class="{user.active ? 'green' : 'grey'}"&gt;&lt;/first-component&gt;
+&lt;div&gt;
+
+WRONG !!!
+&lt;div style="{'name'}"&gt;&lt;/div&gt;
+</code></pre>
+    </blockquote>
+
+    <p>If the component is used in the component attribute, these same rules applies.</p>
+
+    <h2 id="componentpropertieswithdprops">Component Properties with $props</h2>
+
+    <p>At the heart of Yalla components is the $props. $props is the object that holds parameter
+        from outside. Parameters can come from the browser address bar, or from the composite component.</p>
+
+    <p>For example using $props.</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;Hello {$props.firstName} {$props.lastName}&lt;/div&gt;
+</code></pre>
+
+    <p>Now if called the component from browser we can pass the properties <strong>separated with colon</strong>.</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>http://localhost:8080/index.html#first-component:firstName=Bruno:lastName=Mars
+</code></pre>
+
+    <p>We can also give each routing component properties</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>http://localhost:8080/index.html#first-component:firstName=Bruno:lastName=Mars/package-a.second-component:location=Barcelona:date=April-7
+</code></pre>
+
+    <p>Or if we use them in composite component, we need to use <strong>hyphen-case instead camelCase</strong>.</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    &lt;first-component first-name="Bruno" last-name="Mars"&gt;&lt;/first-component&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <h2 id="compositecomponent">Composite Component  </h2>
+
+    <p>Composite components are components formed from other components. With composite
+        components we can put more features on the component, and make them reusable. </p>
+
+    <p>Composite component divided into two chapter. First is about Dependency Injection, <em>how to
+        inject outside component into composite component</em>. Second is about Children,
+        <em>how to render the elements given by the parent container</em> into our the component.</p>
+
+    <h3 id="dependencyinjection">Dependency Injection</h3>
+
+    <p>Lets create another component named 'composite-component'</p>
+
+    <pre onload="{Prism.highlightAll()}"><code>.
+├── src
+|   ├── first-component.html
+|   └── composite-component.html
+└── index.html
+</code></pre>
+
+    <p>To include smaller components in
+        composite components, we can use the <code>&lt;inject&gt;</code> tag.</p>
+
+    <p>The <code>&lt;inject&gt;</code> tag basicly is a dependency injection in Yallajs. We can inject a <em>component or an object</em>.</p>
+
+    <h3 id="toinjectacomponentorobjectincompositecomponentwecanusefollowing">To inject a component or object in composite component we can use following :</h3>
+
+    <p>Injecting a Component</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    &lt;inject name="myFirstComponent" value="first-component"&gt;&lt;/inject&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <p>Injecting an Object</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    &lt;inject name="myActions" value="@my-actions"&gt;&lt;/inject&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <ul>
+        <li><strong>name</strong> : is the variable name, we should use <strong>camelCase</strong> for name attribute.</li>
+    </ul>
+
+    <blockquote>
+        <p>When we want to use the component, we need to use hyphen-case instead camelCase. <code>&lt;my-first-component&gt;</code></p>
+
+        <ul>
+            <li><strong>value</strong> : is the javascript file name that we want to inject. If we want to inject an Object we need to add prefix "@" in it <code>&lt;inject name="actions" value="@actions-object"&gt;</code></li>
+        </ul>
+
+        <p>Inside our composite component we can use firstComponent with <em>hyphen-case instead camelCase</em></p>
+    </blockquote>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    &lt;inject name="myFirstComponent" value="first-component"&gt;&lt;/inject&gt;
+    &lt;my-first-component first-name="Bruno" last-name="Mars"&gt;&lt;/my-first-component&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <h4 id="rulesonyallajsinjecttag"><em>Rules on yallajs <code>inject</code> tag:</em></h4>
+
+    <blockquote>
+        <ul>
+            <li>Inject tag should have attribute name and value</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;inject var="myFirstComponent" value="first-component"&gt;&lt;/inject&gt;
+</code></pre>
+
+        <ul>
+            <li>Inject tag name and value cannot contain expression</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;inject name="{'myFirstComponent'}" value="first-component"&gt;&lt;/inject&gt;
+&lt;inject name="myFirstComponent" value="{nameOfHtmlFile}"&gt;&lt;/inject&gt;
+</code></pre>
+
+        <ul>
+            <li>name should use camelCase</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;inject name="my-first-component" value="first-component"&gt;&lt;/inject&gt;
+</code></pre>
+
+        <ul>
+            <li>To inject javascript object value should start with @</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;inject name="myActions" value="@my-actions"&gt;&lt;/inject&gt;
+</code></pre>
+    </blockquote>
+
+    <h3 id="childrendchildren">Children <code>$children</code></h3>
+
+    <p>Children are the components given by the parent component (Composite component) to be rendered in the component.</p>
+
+    <p>Lets take a look on example</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;!-- composite-component.html --&gt;
+&lt;div&gt;
+    ...
+    &lt;first-component&gt;
+        &lt;!-- start childrens of first component --&gt;
+        &lt;h1&gt;Hello World&lt;/h1&gt;
+        &lt;label&gt;This is a label&lt;/label&gt;
+        &lt;!-- end childrens of first component --&gt;
+    &lt;/first-component&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <p>Above example, The composite-component.html define the children of first-component. Next in the first-component.html
+        we can place the children in using <code>$children</code> tag.</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;!-- first-component.html --&gt;
+&lt;div&gt;
+    Hello World
+    &lt;div $children&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <p>Above code means that we are going to place the <code>children</code> given by the parent component into div tag.</p>
+
+    <h4 id="rulesonyallajsdchildren"><em>Rules on yallajs <code>$children</code>:</em></h4>
+
+    <blockquote>
+        <ul>
+            <li>When we define <code>$children</code> into a tag, the children will be included from the last index</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html  language-html ">&lt;!-- composite-component.html --&gt;
+&lt;div&gt;
+   ...
+   &lt;first-component&gt;
+       &lt;!-- start childrens of first component --&gt;
+       &lt;h1&gt;Hello World&lt;/h1&gt;
+       &lt;label&gt;This is a label&lt;/label&gt;
+       &lt;!-- end childrens of first component --&gt;
+   &lt;/first-component&gt;
+&lt;/div&gt;
+
+&lt;!-- first-component.html --&gt;
+&lt;div&gt;
+   Hello World
+   &lt;div $children&gt;
+       &lt;div&gt;Label One&lt;/div&gt;
+       &lt;div&gt;Label Two&lt;/div&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+        <p>Above code will render following in the browser.</p>
+    </blockquote>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    Hello World
+    &lt;div&gt;
+        &lt;div&gt;Label One&lt;/div&gt;
+        &lt;div&gt;Label Two&lt;/div&gt;
+        &lt;h1&gt;Hello World&lt;/h1&gt;
+        &lt;label&gt;This is a label&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <h2 id="iteratingarrayusingforeach">Iterating array using <code>foreach</code></h2>
+
+    <p>We can iterate an Array inside components by using <code>foreach</code> attribute.
+        Foreach attribute value in yallajs components is similiar with javascript foreach statement :
+        it is separated with in operator.
+        <code>foreach="item in array"</code>. </p>
+
+    <p>For example :</p>
+
+    <pre onload="{Prism.highlightAll()}"><code class="html language-html">&lt;div&gt;
+    &lt;inject name="actions" value="@my-actions"&gt;&lt;/inject&gt;
+    &lt;ul&gt;
+        &lt;li foreach="item in actions.getItems()"&gt;
+            {item.name}
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <p>Above code means we iterate the array, results of function getItems in actions object.</p>
+
+    <p>We can get the index, and the array that we iterate by using as the second and third parameter.</p>
+
+    <pre ><code class="html language-html">&lt;div&gt;
+    &lt;inject name="actions" value="@my-actions"&gt;&lt;/inject&gt;
+    &lt;ul&gt;
+        &lt;li foreach="item,index,array in actions.getItems()"&gt;
+            No : {index+1} Name : {item.name}
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <h4 id="rulesonyallajsforeachattribute"><em>Rules on yallajs <code>foreach</code> attribute:</em></h4>
+
+    <blockquote>
+        <ul>
+            <li><code>foreach</code> attribute accepts string not <code>{expression}</code></li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">WRONG !!!
+&lt;li foreach="{item in actions.getItems()}"&gt;
+</code></pre>
+
+        <ul>
+            <li>First parameter is the currentValue, second is the index, thrid is the array</li>
+        </ul>
+
+        <pre onload="{Prism.highlightAll()}"><code class="html language-html">CORRECT !!!
+&lt;li foreach="item,index,array in actions.getItems()"&gt;
+</code></pre>
+    </blockquote>
+
+    <h2 id="statecontainerwithredux">State Container with Redux</h2>
+
+    <p>Yallajs is equiped state container redux.
+        Redux is a predictable state container for JavaScript apps.</p>
+
+    <p>Inorder to understand Redux, you can follow this link</p>
+
+    <p>http://redux.js.org/docs/basics/</p>
+
+    <p>State container is a very powerfull tools in order to manage the application scalability. </p>
+
+    <p>What is available in Yallajs Redux :</p>
+
+    <ul>
+        <li>Create Store using yalla.createStore.</li>
+
+        <li>Combine Reducer using yalla.combineReducer.</li>
+
+        <li>Applymiddleware using yalla.applyMiddleware.</li>
+    </ul>
+</div>
