@@ -1,5 +1,8 @@
 <div>
     <style>
+        root{
+            margin-top :1em;
+        }
         .line {
             margin-top: 1em;
             margin-bottom: 0em;
@@ -21,6 +24,12 @@
 
     </style>
     <div>
+        <iframe width="{videoWidth}" height="{videoHeight}" src="https://www.youtube.com/embed/GVQDfolFo5A" frameborder="0" allowfullscreen></iframe>
+        <inject name="browserSize" value="@contact-manager/browser-size"></inject>
+        <var name="viewPortWidth" value="{browserSize.getWidth()}" />
+        <var name="videoWidth" value="{viewPortWidth < 1200 ? (viewPortWidth - 80) : 1200}"></var>
+        <var name="videoHeight" value="{(videoWidth / 560 )*315}"></var>
+
         <section>
             <h4>Just one library</h4>
             Build HTML5 applications require a lot of libraries. Some but not all including library to manage modules,
