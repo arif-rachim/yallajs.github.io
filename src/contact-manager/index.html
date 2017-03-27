@@ -29,8 +29,8 @@
         }
 
     </style>
-    <inject name="contactList" value="contact-manager/list"/>
-    <inject name="browserSize" value="@contact-manager/browser-size"/>
+    <inject name="contactList" value="list"/>
+    <inject name="browserSize" value="@/contact-manager/browser-size"/>
     <var name="isMobile" value="{browserSize.getWidth() <= 760}"/>
     <div class="table" $includewhen="{!isMobile}">
         <div class="cell cell-list">

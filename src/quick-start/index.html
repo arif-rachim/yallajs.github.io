@@ -40,7 +40,7 @@
 
     </style>
     <section class="opening" >
-        <inject name="browserSize" value="@contact-manager/browser-size"></inject>
+        <inject name="browserSize" value="@/contact-manager/browser-size"></inject>
         <var name="viewPortWidth" value="{browserSize.getWidth()}" />
         <var name="videoWidth" value="{viewPortWidth < 1200 ? (viewPortWidth - 80) : 1200}"></var>
         <var name="videoHeight" value="{(videoWidth / 560 )*315}"></var>

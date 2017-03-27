@@ -115,7 +115,7 @@
         }
     </style>
 
-    <inject name="actions" value="@site/actions"></inject>
+    <inject name="actions" value="@actions"></inject>
     <var name="displaySmall" value="{$props.titleStyle === 'small'}"></var>
     <var name="displayMenu" value="{actions.getState().displayMenu}"></var>
     <div class="menu {!displayMenu? 'menu-hide' : ''}">

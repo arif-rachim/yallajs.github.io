@@ -72,7 +72,7 @@
         }
 
     </style>
-    <inject name="action" value="@contact-manager/actions" />
+    <inject name="action" value="@actions" />
     <var name="contact" value="{action.getContact($props.id)}" />
     <form onsubmit="{action.saveForm(e.target)}">
         <input type="hidden" name="contactId" value="{contact.id}">
