@@ -1,0 +1,25 @@
+<style>
+    root {
+        border : 1px solid #ECECEC;
+        border-radius: 3px;
+        margin: 1rem;
+        box-shadow: 0px 5px 10px -3px #ECECEC;
+    }
+    .header{
+        background-color: #FCFCFC;
+        border-bottom: 1px solid #ECECEC;
+        padding : 0.8rem;
+    }
+
+    .content{
+        padding: 0.8rem;
+    }
+</style>
+<div>
+    <div class="header">
+        <slot-view name="title"></slot-view>
+    </div>
+    <div class="content" >
+        <slot-view name="content"></slot-view>
+    </div>
+</div>
