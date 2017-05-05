@@ -4,7 +4,7 @@
         <button style="margin-left: 1rem" click.trigger="redirect('get-started')" class="btn btn-primary">Get Started</button>
     </p>
 </div>
-<div resize.trigger="onRowResized()" style="text-align: center;margin-top:1rem">
+<div style="text-align: center;margin-top:1rem">
     <iframe width.bind="videoWidth()" height.bind="videoHeight()" src="https://www.youtube.com/embed/NpRFvL6wTfU"
             frameborder="0" allowfullscreen style="margin: auto;"></iframe>
 </div>
@@ -13,7 +13,7 @@
 
     var videoWidth = function () {
         var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        return Math.min((w - 20), 1000);
+        return Math.min((w - 40), 1000);
     };
 
     var videoHeight = function () {

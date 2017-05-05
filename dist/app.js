@@ -50,7 +50,7 @@ yalla.framework.addComponent("/dist/app", (function() {
     var home = $context["home"];
     elementOpenStart("style", "");
     elementOpenEnd("style");
-    text("\r\n[element='dist.app'] .hidden {font-size: 0;}\r\n[element='dist.app'] .title {font-size: 4rem;}\r\n[element='dist.app'] h4,\r\n[element='dist.app'] h1 {transition: 500ms ease all;}");
+    text("\r\n[element='dist.app'] .hidden {font-size: 0;}\r\n[element='dist.app'] .title {font-size: 4rem;}\r\n[element='dist.app'] h4,\r\n[element='dist.app'] h1 {transition: 500ms ease all;}\r\n[element='dist.app'] .footer {position: fixed;left: 0;right: 0;bottom: 0;background-color: #FCFCFC;border-top: 1px solid #EEEEEE;padding : 0.3rem;text-align: center;font-size: 0.9rem;}");
     elementClose("style");
     elementOpenStart("div", "");
     attr("element", "dist.app");
@@ -76,16 +76,30 @@ yalla.framework.addComponent("/dist/app", (function() {
     elementClose("div");
     if (locationIsDefault()) {
       elementOpenStart("div", "");
+      attr("style", "padding-bottom: 4rem");
       elementOpenEnd("div");
       $context["home"].render({}, function(slotName) {});
       elementClose("div");
     }
     if (!locationIsDefault()) {
       elementOpenStart("div", "");
+      attr("style", "padding-bottom: 4rem");
       elementOpenEnd("div");
       _slotView("default");
       elementClose("div");
     }
+    elementOpenStart("div", "");
+    attr("class", "footer");
+    elementOpenEnd("div");
+    elementOpenStart("div", "");
+    elementOpenEnd("div");
+    text("Copyright © 2017 Arif Rachim.");
+    elementClose("div");
+    elementOpenStart("div", "");
+    elementOpenEnd("div");
+    text("Licensed under the MIT License.");
+    elementClose("div");
+    elementClose("div");
     elementClose("div");
     elementOpenStart("script", "");
     elementOpenEnd("script");

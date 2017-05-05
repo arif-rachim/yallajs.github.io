@@ -12,22 +12,38 @@
         transition: 500ms ease all;
     }
 
+    .footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #FCFCFC;
+        border-top: 1px solid #EEEEEE;
+        padding : 0.3rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
 </style>
 
-<div>
+<div >
     <div style="background-color: #FCFCFC;border-bottom: 1px solid #EEEEEE">
         <div style="text-align: center;margin: auto;padding-top:10px">
             <h1 style="margin-bottom: 0px;" class.bind="locationIsDefault() ? '':'title'">YallaJS</h1>
             <h4 class.bind="locationIsDefault() ? '':'hidden'">Zero Boilerplate Webapp</h4>
         </div>
     </div>
-    <div if.bind="locationIsDefault()">
+    <div if.bind="locationIsDefault()" style="padding-bottom: 4rem">
         <home></home>
     </div>
-    <div if.bind="!locationIsDefault()">
+    <div if.bind="!locationIsDefault()" style="padding-bottom: 4rem">
         <slot-view></slot-view>
     </div>
+    <div class="footer">
+        <div>Copyright © 2017 Arif Rachim.</div><div>Licensed under the MIT License.</div>
+    </div>
 </div>
+
 <script>
     function locationIsDefault(){
         return ['','#app'].indexOf(window.location.hash) >= 0;

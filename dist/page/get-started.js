@@ -23,63 +23,19 @@ yalla.framework.addComponent("/dist/page/get-started", (function() {
     {
       title: 'YallaJS Expression',
       description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Calling Component from browser\'s address bar',
-      description: 'In this tutorial you will learn how to call component from browser address bar',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Chaining sub-components from the browser\'s address bar',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Accessing component properties using prefix $',
-      description: 'In this tutorial you will learn how to call component from browser address bar',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Component Dependency Injection',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Content Projection',
-      description: 'In this tutorial you will learn how to call component from browser address bar',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Listening on Event',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Publishing component Event',
-      description: 'In this tutorial you will learn how to call component from browser address bar',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Iterate array with for.each',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Conditional Rendering with if.bind',
-      description: 'In this tutorial you will learn how to call component from browser address bar',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Repaint changes',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
-    },
-    {
-      title: 'Asynchronous Data Load',
-      description: 'In this tutorial you will learn how YallaJS Expression work',
-      youtube: 'https://www.youtube.com/embed/pMmS2SM4eBM'
+      youtube: 'https://www.youtube.com/embed/5In_4H1K1cU'
     }
+    //        {title : 'Calling Component from browser\'s address bar',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Chaining sub-components from the browser\'s address bar',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Accessing component properties using prefix $',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Component Dependency Injection',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Content Projection',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Listening on Event',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Publishing component Event',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Iterate array with for.each',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Conditional Rendering with if.bind',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Repaint changes',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+    //        {title : 'Asynchronous Data Load',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'}
   ];
 
 
@@ -149,8 +105,8 @@ yalla.framework.addComponent("/dist/page/get-started", (function() {
           elementClose("div");
         }
         if (slotName == "content") {
-          elementOpenStart("p", "");
-          elementOpenEnd("p");
+          elementOpenStart("div", "");
+          elementOpenEnd("div");
           elementOpenStart("iframe", "");
           attr("width", "100%");
           attr("height", videoHeight());
@@ -159,7 +115,7 @@ yalla.framework.addComponent("/dist/page/get-started", (function() {
           attr("allowfullscreen", "allowfullscreen");
           elementOpenEnd("iframe");
           elementClose("iframe");
-          elementClose("p");
+          elementClose("div");
         }
       });
       elementClose("div");

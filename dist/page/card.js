@@ -18,7 +18,7 @@ yalla.framework.addComponent("/dist/page/card", (function() {
   function $render(_data, _slotView) {
     elementOpenStart("style", "");
     elementOpenEnd("style");
-    text("\r\n[element='dist.page.card'] {border : 1px solid #ECECEC;border-radius: 3px;margin: 1rem;box-shadow: 0px 5px 10px -3px #ECECEC;}\r\n[element='dist.page.card'] .header{background-color: #FCFCFC;border-bottom: 1px solid #ECECEC;padding : 0.8rem;}\r\n[element='dist.page.card'] .content{padding: 0.8rem;}");
+    text("\r\n[element='dist.page.card'] {margin: 1rem;box-shadow: 0px 5px 5px 0px #CCCCCC;}\r\n[element='dist.page.card'] .header{border: 1px solid #ECECEC;background-color: #FCFCFC;border-bottom: 1px solid #ECECEC;padding : 0.8rem;}\r\n[element='dist.page.card'] .content{padding: 0.5rem;background-color: black;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;}");
     elementClose("style");
     elementOpenStart("div", "");
     attr("element", "dist.page.card");

@@ -18,7 +18,7 @@ yalla.framework.addComponent("/dist/page/home", (function() {
 
   var videoWidth = function() {
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    return Math.min((w - 20), 1000);
+    return Math.min((w - 40), 1000);
   };
 
   var videoHeight = function() {
@@ -55,9 +55,6 @@ yalla.framework.addComponent("/dist/page/home", (function() {
     elementClose("div");
     elementOpenStart("div", "");
     attr("element", "dist.page.home");
-    attr("onresize", function(event) {
-      return onRowResized()
-    });
     attr("style", "text-align: center;margin-top:1rem");
     elementOpenEnd("div");
     elementOpenStart("iframe", "");
