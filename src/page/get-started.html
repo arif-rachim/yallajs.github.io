@@ -14,7 +14,7 @@
         <div class="col-12 col-lg-6 col-md-12" id="tutorialPanel" for.each="tutorial,index in tutorials">
             <card>
                 <div slot.name="title"><strong>{{ index + 1 }}. {{tutorial.title}}</strong></div>
-                <p slot.name="content"><iframe width="100%" height.bind="videoHeight()" src="https://www.youtube.com/embed/NpRFvL6wTfU" frameborder="0" allowfullscreen></iframe></p>
+                <p slot.name="content"><iframe width="100%" height.bind="videoHeight()" src.bind="tutorial.youtube" frameborder="0" allowfullscreen></iframe></p>
             </card>
         </div>
     </div>
@@ -22,19 +22,19 @@
 
 <script>
     var tutorials = [
-        {title : 'YallaJS Installation',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'YallaJS Expression',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Calling Component from browser\'s address bar',description:'In this tutorial you will learn how to call component from browser address bar'},
-        {title : 'Chaining sub-components from the browser\'s address bar',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Accessing component properties using prefix $',description:'In this tutorial you will learn how to call component from browser address bar'},
-        {title : 'Component Dependency Injection',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Content Projection',description:'In this tutorial you will learn how to call component from browser address bar'},
-        {title : 'Listening on Event',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Publishing component Event',description:'In this tutorial you will learn how to call component from browser address bar'},
-        {title : 'Iterate array with for.each',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Conditional Rendering with if.bind',description:'In this tutorial you will learn how to call component from browser address bar'},
-        {title : 'Repaint changes',description:'In this tutorial you will learn how YallaJS Expression work'},
-        {title : 'Asynchronous Data Load',description:'In this tutorial you will learn how YallaJS Expression work'}
+        {title : 'YallaJS Installation',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'YallaJS Expression',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Calling Component from browser\'s address bar',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Chaining sub-components from the browser\'s address bar',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Accessing component properties using prefix $',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Component Dependency Injection',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Content Projection',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Listening on Event',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Publishing component Event',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Iterate array with for.each',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Conditional Rendering with if.bind',description:'In this tutorial you will learn how to call component from browser address bar',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Repaint changes',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'},
+        {title : 'Asynchronous Data Load',description:'In this tutorial you will learn how YallaJS Expression work',youtube:'https://www.youtube.com/embed/pMmS2SM4eBM'}
         ];
 
 
