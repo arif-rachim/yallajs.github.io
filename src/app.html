@@ -1,13 +1,52 @@
 <div>
-    <inject name="header" value="site/header" ></inject>
-    <inject name="content" value="site/content" ></inject>
-    <inject name="landingPage" value="site/landing-page" ></inject>
-    <inject name="footer" value="site/footer" ></inject>
-    <inject name="mediator" value="@app"></inject>
-    <header title-style="{mediator.isAtIndexPage() ? 'big' : 'small'}"></header>
-    <content>
-        <landing-page $includewhen="{mediator.isAtIndexPage()}"></landing-page>
-        <router-view></router-view>
-    </content>
-    <footer></footer>
+    <div style="background-color: #FCFCFC;border-bottom: 1px solid #EEEEEE">
+        <div style="text-align: center;margin: auto;padding-top:10px">
+            <h1 style="margin-bottom: 0px;margin-top: 0px">YallaJS</h1>
+            <h4>Zero Boilerplate Webapp</h4>
+        </div>
+    </div>
+    <div style="text-align: center;margin-top: 1rem">
+        <p style="margin-bottom: 0px">Yalla JS is a javascript client framework for building Mobile, Tablet and Web application with great ease and simplicity. <button style="margin-left: 1rem">Get Started</button> </p>
+
+    </div>
+    <div resize.trigger="onRowResized()" style="text-align: center">
+        <iframe width.bind="videoWidth" height.bind="videoHeight()" src="https://www.youtube.com/embed/NpRFvL6wTfU" frameborder="0" allowfullscreen style="margin: auto;"></iframe>
+    </div>
+
 </div>
+<script>
+
+    var videoWidth = 1000;
+
+    var videoHeight = function(){
+        return videoWidth * ( 315 / 560 );
+    };
+
+
+    // Returns a function, that, as long as it continues to be invoked, will not
+    // be triggered. The function will be called after it stops being called for
+    // N milliseconds. If `immediate` is passed, trigger the function on the
+    // leading edge, instead of the trailing.
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    window.addEventListener('resize',debounce(function(){
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        videoWidth = Math.min((w - 20),1000);
+        $patchChanges();
+    },100,false));
+
+</script>
