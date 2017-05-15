@@ -45,7 +45,7 @@ yalla.framework.addComponent("/dist/page/home", (function() {
     elementOpenStart("button", "");
     attr("style", "margin-left: 1rem");
     attr("onclick", function(event) {
-      return redirect('get-started')
+      return redirect('getting-started')
     });
     attr("class", "btn btn-primary");
     elementOpenEnd("button");
