@@ -6,14 +6,14 @@ yalla.framework.addComponent("/dist/page/home", (function() {
   var $context = {};
   var $patchRef = yalla.framework.patchRef;
   var $inject = yalla.framework.createInjector("/dist/page/home");
-  var elementOpen = IncrementalDOM.elementOpen,
-    elementClose = IncrementalDOM.elementClose,
-    elementOpenStart = IncrementalDOM.elementOpenStart,
-    elementOpenEnd = IncrementalDOM.elementOpenEnd,
-    elementVoid = IncrementalDOM.elementVoid,
-    text = IncrementalDOM.text,
-    attr = IncrementalDOM.attr,
-    skip = IncrementalDOM.skip;
+  var _elementOpen = IncrementalDOM.elementOpen,
+    _elementClose = IncrementalDOM.elementClose,
+    _elementOpenStart = IncrementalDOM.elementOpenStart,
+    _elementOpenEnd = IncrementalDOM.elementOpenEnd,
+    _elementVoid = IncrementalDOM.elementVoid,
+    _text = IncrementalDOM.text,
+    _attr = IncrementalDOM.attr,
+    _skip = IncrementalDOM.skip;
 
 
   var videoWidth = function() {
@@ -34,42 +34,42 @@ yalla.framework.addComponent("/dist/page/home", (function() {
 
 
   function $render(_data, _slotView) {
-    elementOpenStart("div", "");
-    attr("element", "dist.page.home");
-    attr("style", "text-align: center;margin-top: 1rem");
-    elementOpenEnd("div");
-    elementOpenStart("p", "");
-    attr("style", "margin-bottom: 0px;margin-left: 1rem;margin-right: 1rem");
-    elementOpenEnd("p");
-    text("Yalla JS is a javascript client framework for        building Mobile, Tablet and Web application with great ease and simplicity.");
-    elementOpenStart("button", "");
-    attr("style", "margin-left: 1rem");
-    attr("onclick", function(event) {
+    _elementOpenStart("div", "");
+    _attr("element", "dist.page.home");
+    _attr("style", "text-align: center;margin-top: 1rem");
+    _elementOpenEnd("div");
+    _elementOpenStart("p", "");
+    _attr("style", "margin-bottom: 0px;margin-left: 1rem;margin-right: 1rem");
+    _elementOpenEnd("p");
+    _text("Yalla JS is a javascript client framework for        building Mobile, Tablet and Web application with great ease and simplicity.");
+    _elementOpenStart("button", "");
+    _attr("style", "margin-left: 1rem");
+    _attr("onclick", function(event) {
       return redirect('getting-started')
     });
-    attr("class", "btn btn-primary");
-    elementOpenEnd("button");
-    text("Get Started");
-    elementClose("button");
-    elementClose("p");
-    elementClose("div");
-    elementOpenStart("div", "");
-    attr("element", "dist.page.home");
-    attr("style", "text-align: center;margin-top:1rem");
-    elementOpenEnd("div");
-    elementOpenStart("iframe", "");
-    attr("width", videoWidth());
-    attr("height", videoHeight());
-    attr("src", "https://www.youtube.com/embed/NpRFvL6wTfU");
-    attr("frameborder", "0");
-    attr("allowfullscreen", "allowfullscreen");
-    attr("style", "margin: auto;");
-    elementOpenEnd("iframe");
-    elementClose("iframe");
-    elementClose("div");
-    elementOpenStart("script", "");
-    elementOpenEnd("script");
-    elementClose("script");
+    _attr("class", "btn btn-primary");
+    _elementOpenEnd("button");
+    _text("Get Started");
+    _elementClose("button");
+    _elementClose("p");
+    _elementClose("div");
+    _elementOpenStart("div", "");
+    _attr("element", "dist.page.home");
+    _attr("style", "text-align: center;margin-top:1rem");
+    _elementOpenEnd("div");
+    _elementOpenStart("iframe", "");
+    _attr("width", videoWidth());
+    _attr("height", videoHeight());
+    _attr("src", "https://www.youtube.com/embed/NpRFvL6wTfU");
+    _attr("frameborder", "0");
+    _attr("allowfullscreen", "allowfullscreen");
+    _attr("style", "margin: auto;");
+    _elementOpenEnd("iframe");
+    _elementClose("iframe");
+    _elementClose("div");
+    _elementOpenStart("script", "");
+    _elementOpenEnd("script");
+    _elementClose("script");
   }
   if (typeof $render === "function") {
     $export.render = $render;

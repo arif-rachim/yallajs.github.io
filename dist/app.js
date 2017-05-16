@@ -6,14 +6,14 @@ yalla.framework.addComponent("/dist/app", (function() {
   var $context = {};
   var $patchRef = yalla.framework.patchRef;
   var $inject = yalla.framework.createInjector("/dist/app");
-  var elementOpen = IncrementalDOM.elementOpen,
-    elementClose = IncrementalDOM.elementClose,
-    elementOpenStart = IncrementalDOM.elementOpenStart,
-    elementOpenEnd = IncrementalDOM.elementOpenEnd,
-    elementVoid = IncrementalDOM.elementVoid,
-    text = IncrementalDOM.text,
-    attr = IncrementalDOM.attr,
-    skip = IncrementalDOM.skip;
+  var _elementOpen = IncrementalDOM.elementOpen,
+    _elementClose = IncrementalDOM.elementClose,
+    _elementOpenStart = IncrementalDOM.elementOpenStart,
+    _elementOpenEnd = IncrementalDOM.elementOpenEnd,
+    _elementVoid = IncrementalDOM.elementVoid,
+    _text = IncrementalDOM.text,
+    _attr = IncrementalDOM.attr,
+    _skip = IncrementalDOM.skip;
 
   function locationIsDefault() {
     return ['', '#app'].indexOf(window.location.hash) >= 0;
@@ -48,62 +48,62 @@ yalla.framework.addComponent("/dist/app", (function() {
   function $render(_data, _slotView) {
     $context["home"] = $inject("/page/home");
     var home = $context["home"];
-    elementOpenStart("style", "");
-    elementOpenEnd("style");
-    text("\r\n[element='dist.app'] .hidden {font-size: 0;}\r\n[element='dist.app'] .title {font-size: 4rem;}\r\n[element='dist.app'] h4,\r\n[element='dist.app'] h1 {transition: 500ms ease all;}\r\n[element='dist.app'] .footer {position: fixed;left: 0;right: 0;bottom: 0;background-color: #FCFCFC;border-top: 1px solid #EEEEEE;padding : 0.3rem;text-align: center;font-size: 0.9rem;}");
-    elementClose("style");
-    elementOpenStart("div", "");
-    attr("element", "dist.app");
-    elementOpenEnd("div");
-    elementOpenStart("div", "");
-    attr("style", "background-color: #FCFCFC;border-bottom: 1px solid #EEEEEE");
-    elementOpenEnd("div");
-    elementOpenStart("div", "");
-    attr("style", "text-align: center;margin: auto;padding-top:10px");
-    elementOpenEnd("div");
-    elementOpenStart("h1", "");
-    attr("style", "margin-bottom: 0px;");
-    attr("class", locationIsDefault() ? '' : 'title');
-    elementOpenEnd("h1");
-    text("YallaJS");
-    elementClose("h1");
-    elementOpenStart("h4", "");
-    attr("class", locationIsDefault() ? '' : 'hidden');
-    elementOpenEnd("h4");
-    text("Zero Boilerplate Webapp");
-    elementClose("h4");
-    elementClose("div");
-    elementClose("div");
+    _elementOpenStart("style", "");
+    _elementOpenEnd("style");
+    _text("\r\n[element='dist.app'] .hidden {font-size: 0;}\r\n[element='dist.app'] .title {font-size: 4rem;}\r\n[element='dist.app'] h4,\r\n[element='dist.app'] h1 {transition: 500ms ease all;}\r\n[element='dist.app'] .footer {position: fixed;left: 0;right: 0;bottom: 0;background-color: #FCFCFC;border-top: 1px solid #EEEEEE;padding : 0.3rem;text-align: center;font-size: 0.9rem;}");
+    _elementClose("style");
+    _elementOpenStart("div", "");
+    _attr("element", "dist.app");
+    _elementOpenEnd("div");
+    _elementOpenStart("div", "");
+    _attr("style", "background-color: #FCFCFC;border-bottom: 1px solid #EEEEEE");
+    _elementOpenEnd("div");
+    _elementOpenStart("div", "");
+    _attr("style", "text-align: center;margin: auto;padding-top:10px");
+    _elementOpenEnd("div");
+    _elementOpenStart("h1", "");
+    _attr("style", "margin-bottom: 0px;");
+    _attr("class", locationIsDefault() ? '' : 'title');
+    _elementOpenEnd("h1");
+    _text("YallaJS");
+    _elementClose("h1");
+    _elementOpenStart("h4", "");
+    _attr("class", locationIsDefault() ? '' : 'hidden');
+    _elementOpenEnd("h4");
+    _text("Zero Boilerplate Webapp");
+    _elementClose("h4");
+    _elementClose("div");
+    _elementClose("div");
     if (locationIsDefault()) {
-      elementOpenStart("div", "");
-      attr("style", "padding-bottom: 4rem");
-      elementOpenEnd("div");
+      _elementOpenStart("div", "");
+      _attr("style", "padding-bottom: 4rem");
+      _elementOpenEnd("div");
       $context["home"].render({}, function(slotName) {});
-      elementClose("div");
+      _elementClose("div");
     }
     if (!locationIsDefault()) {
-      elementOpenStart("div", "");
-      attr("style", "padding-bottom: 4rem");
-      elementOpenEnd("div");
+      _elementOpenStart("div", "");
+      _attr("style", "padding-bottom: 4rem");
+      _elementOpenEnd("div");
       _slotView("default");
-      elementClose("div");
+      _elementClose("div");
     }
-    elementOpenStart("div", "");
-    attr("class", "footer");
-    elementOpenEnd("div");
-    elementOpenStart("div", "");
-    elementOpenEnd("div");
-    text("Copyright © 2017 Arif Rachim.");
-    elementClose("div");
-    elementOpenStart("div", "");
-    elementOpenEnd("div");
-    text("Licensed under the MIT License.");
-    elementClose("div");
-    elementClose("div");
-    elementClose("div");
-    elementOpenStart("script", "");
-    elementOpenEnd("script");
-    elementClose("script");
+    _elementOpenStart("div", "");
+    _attr("class", "footer");
+    _elementOpenEnd("div");
+    _elementOpenStart("div", "");
+    _elementOpenEnd("div");
+    _text("Copyright © 2017 Arif Rachim.");
+    _elementClose("div");
+    _elementOpenStart("div", "");
+    _elementOpenEnd("div");
+    _text("Licensed under MIT License.");
+    _elementClose("div");
+    _elementClose("div");
+    _elementClose("div");
+    _elementOpenStart("script", "");
+    _elementOpenEnd("script");
+    _elementClose("script");
   }
   if (typeof $render === "function") {
     $export.render = $render;
