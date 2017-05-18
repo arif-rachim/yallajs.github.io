@@ -40,7 +40,7 @@ yalla.framework.addComponent("/dist/page/home", (function() {
     _attr("class", "btn btn-primary");
     _attr("style", "margin-left: 1rem");
     _elementOpenEnd("a");
-    _text("Get Started.");
+    _text("Get Started!");
     _elementClose("a");
     _elementClose("p");
     _elementClose("div");
