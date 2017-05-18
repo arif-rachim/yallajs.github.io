@@ -1947,8 +1947,15 @@ var yalla = (function () {
 
     function patchGlobal() {
         var address = [framework.defaultComponent];
+        var addressString = '';
+        var googleEscapedFragment = '?_escaped_fragment_=';
         if (window.location.hash != "") {
-            address = window.location.hash.substring(1, window.location.hash.length).split("/").map(function(addr){
+            addressString = window.location.hash.substring(1, window.location.hash.length);
+        }else if(window.location.search.indexOf(googleEscapedFragment) == 0){
+            addressString = decodeURIComponent(window.location.search.substring(googleEscapedFragment.length,window.location.search.length));
+        }
+        if(addressString && addressString.length > 0){
+            address = addressString.split("/").map(function(addr){
                 if(addr && addr.indexOf('!') == 0 && addr.length > 1){
                     addr = addr.substring(1,addr.length);
                 }
@@ -1960,6 +1967,7 @@ var yalla = (function () {
                 return false;
             });
         }
+
         var componentAndParams = address.map(function (pathQuery) {
             var valParams = pathQuery.split(':');
             var path = valParams[0].replace(/\./g, '/');
