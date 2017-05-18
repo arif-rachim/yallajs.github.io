@@ -16,9 +16,11 @@ yalla.framework.addComponent("/dist/app", (function() {
     _skip = IncrementalDOM.skip;
 
   function locationIsDefault() {
+
     if (window.location.hash == '' && window.location.search.length > 0) {
       return false;
     }
+
     return ['', '#app', '#!app', '#!/app'].indexOf(window.location.hash) >= 0;
   }
 
