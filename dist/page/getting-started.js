@@ -40,15 +40,13 @@ yalla.framework.addComponent("/dist/page/getting-started", (function() {
     _attr("element", "dist.page.getting-started");
     _attr("style", "text-align: center;margin-top: 1rem");
     _elementOpenEnd("div");
-    _elementOpenStart("button", "");
-    _attr("style", "margin-left: 1rem");
-    _attr("onclick", function(event) {
-      return backToMain()
-    });
+    _elementOpenStart("a", "");
+    _attr("href", "#!/app");
     _attr("class", "btn btn-primary");
-    _elementOpenEnd("button");
-    _text("Back to Main");
-    _elementClose("button");
+    _attr("style", "margin-left: 1rem");
+    _elementOpenEnd("a");
+    _text("Home");
+    _elementClose("a");
     _elementClose("div");
     _elementOpenStart("div", "");
     _attr("element", "dist.page.getting-started");

@@ -16,7 +16,7 @@ yalla.framework.addComponent("/dist/app", (function() {
     _skip = IncrementalDOM.skip;
 
   function locationIsDefault() {
-    return ['', '#app'].indexOf(window.location.hash) >= 0;
+    return ['', '#app', '#!app', '#!/app'].indexOf(window.location.hash) >= 0;
   }
 
   // Returns a function, that, as long as it continues to be invoked, will not

@@ -26,13 +26,6 @@ yalla.framework.addComponent("/dist/page/home", (function() {
   };
 
 
-  function redirect(page) {
-    window.location.hash = '#app/page.' + page;
-  }
-
-
-
-
   function $render(_data, _slotView) {
     _elementOpenStart("div", "");
     _attr("element", "dist.page.home");
@@ -42,15 +35,13 @@ yalla.framework.addComponent("/dist/page/home", (function() {
     _attr("style", "margin-bottom: 0px;margin-left: 1rem;margin-right: 1rem");
     _elementOpenEnd("p");
     _text("Yalla JS is a javascript client framework for        building Mobile, Tablet and Web application with great ease and simplicity.");
-    _elementOpenStart("button", "");
-    _attr("style", "margin-left: 1rem");
-    _attr("onclick", function(event) {
-      return redirect('getting-started')
-    });
+    _elementOpenStart("a", "");
+    _attr("href", "#!/app/page.getting-started");
     _attr("class", "btn btn-primary");
-    _elementOpenEnd("button");
+    _attr("style", "margin-left: 1rem");
+    _elementOpenEnd("a");
     _text("Get Started");
-    _elementClose("button");
+    _elementClose("a");
     _elementClose("p");
     _elementClose("div");
     _elementOpenStart("div", "");
