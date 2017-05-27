@@ -533,9 +533,10 @@ Inside name-card.html
 </script>
 ```
 
+
 ## Publishing Component Event
 
-YallaJS ***sub-component*** can publish events using ```$oneventname``` property. 
+YallaJS ***sub-component*** can publish component event using ```emitEvent``` method. 
 
 YallaJS ***composite-component*** can listen to an event using ```eventname.trigger```
 
@@ -554,11 +555,11 @@ Inside ***sub-component*** : john-doe.html
 ```html
 <div>
     <p>My name is John Doe</p>
-    <button click.trigger="jonDoeClicked($onMyEvent)">JOHN DOE CLICKED</button>
+    <button click.trigger="onButtonClicked()">John Doe Clicked</button>
 </div>
 <script>
-    function jonDoeClicked(onMyEvent){
-        onMyEvent('John Doe Clicked');
+    function onButtonClicked(){
+        this.emitEvent('my-event',{value:'john doe is clicked'})
     }
 </script>
 ```
@@ -569,7 +570,7 @@ Inside ***composite-component*** : name-card.html
 <inject from="/john-doe" name="johndoe">
 <div>
     Hello : 
-    <johndoe MyEvent.trigger="onCustomEventListener(event)"> </johndoe>
+    <johndoe my-event.trigger="onCustomEventListener(event)"> </johndoe>
 </div>
 <script>
     function onCustomEventListener(event){
@@ -577,7 +578,6 @@ Inside ***composite-component*** : name-card.html
     }
 </script>
 ```
-
 ## Iterate array with Foreach
 
 YallaJS component can render the array by using ```for.each``` attribute.
