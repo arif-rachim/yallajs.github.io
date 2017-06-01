@@ -1,4 +1,5 @@
-## Installation And Setup
+
+### Installation And Setup
 
 To install yallajs you can type the following in the command line
 
@@ -300,6 +301,78 @@ The browser will render the output as follows :
     My name is : John Doe
 </div>
 ```
+
+## Listening property change with ```onPropertyChange```
+YallaJS component can listen property changes by implementing ```function onPropertyChange(event)``` in the component.
+
+YallaJS ```onPropertyChange``` event has 4 values (property,oldVal,newVal, and type)
+
+
+Example :
+/src/name-card.html
+```html
+<div>
+    My name is : {{ $firstName +' '+ $lastName }}
+</div>
+<script>
+    function onPropertyChange(event){
+        switch(event.type){
+            case 'add' : {
+                alert('property added '+event.property+' val '+event.newVal);
+                break;
+            }
+            case 'remove' : {
+                alert('property removed '+event.property+' val '+event.oldVal);
+                break;
+            }
+            case 'change' : {
+                alert('property changed '+event.property+' val '+event.newVal+' '+event.oldVal);
+                break;
+            }
+        }
+    }
+</script>
+```
+
+
+
+## Accessing component state using prefix @
+
+YallaJS component can have its own local state.
+
+YallaJS component uses ```@stateName``` to access the value of the state.
+
+YallaJS component uses ```function initState(props)``` to initialize the state.
+
+
+Example :
+/src/name-card.html
+```html
+<div>
+    My name is : {{ @firstName +' '+ @lastName }}
+</div>
+<script>
+    function initState(props){
+        return {
+            firstName : 'John',
+            lastName : 'Doe'
+        }
+    }
+</script>
+```
+
+If we call name-card component from browser's address bar :
+
+```html
+http://localhost:8080/index.html#name-card
+```
+
+The browser will render the output as follows :
+```html
+<div>
+    My name is : John Doe
+</div>
+```
 ## Component Dependency Injection
 
 YallaJS components can be combined with other components (sub-components) to form more complex components or so-called ***composite-component***.
@@ -349,13 +422,14 @@ Browser will render :
 YallaJS ***composit-component*** can also assign property value to the sub-components.
 
 Following is an example:
-```html
-.
+ 
+ ```html
+  .
   +-- index.html
   +-- /src
       +-- name-card.html 
-      +-- first-last-name.html
-```
+      +-- first-last-name.html 
+ ```
 
 Inside ***composite-component*** : name-card.html 
 
@@ -519,20 +593,19 @@ Inside name-card.html
 
 ```html
 <div>
-    <input type="text" change.trigger="textChange(this)">
-    <button click.trigger="helloWorld(event)">Hello World</button>
+    <input type="text" change.trigger="textChange()">
+    <button click.trigger="helloWorld()">Hello World</button>
 </div>
 <script>
-    function helloWorld(event){
+    function helloWorld(){
         alert('Hello World');
     }
     
-    function textChange(textInput){
-        alert(textInput.value);
+    function textChange(){
+        alert(this.target.value);
     }
 </script>
 ```
-
 
 ## Publishing Component Event
 
@@ -578,6 +651,7 @@ Inside ***composite-component*** : name-card.html
     }
 </script>
 ```
+
 ## Iterate array with Foreach
 
 YallaJS component can render the array by using ```for.each``` attribute.
@@ -758,4 +832,3 @@ Inside index.html
     </script>
 </html>
 ```
-
