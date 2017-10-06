@@ -34,8 +34,19 @@ function backToHome(){
     patchUpdate();
 }
 function onkeyup(e){
+
     if(e.key == 'Enter'){
         let todo = e.target.value;
+        let alreadyExist = false;
+        todos.forEach(t =>{
+            if(t.todo == todo){
+                alreadyExist = true;
+            }
+        });
+        if(alreadyExist){
+            alert(`"${todo}" already exist`);
+            return;
+        }
         todos.push({todo:todo,completed:false,editing:false});
         e.target.value = '';
         patchUpdate();

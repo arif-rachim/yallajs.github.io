@@ -43,8 +43,19 @@ function backToHome() {
     patchUpdate();
 }
 function onkeyup(e) {
+
     if (e.key == 'Enter') {
         var todo = e.target.value;
+        var alreadyExist = false;
+        todos.forEach(function (t) {
+            if (t.todo == todo) {
+                alreadyExist = true;
+            }
+        });
+        if (alreadyExist) {
+            alert('"' + todo + '" already exist');
+            return;
+        }
         todos.push({ todo: todo, completed: false, editing: false });
         e.target.value = '';
         patchUpdate();
