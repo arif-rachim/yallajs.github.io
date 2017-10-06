@@ -1,11 +1,11 @@
-yalla.framework.addComponent("/dist/app", (function() {
-  var $path = "/dist/app";
+yalla.framework.addComponent("/dist-yalla1/app", (function() {
+  var $path = "/dist-yalla1/app";
   var $patchChanges = yalla.framework.renderToScreen;
   var $storeRef = yalla.framework.storeRef;
   var $export = {};
   var $context = {};
   var $patchRef = yalla.framework.patchRef;
-  var $inject = yalla.framework.createInjector("/dist/app");
+  var $inject = yalla.framework.createInjector("/dist-yalla1/app");
   var _elementOpen = IncrementalDOM.elementOpen,
     _elementClose = IncrementalDOM.elementClose,
     _elementOpenStart = IncrementalDOM.elementOpenStart,
@@ -55,10 +55,10 @@ yalla.framework.addComponent("/dist/app", (function() {
     var home = $context["home"];
     _elementOpenStart("style", "");
     _elementOpenEnd("style");
-    _text("\r\n[element='dist.app'] .hidden {font-size: 0;}\r\n[element='dist.app'] .title {font-size: 4rem;}\r\n[element='dist.app'] h4,\r\n[element='dist.app'] h1 {transition: 500ms ease all;}\r\n[element='dist.app'] .footer {position: fixed;left: 0;right: 0;bottom: 0;background-color: #FCFCFC;border-top: 1px solid #EEEEEE;padding : 0.3rem;text-align: center;font-size: 0.9rem;}");
+    _text("\r\n[element='dist-yalla1.app'] .hidden {font-size: 0;}\r\n[element='dist-yalla1.app'] .title {font-size: 4rem;}\r\n[element='dist-yalla1.app'] h4,\r\n[element='dist-yalla1.app'] h1 {transition: 500ms ease all;}\r\n[element='dist-yalla1.app'] .footer {position: fixed;left: 0;right: 0;bottom: 0;background-color: #FCFCFC;border-top: 1px solid #EEEEEE;padding : 0.3rem;text-align: center;font-size: 0.9rem;}");
     _elementClose("style");
     _elementOpenStart("div", "");
-    _attr("element", "dist.app");
+    _attr("element", "dist-yalla1.app");
     _elementOpenEnd("div");
     _elementOpenStart("div", "");
     _attr("style", "background-color: #FCFCFC;border-bottom: 1px solid #EEEEEE");

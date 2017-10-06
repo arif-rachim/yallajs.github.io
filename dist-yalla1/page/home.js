@@ -1,11 +1,11 @@
-yalla.framework.addComponent("/dist/page/home", (function() {
-  var $path = "/dist/page/home";
+yalla.framework.addComponent("/dist-yalla1/page/home", (function() {
+  var $path = "/dist-yalla1/page/home";
   var $patchChanges = yalla.framework.renderToScreen;
   var $storeRef = yalla.framework.storeRef;
   var $export = {};
   var $context = {};
   var $patchRef = yalla.framework.patchRef;
-  var $inject = yalla.framework.createInjector("/dist/page/home");
+  var $inject = yalla.framework.createInjector("/dist-yalla1/page/home");
   var _elementOpen = IncrementalDOM.elementOpen,
     _elementClose = IncrementalDOM.elementClose,
     _elementOpenStart = IncrementalDOM.elementOpenStart,
@@ -28,7 +28,7 @@ yalla.framework.addComponent("/dist/page/home", (function() {
 
   function $render(_data, _slotView) {
     _elementOpenStart("div", "");
-    _attr("element", "dist.page.home");
+    _attr("element", "dist-yalla1.page.home");
     _attr("style", "text-align: center;margin-top: 1rem");
     _elementOpenEnd("div");
     _elementOpenStart("p", "");
@@ -45,7 +45,7 @@ yalla.framework.addComponent("/dist/page/home", (function() {
     _elementClose("p");
     _elementClose("div");
     _elementOpenStart("div", "");
-    _attr("element", "dist.page.home");
+    _attr("element", "dist-yalla1.page.home");
     _attr("style", "text-align: center;margin-top:1rem");
     _elementOpenEnd("div");
     _elementOpenStart("iframe", "");

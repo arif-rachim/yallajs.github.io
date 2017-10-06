@@ -1,0 +1,19 @@
+.home{
+    font-family: Roboto;
+    font-size: 2em;
+    line-height: 1.5em;
+}
+.home p{
+    font-size: 0.9em;
+}
+.home h1{
+    font-weight: 100;
+    font-size: 3em;
+    margin-bottom: 1em;
+    margin-top: 1.2em;
+}
+
+.home h2{
+    font-weight: 300;
+    font-size: 1.2em;
+}

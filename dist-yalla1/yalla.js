@@ -1912,7 +1912,7 @@ var yalla = (function () {
 
 
     framework.start = function () {
-        var scripts = document.querySelector("script[src$='yalla.js']") || [];
+        var scripts = document.querySelector("script[src-yalla1$='yalla.js']") || [];
         if (!utils.assertNotNull(scripts.attributes['yalla-component'], scripts.attributes['yalla-base'], scripts.attributes['yalla-domtarget'])) {
             throw new Error("script tag should contain attributes 'yalla-component', 'yalla-base' and 'yalla-domtarget'");
         }
