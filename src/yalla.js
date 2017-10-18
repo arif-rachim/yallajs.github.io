@@ -1,3 +1,9 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /*
  The MIT License (MIT)
 
@@ -25,18 +31,23 @@
 /*
  PLACEHOLDER_CONTENT is a constant used to mark a placeholder
  */
-const PLACEHOLDER_CONTENT = '∞';
+var PLACEHOLDER_CONTENT = '∞';
 /*
  PlaceHolder is a Comment node that contains a PLACEHOLDER_CONTENT value
  */
-const PLACEHOLDER = `<!--${PLACEHOLDER_CONTENT}-->`;
+var PLACEHOLDER = '<!--' + PLACEHOLDER_CONTENT + '-->';
 
 /*
  Function to validate whether the node is a minimization
  */
-const isMinimizationAttribute = node => {
-    return ['checked', 'compact', 'declare', 'defer', 'disabled', 'ismap',
-            'noresize', 'noshade', 'nowrap', 'selected'].indexOf(node.nodeName) >= 0;
+var isMinimizationAttribute = function isMinimizationAttribute(node) {
+    return ['checked', 'compact', 'declare', 'defer', 'disabled', 'ismap', 'noresize', 'noshade', 'nowrap', 'selected'].indexOf(node.nodeName) >= 0;
+};
+
+var arrayFrom = function arrayFrom(nodeList) {
+    var arr = [];
+    for (var i = nodeList.length; i--; arr.unshift(nodeList[i])) {}
+    return arr;
 };
 
 /*
@@ -47,7 +58,7 @@ function render(templateValue, element) {
     // if the element has never rendered the 'templateValue' then it has no content.
     if (!element.$content) {
         // placeHolder is Node.COMMENT used as a marker where templateValue will be rendered
-        let placeHolder = document.createComment(PLACEHOLDER_CONTENT);
+        var placeHolder = document.createComment(PLACEHOLDER_CONTENT);
         // we add placeholder to the element to be rendered.
         element.appendChild(placeHolder);
         element.$content = placeHolder;
@@ -106,11 +117,11 @@ function getFirstNodeFromTemplate(templateValue, placeHolder) {
  */
 function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
     // variable yang menyimpan placeHolder children yang baru
-    let placeHolderContainer = {};
+    var placeHolderContainer = {};
     // variable yang menyimpan placeHolder children yang lama
-    let oldPlaceHolderContainer = {};
+    var oldPlaceHolderContainer = {};
     // variable yang menyimpan templateCollectionValue yang lama
-    let oldTemplateCollectionValue = placeHolder.$content;
+    var oldTemplateCollectionValue = placeHolder.$content;
 
     /*
      If there is an old templateCollectionValue, then we will remove the existing templateValue children in the new templateCollectionValue.
@@ -122,9 +133,9 @@ function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
          */
         if (oldTemplateCollectionValue instanceof HtmlTemplateCollection) {
             oldPlaceHolderContainer = oldTemplateCollectionValue.placeHolderContainer;
-            oldTemplateCollectionValue.keys.forEach(oldKey => {
+            oldTemplateCollectionValue.keys.forEach(function (oldKey) {
                 if (templateCollectionValue.keys.indexOf(oldKey) < 0) {
-                    let oldPlaceHolder = oldPlaceHolderContainer[oldKey];
+                    var oldPlaceHolder = oldPlaceHolderContainer[oldKey];
                     removePlaceholder(oldPlaceHolder);
                 }
             });
@@ -142,19 +153,19 @@ function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
      if there is oldChildPlaceholder from oldPlaceHolderContainer, then we will use oldChildPlaceHolder
      rather than the new childPlaceholder.
      */
-    templateCollectionValue.keys.reduceRight((expectedSibling, key) => {
+    templateCollectionValue.keys.reduceRight(function (expectedSibling, key) {
         // disini kita panggil childTemplateValue dari templateCollectionValue
-        let childTemplateValue = templateCollectionValue.templateValuesContainer[key];
+        var childTemplateValue = templateCollectionValue.templateValuesContainer[key];
 
         // kemudian kita create childPlaceHolder
-        let childPlaceHolder = document.createComment(PLACEHOLDER_CONTENT);
+        var childPlaceHolder = document.createComment(PLACEHOLDER_CONTENT);
         if (oldPlaceHolderContainer[key]) {
             // bila terdapat key dari oldPlaceHolderContainer maka kita gunakan oldChildPlaceHolder dari oldPlaceHolderContainer.
             childPlaceHolder = oldPlaceHolderContainer[key];
 
             // bila terdapat oldChildTemplateValue dari oldTemplateCollectionValue maka kita akan gunakan oldChildTemplateValue sebagai
             // templateValue yang baru.
-            let oldChildTemplateValue = oldTemplateCollectionValue.templateValuesContainer[key];
+            var oldChildTemplateValue = oldTemplateCollectionValue.templateValuesContainer[key];
             if (oldChildTemplateValue instanceof HtmlTemplate && childTemplateValue instanceof HtmlTemplate && oldChildTemplateValue.key == childTemplateValue.key) {
                 templateCollectionValue.templateValuesContainer[key] = oldChildTemplateValue;
             }
@@ -162,7 +173,7 @@ function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
         /* Jika childPlaceHolder nextSibling tidak ada, atau nextSibling bukan expectedSibling, maka kita tempatkan
          childPlaceHolder ini disebelah expectedSibling.
          */
-        if ((!childPlaceHolder.nextSibling) || (childPlaceHolder.nextSibling != expectedSibling)) {
+        if (!childPlaceHolder.nextSibling || childPlaceHolder.nextSibling != expectedSibling) {
             placeHolder.parentNode.insertBefore(childPlaceHolder, expectedSibling);
         }
         // kemudian kita tempatekan childPlaceHolder kedalam placeHolderContainer yang baru
@@ -172,7 +183,6 @@ function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
 
         // mengembalikan first node dari templateCollectionValue
         return getFirstNodeFromTemplate(templateCollectionValue.templateValuesContainer[key], childPlaceHolder);
-
     }, placeHolder);
     // menempatkan placeHolderContainer kedalam templateCollectionValue yang baru
     templateCollectionValue.placeHolderContainer = placeHolderContainer;
@@ -184,7 +194,7 @@ function _renderHtmlTemplateCollection(templateCollectionValue, placeHolder) {
  Function used to remove placeHolder
  */
 function removePlaceholder(placeHolder) {
-    if ((placeHolder.$content instanceof HtmlTemplate) || (placeHolder.$content instanceof HtmlTemplateCollection)) {
+    if (placeHolder.$content instanceof HtmlTemplate || placeHolder.$content instanceof HtmlTemplateCollection) {
         // Jika placeHolder.$content merupakan HtmlTemplate kita kita akan mendestroy dulu kemudian remove.
         placeHolder.$content.destroy();
     }
@@ -195,7 +205,9 @@ function removePlaceholder(placeHolder) {
  function used to build templateValue, on its placeholder
  */
 function _buildTemplate(templateValue, placeHolder) {
-    templateValue.generateNodeTree().forEach(node => placeHolder.parentNode.insertBefore(node, placeHolder));
+    templateValue.generateNodeTree().forEach(function (node) {
+        return placeHolder.parentNode.insertBefore(node, placeHolder);
+    });
     placeHolder.$content = templateValue;
 }
 
@@ -205,7 +217,7 @@ function _buildTemplate(templateValue, placeHolder) {
 function _renderHtmlTemplate(templateValue, placeHolder) {
     // Jika placeHolder memiliki $content artinya placeHolder sudah pernah merender content.
     if (placeHolder.$content) {
-        let oldTemplateValue = placeHolder.$content;
+        var oldTemplateValue = placeHolder.$content;
         // Jika oldTemplateValue merukanan HtmlTemplate maka kita akan melakukan update
         if (oldTemplateValue instanceof HtmlTemplate) {
             // mengupdate oldTemplateValue(HtmlTemplate) dengan values yang baru
@@ -237,12 +249,12 @@ function _renderText(templateValue, placeHolder) {
         return;
     }
     // Jika sudah terdapat oldTemplateValue kita destroy terlebih dulu oldTemplateValue
-    let oldTemplateValue = placeHolder.$content;
+    var oldTemplateValue = placeHolder.$content;
     if (oldTemplateValue) {
         destroy(oldTemplateValue);
     }
     // kemudian kita buat text node dari templateValue
-    let textNode = document.createTextNode(templateValue);
+    var textNode = document.createTextNode(templateValue);
     // setelah itu kita insert textNode ke sebelah placeHolder
     placeHolder.parentNode.insertBefore(textNode, placeHolder);
     // kemudian kita simpan textNode ke placeHolder
@@ -252,8 +264,13 @@ function _renderText(templateValue, placeHolder) {
 /*
  html is a function to create an HtmlTemplate object
  */
-function html(strings, ...values) {
-    let key = strings.join('').replace(/\s/g, '');
+function html(strings) {
+    var key = strings.join('').replace(/\s/g, '');
+
+    for (var _len = arguments.length, values = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        values[_key - 1] = arguments[_key];
+    }
+
     return new HtmlTemplate(strings, values, key);
 }
 
@@ -262,10 +279,14 @@ function html(strings, ...values) {
  */
 function cache(key) {
     return {
-        html: function (strings, ...values) {
+        html: function html(strings) {
+            for (var _len2 = arguments.length, values = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                values[_key2 - 1] = arguments[_key2];
+            }
+
             return new HtmlTemplate(strings, values, key);
         }
-    }
+    };
 }
 
 /*
@@ -275,7 +296,7 @@ function htmlCollection(items, keyFn, templateFn) {
     return new HtmlTemplateCollection(items, keyFn, templateFn);
 }
 
-const _cache = {};
+var _cache = {};
 
 /*
  Class that stores information about the collection template
@@ -287,10 +308,15 @@ const _cache = {};
    5. templateValuesContainer: container from templateValues
    6. placeHolderContainer: container from placeHolder used to render the collection
  */
-class HtmlTemplateCollection {
-    constructor(items, keyFn, templateFn) {
+
+var HtmlTemplateCollection = function () {
+    function HtmlTemplateCollection(items, keyFn, templateFn) {
+        _classCallCheck(this, HtmlTemplateCollection);
+
         this.items = items;
-        this.keyFn = typeof keyFn === 'function' ? keyFn : (i) => i[keyFn];
+        this.keyFn = typeof keyFn === 'function' ? keyFn : function (i) {
+            return i[keyFn];
+        };
         this.templateFn = templateFn;
         this.keys = [];
         this.templateValuesContainer = {};
@@ -301,46 +327,59 @@ class HtmlTemplateCollection {
     /*
      Function to initialize item, key into HtmlTemplateCollection
      */
-    _init() {
-        let index = this.items.length;
-        while (index--) {
-            let item = this.items[index];
-            let key = this.keyFn.apply(this, [item]);
-            this.templateValuesContainer[key] = this.templateFn.apply(this, [item, index, this.items]);
-            this.keys.push(key);
-        }
-        this.keys.reverse();
-    }
 
-    /*
-     Function called to destroy HtmlTemplateCollection
-     */
-    destroy() {
-        this.keys.forEach(key => {
-            if (this.templateValuesContainer[key] instanceof HtmlTemplate) {
-                this.templateValuesContainer[key].destroy();
-                this.placeHolderContainer[key].parentNode.removeChild(this.placeHolderContainer[key]);
+
+    _createClass(HtmlTemplateCollection, [{
+        key: '_init',
+        value: function _init() {
+            var index = this.items.length;
+            while (index--) {
+                var item = this.items[index];
+                var key = this.keyFn.apply(this, [item]);
+                this.templateValuesContainer[key] = this.templateFn.apply(this, [item, index, this.items]);
+                this.keys.push(key);
             }
-        });
+            this.keys.reverse();
+        }
 
-        this.keys = [];
-        this.templateValuesContainer = {};
-        this.items = {};
-        this.placeHolderContainer = {};
-    }
+        /*
+         Function called to destroy HtmlTemplateCollection
+         */
 
-}
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            var _this = this;
+
+            this.keys.forEach(function (key) {
+                if (_this.templateValuesContainer[key] instanceof HtmlTemplate) {
+                    _this.templateValuesContainer[key].destroy();
+                    _this.placeHolderContainer[key].parentNode.removeChild(_this.placeHolderContainer[key]);
+                }
+            });
+
+            this.keys = [];
+            this.templateValuesContainer = {};
+            this.items = {};
+            this.placeHolderContainer = {};
+        }
+    }]);
+
+    return HtmlTemplateCollection;
+}();
 
 /*
  Function to take the path of a node up in documentFragment
  */
+
+
 function getPath(node) {
-    let i = 0;
-    let child = node;
+    var i = 0;
+    var child = node;
     while ((child = child.previousSibling) != null) {
         i++;
     }
-    let path = [];
+    var path = [];
     path.push(i);
     if (node.parentNode && node.parentNode.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
         return path.concat(getPath(node.parentNode));
@@ -354,8 +393,11 @@ function getPath(node) {
    2. values: or dynamic values
    3. key: used as cache or name of template
  */
-class HtmlTemplate {
-    constructor(strings, values, key) {
+
+var HtmlTemplate = function () {
+    function HtmlTemplate(strings, values, key) {
+        _classCallCheck(this, HtmlTemplate);
+
         this.strings = strings;
         this.values = values;
         this.key = key;
@@ -364,160 +406,191 @@ class HtmlTemplate {
     /*
      Function to generate nodeTree
      */
-    generateNodeTree() {
-        let key = this.key;
-        // jika key sudah terdapat di cache, maka kita gunakan template untuk mempercepat pembuatan htmlTemplate.
-        if (!_cache[key]) {
-            let template = document.createElement('template');
-            template.innerHTML = this.strings.join(PLACEHOLDER);
-            _cache[key] = template;
-        }
-        let template = _cache[key];
-        // kita clone document fragment dari template
-        let documentFragment = template.content.cloneNode(true);
-        /*
-         if the template does not have dynamicNode Path, it means that this is the first time the tempalte has been created,
-         then we will create dynamicNodesPath by calling coldStart.
-         */
-        if (!template.dynamicNodesPath) {
-            this._coldStart(documentFragment);
-            template.dynamicNodesPath = this.dynamicNodesPath;
-        } else {
+
+
+    _createClass(HtmlTemplate, [{
+        key: 'generateNodeTree',
+        value: function generateNodeTree() {
+            var key = this.key;
+            // jika key sudah terdapat di cache, maka kita gunakan template untuk mempercepat pembuatan htmlTemplate.
+            if (!_cache[key]) {
+                var _template = document.createElement('template');
+                _template.innerHTML = this.strings.join(PLACEHOLDER);
+                _cache[key] = _template;
+            }
+            var template = _cache[key];
+            // kita clone document fragment dari template
+            var documentFragment = template.content.cloneNode(true);
             /*
-             If the template already has dynamicNodesPath, then we will use dynamicNodesPath template
-             to pull dynamicNodes by using warmStart.
+             if the template does not have dynamicNode Path, it means that this is the first time the tempalte has been created,
+             then we will create dynamicNodesPath by calling coldStart.
              */
-            this.dynamicNodesPath = template.dynamicNodesPath;
-            this._warmStart(documentFragment);
-        }
-        // after we get the dynamicNodes we save the childNodes document fragment to nodeTree.
-        this.nodeTree = Array.from(documentFragment.childNodes);
-        return this.nodeTree;
-    }
-
-    /*
-     The Coldstart function will populate dynamicNodes, and dynamicNodesPath from document fragment
-     */
-    _coldStart(documentFragment) {
-        let dynamicNodes = [];
-        let dynamicNodesPath = [];
-        // fungsi yang akan mengambil dynamicNodes dari path.
-        this._lookDynamicNodes(Array.from(documentFragment.childNodes), dynamicNodes, dynamicNodesPath);
-        this.dynamicNodes = dynamicNodes;
-        this.dynamicNodesPath = dynamicNodesPath.map(path => {
-            return path.reverse();
-        });
-        this.applyValues(this.values);
-    }
-
-    /*
-     Warm start, will assign dynamic nodes of dynamicNodesPath, then apply values based on dynamicNodes that have been adapted.
-     */
-    _warmStart(documentFragment) {
-        this.dynamicNodes = this._lookDynamicNodesFromPath(documentFragment, this.dynamicNodesPath);
-        this.applyValues(this.values);
-    }
-
-    /*
-     Function that searches dynamicNodes in a documentFragment with dynamicNodesPath
-     */
-    _lookDynamicNodesFromPath(documentFragment, dynamicNodesPath) {
-        return dynamicNodesPath.map((path) => {
-            return path.reduce(function (content, path) {
-                if (typeof path == 'number') {
-                    return content.childNodes[path];
-                } else {
-                    let attribute = content.attributes[path.name];
-                    attribute.$dynamicAttributeLength = path.dynamicLength;
-                    attribute.$dynamicAttributeLengthPos = 0;
-                    return attribute;
-                }
-            }, documentFragment)
-        });
-    }
-
-    /*
-     Function that looks for dynamicNodes, from documentFragment.childNodes, then saves the result into dynamicNodes, dynamicNodesPath
-     */
-    _lookDynamicNodes(documentFragmentChildNodes, dynamicNodes, dynamicNodesPath) {
-        documentFragmentChildNodes.forEach(node => {
-            if (node instanceof Comment && node.nodeValue == PLACEHOLDER_CONTENT) {
-                dynamicNodes.push(node);
-                dynamicNodesPath.push(getPath(node));
-            }
-            else if (node.attributes) {
-                Array.from(node.attributes).reduce((results, attribute) => {
-                    if (attribute.nodeValue.indexOf(PLACEHOLDER) >= 0) {
-                        let dynamicLength = attribute.nodeValue.split(PLACEHOLDER).length - 1;
-                        for (let i = 0; i < dynamicLength; i++) {
-                            attribute.$dynamicAttributeLength = dynamicLength;
-                            attribute.$dynamicAttributeLengthPos = 0;
-                            results.push(attribute);
-                            let path = [{
-                                name: attribute.nodeName,
-                                dynamicLength: dynamicLength
-                            }].concat(getPath(attribute.ownerElement));
-                            dynamicNodesPath.push(path);
-                        }
-                    }
-                    return results;
-                }, dynamicNodes);
-                this._lookDynamicNodes(Array.from(node.childNodes), dynamicNodes, dynamicNodesPath);
-            }
-        });
-    }
-
-    /*
-     Function that will apply templateValues
-     */
-    applyValues(templateValues) {
-        this.dynamicNodes.forEach((dynamicNode, index) => {
-            if (dynamicNode.nodeType === Node.ATTRIBUTE_NODE) {
-                HtmlTemplate._applyAttributeNode(dynamicNode, templateValues[index]);
+            if (!template.dynamicNodesPath) {
+                this._coldStart(documentFragment);
+                template.dynamicNodesPath = this.dynamicNodesPath;
             } else {
-                _render(templateValues[index], dynamicNode);
+                /*
+                 If the template already has dynamicNodesPath, then we will use dynamicNodesPath template
+                 to pull dynamicNodes by using warmStart.
+                 */
+                this.dynamicNodesPath = template.dynamicNodesPath;
+                this._warmStart(documentFragment);
             }
-        });
-    }
+            // after we get the dynamicNodes we save the childNodes document fragment to nodeTree.
+            this.nodeTree = arrayFrom(documentFragment.childNodes);
+            return this.nodeTree;
+        }
 
-    /*
-     Function to destroy HtmlTemplate
-     */
-    destroy() {
-        this.nodeTree.forEach(n => n.parentNode.removeChild(n));
-    }
-
-    /*
-     Function to apply attribute node.
-     */
-    static _applyAttributeNode(node, value) {
         /*
-         If the attribute is a function, and the node name has a prefix on, then we assume it's an attribute event so we will call ownerElement [node.name]
+         The Coldstart function will populate dynamicNodes, and dynamicNodesPath from document fragment
          */
-        if (typeof value === 'function' && node.name.indexOf('on') === 0) {
-            node.nodeValue = PLACEHOLDER_CONTENT;
-            node.ownerElement[node.name] = value;
-        } else {
-            if (!node.$valueOriginal) {
-                node.$valueOriginal = node.value;
-            }
-            if (node.$dynamicAttributeLengthPos == node.$dynamicAttributeLength) {
-                node.$dynamicAttributeLengthPos = 0;
-            }
-            if (node.$dynamicAttributeLengthPos == 0) {
-                node.$value = node.$valueOriginal;
-            }
-            if (isMinimizationAttribute(node)) {
-                node.ownerElement[node.nodeName] = value;
+
+    }, {
+        key: '_coldStart',
+        value: function _coldStart(documentFragment) {
+            var dynamicNodes = [];
+            var dynamicNodesPath = [];
+            // fungsi yang akan mengambil dynamicNodes dari path.
+            this._lookDynamicNodes(arrayFrom(documentFragment.childNodes), dynamicNodes, dynamicNodesPath);
+            this.dynamicNodes = dynamicNodes;
+            this.dynamicNodesPath = dynamicNodesPath.map(function (path) {
+                return path.reverse();
+            });
+            this.applyValues(this.values);
+        }
+
+        /*
+         Warm start, will assign dynamic nodes of dynamicNodesPath, then apply values based on dynamicNodes that have been adapted.
+         */
+
+    }, {
+        key: '_warmStart',
+        value: function _warmStart(documentFragment) {
+            this.dynamicNodes = this._lookDynamicNodesFromPath(documentFragment, this.dynamicNodesPath);
+            this.applyValues(this.values);
+        }
+
+        /*
+         Function that searches dynamicNodes in a documentFragment with dynamicNodesPath
+         */
+
+    }, {
+        key: '_lookDynamicNodesFromPath',
+        value: function _lookDynamicNodesFromPath(documentFragment, dynamicNodesPath) {
+            return dynamicNodesPath.map(function (path) {
+                return path.reduce(function (content, path) {
+                    if (typeof path == 'number') {
+                        return content.childNodes[path];
+                    } else {
+                        var attribute = content.attributes[path.name];
+                        attribute.$dynamicAttributeLength = path.dynamicLength;
+                        attribute.$dynamicAttributeLengthPos = 0;
+                        return attribute;
+                    }
+                }, documentFragment);
+            });
+        }
+
+        /*
+         Function that looks for dynamicNodes, from documentFragment.childNodes, then saves the result into dynamicNodes, dynamicNodesPath
+         */
+
+    }, {
+        key: '_lookDynamicNodes',
+        value: function _lookDynamicNodes(documentFragmentChildNodes, dynamicNodes, dynamicNodesPath) {
+            var _this2 = this;
+
+            documentFragmentChildNodes.forEach(function (node) {
+                if (node instanceof Comment && node.nodeValue == PLACEHOLDER_CONTENT) {
+                    dynamicNodes.push(node);
+                    dynamicNodesPath.push(getPath(node));
+                } else if (node.attributes) {
+                    arrayFrom(node.attributes).reduce(function (results, attribute) {
+                        if (attribute.nodeValue.indexOf(PLACEHOLDER) >= 0) {
+                            var dynamicLength = attribute.nodeValue.split(PLACEHOLDER).length - 1;
+                            for (var i = 0; i < dynamicLength; i++) {
+                                attribute.$dynamicAttributeLength = dynamicLength;
+                                attribute.$dynamicAttributeLengthPos = 0;
+                                results.push(attribute);
+                                var path = [{
+                                    name: attribute.nodeName,
+                                    dynamicLength: dynamicLength
+                                }].concat(getPath(attribute.ownerElement));
+                                dynamicNodesPath.push(path);
+                            }
+                        }
+                        return results;
+                    }, dynamicNodes);
+                    _this2._lookDynamicNodes(arrayFrom(node.childNodes), dynamicNodes, dynamicNodesPath);
+                }
+            });
+        }
+
+        /*
+         Function that will apply templateValues
+         */
+
+    }, {
+        key: 'applyValues',
+        value: function applyValues(templateValues) {
+            this.dynamicNodes.forEach(function (dynamicNode, index) {
+                if (dynamicNode.nodeType === Node.ATTRIBUTE_NODE) {
+                    HtmlTemplate._applyAttributeNode(dynamicNode, templateValues[index]);
+                } else {
+                    _render(templateValues[index], dynamicNode);
+                }
+            });
+        }
+
+        /*
+         Function to destroy HtmlTemplate
+         */
+
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            this.nodeTree.forEach(function (n) {
+                return n.parentNode.removeChild(n);
+            });
+        }
+
+        /*
+         Function to apply attribute node.
+         */
+
+    }], [{
+        key: '_applyAttributeNode',
+        value: function _applyAttributeNode(node, value) {
+            /*
+             If the attribute is a function, and the node name has a prefix on, then we assume it's an attribute event so we will call ownerElement [node.name]
+             */
+            if (typeof value === 'function' && node.name.indexOf('on') === 0) {
+                node.nodeValue = PLACEHOLDER_CONTENT;
+                node.ownerElement[node.name] = value;
             } else {
-                node.$value = node.$value.split(PLACEHOLDER).reduce((result, data, index)=> {
-                    return index == 0 ? data : `${result}${index == 1 ? value : PLACEHOLDER}${data}`;
-                }, '');
-                node.$dynamicAttributeLengthPos++;
-                if (node.$dynamicAttributeLengthPos == node.$dynamicAttributeLength && node.value != node.$value) {
-                    node.value = node.$value;
+                if (!node.$valueOriginal) {
+                    node.$valueOriginal = node.value;
+                }
+                if (node.$dynamicAttributeLengthPos == node.$dynamicAttributeLength) {
+                    node.$dynamicAttributeLengthPos = 0;
+                }
+                if (node.$dynamicAttributeLengthPos == 0) {
+                    node.$value = node.$valueOriginal;
+                }
+                if (isMinimizationAttribute(node)) {
+                    node.ownerElement[node.nodeName] = value;
+                } else {
+                    node.$value = node.$value.split(PLACEHOLDER).reduce(function (result, data, index) {
+                        return index == 0 ? data : '' + result + (index == 1 ? value : PLACEHOLDER) + data;
+                    }, '');
+                    node.$dynamicAttributeLengthPos++;
+                    if (node.$dynamicAttributeLengthPos == node.$dynamicAttributeLength && node.value != node.$value) {
+                        node.value = node.$value;
+                    }
                 }
             }
         }
-    }
-}
+    }]);
+
+    return HtmlTemplate;
+}();
