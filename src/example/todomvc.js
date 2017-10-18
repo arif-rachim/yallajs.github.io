@@ -97,6 +97,8 @@ function updateTodo(e) {
     }
 }
 
+let htmlMap = htmlCollection;
+
 var app = () => html`
     <div style="display:${state.showTodoMvc ? 'none' : 'block' }">
         <section class="home">
