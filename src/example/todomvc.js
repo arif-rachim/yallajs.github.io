@@ -34,21 +34,24 @@ function backToHome(){
     patchUpdate();
 }
 function onkeyup(e){
-
+    console.log(JSON.stringify(e.key,null,4));
     if(e.key == 'Enter'){
         let todo = e.target.value;
         let alreadyExist = false;
+
         todos.forEach(t =>{
             if(t.todo == todo){
                 alreadyExist = true;
             }
         });
+        console.log('Check if already exist');
         if(alreadyExist){
             alert(`"${todo}" already exist`);
             return;
         }
         todos.push({todo:todo,completed:false,editing:false});
         e.target.value = '';
+        console.log('We need to patchUpdate');
         patchUpdate();
     }
     return false;
