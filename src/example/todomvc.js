@@ -34,8 +34,8 @@ function backToHome(){
     patchUpdate();
 }
 function onkeyup(e){
-    console.log(JSON.stringify(e.key,null,4));
-    if(e.key == 'Enter'){
+    console.log(JSON.stringify(e.keyCode));
+    if(e.keyCode === 13){
         let todo = e.target.value;
         let alreadyExist = false;
 
