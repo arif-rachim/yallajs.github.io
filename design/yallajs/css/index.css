@@ -1,0 +1,437 @@
+body {
+  min-width: none;
+  min-height: nonepx;
+  background-color: rgb(255, 255, 255);
+  font: 400 1em/1.38 Helvetica;
+  color: rgb(0, 0, 0);
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.container {
+  min-width: none;
+  min-height: nonepx;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.container .element {
+  visibility: hidden;
+  clear: both;
+  width: 11.4666666666%;
+  height: 22px;
+  margin-top: 32px;
+  background-color: rgb(222, 222, 222);
+}
+
+.element {
+  min-width: none;
+  min-height: nonepx;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.image {
+  display: block;
+  min-width: none;
+  height: auto;
+  min-height: nonepx;
+  overflow: hidden;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.roboto {
+  font-family: 'Trebuchet MS';
+}
+
+.sanspro {
+  text-align: center;
+}
+
+.sansprotext {
+  float: left;
+  width: 100%;
+  min-height: 73px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 1.875em;
+  color: rgb(0, 0, 0);
+}
+
+.text {
+  min-width: none;
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.text-5 p,
+.text-7 p,
+.text-9 p {
+  margin-bottom: 1em;
+}
+
+._text {
+  float: left;
+  clear: both;
+  width: 100%;
+  min-height: 172px;
+  font-size: 1em;
+  word-spacing: 5px;
+  color: rgb(0, 0, 0);
+}
+
+.container ._element {
+  float: left;
+}
+
+.container-1 {
+  position: relative;
+  z-index: 23;
+  width: 100%;
+  margin: 0 auto;
+  background: rgb(55, 0, 12);
+  background: -webkit-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%) rgba(1, 1, 1, 0);
+  background:    -moz-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%) rgba(1, 1, 1, 0);
+  background:      -o-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%) rgba(1, 1, 1, 0);
+  background:     -ms-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%) rgba(1, 1, 1, 0);
+  background:         linear-gradient(180deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%) rgba(1, 1, 1, 0);
+}
+
+.container-10 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 26;
+  width: 100%;
+  background-image: -webkit-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%);
+  background-image:    -moz-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%);
+  background-image:      -o-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%);
+  background-image:     -ms-linear-gradient(270deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%);
+  background-image:         linear-gradient(180deg, rgb(55, 0, 12) 0%, rgb(24, 24, 24) 100%);
+}
+
+.container-11 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 28;
+  width: 100%;
+  height: 511px;
+}
+
+.container-12 {
+  width: 80.3333333333%;
+  height: 421px;
+  margin: 34px 0 0 9.66667%;
+  background-color: rgba(78, 68, 68, 0.21);
+}
+
+.container-2 {
+  position: relative;
+  width: 370px;
+  margin: 100px auto 0;
+  border-bottom: 20px solid rgba(0, 0, 0, 0.01);
+}
+
+.container-3 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 16;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.container-5 {
+  width: 100%;
+  margin: 0 auto;
+  border-left-style: none;
+}
+
+.container-4,
+.container-6 {
+  position: relative;
+  width: 80%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+.container-7 {
+  float: left;
+  clear: both;
+  width: 100%;
+  border-bottom: 30px solid rgba(255, 255, 255, 0.01);
+  border-left-style: none;
+}
+
+.container-8 {
+  position: relative;
+  width: 80%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+.container-9 {
+  float: left;
+  clear: both;
+  width: 100%;
+  border-left-style: none;
+}
+
+.element-2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 24;
+  width: 100.6666666666%;
+  height: 59px;
+  margin: 0 auto;
+  background: rgb(122, 0, 27);
+  background: -webkit-linear-gradient(90deg, rgb(122, 0, 27) 0%, rgb(152, 1, 34) 4.523809523809524%, rgb(152, 1, 34) 80%, rgb(152, 1, 34) 93.57142857142857%) rgb(122, 0, 27);
+  background:    -moz-linear-gradient(90deg, rgb(122, 0, 27) 0%, rgb(152, 1, 34) 4.523809523809524%, rgb(152, 1, 34) 80%, rgb(152, 1, 34) 93.57142857142857%) rgb(122, 0, 27);
+  background:      -o-linear-gradient(90deg, rgb(122, 0, 27) 0%, rgb(152, 1, 34) 4.523809523809524%, rgb(152, 1, 34) 80%, rgb(152, 1, 34) 93.57142857142857%) rgb(122, 0, 27);
+  background:     -ms-linear-gradient(90deg, rgb(122, 0, 27) 0%, rgb(152, 1, 34) 4.523809523809524%, rgb(152, 1, 34) 80%, rgb(152, 1, 34) 93.57142857142857%) rgb(122, 0, 27);
+  background:         linear-gradient(360deg, rgb(122, 0, 27) 0%, rgb(152, 1, 34) 4.523809523809524%, rgb(152, 1, 34) 80%, rgb(152, 1, 34) 93.57142857142857%) rgb(122, 0, 27);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.image-1 {
+  position: relative;
+  float: left;
+  z-index: 18;
+  width: 185px;
+}
+
+.image-2,
+.image-3 {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.image-4 {
+  width: 120px;
+  margin: 0 auto;
+}
+
+.roboto-2 {
+  display: block;
+  position: absolute;
+  bottom: 35px;
+  left: 0;
+  right: 0;
+  z-index: 21;
+  min-width: 100px;
+  max-width: 200px;
+  min-height: nonepx;
+  margin: 0 auto;
+  padding: 10px;
+  border-style: none;
+  border-radius: 3px;
+  background-color: rgb(222, 222, 222);
+  font-size: 1em;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  -webkit-transform: none;
+  -moz-transform: none;
+  -o-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+  -webkit-filter: none;
+  -moz-filter: none;
+  -o-filter: none;
+  -ms-filter: none;
+  filter: none;
+}
+
+.text-1 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 19;
+  width: 85.1648351648%;
+  min-height: 99px;
+  margin: -165px 0 0 175px;
+  font-style: normal;
+  font-size: 7.5em;
+  color: rgb(255, 255, 255);
+}
+
+.text-10 {
+  float: left;
+  width: 66.3997395833%;
+  min-height: 46px;
+  margin-left: 16.79948%;
+  padding-top: 10px;
+  font-size: 1.25em;
+  color: rgb(255, 255, 255);
+}
+
+.text-2 {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 17;
+  width: 80%;
+  min-height: 87px;
+  margin-left: 10%;
+  border-bottom-style: none;
+  font: normal 1.25em/1 'Trebuchet MS';
+  color: rgb(255, 255, 255);
+}
+
+.text-3 {
+  width: 80%;
+  min-height: 57px;
+  margin: 20px auto 0;
+  padding-bottom: 20px;
+  border-bottom: 20px solid rgba(255, 255, 255, 0.03);
+  font-family: 'Trebuchet MS';
+  font-size: 1.875em;
+  color: rgb(0, 0, 0);
+}
+
+.text-7 {
+  font-style: normal;
+}
+
+.text-8 {
+  font-style: normal;
+}
+
+@media(max-width: 320px) {
+  .container .image {
+    height: auto;
+  }
+
+  .container .container-2 {
+    width: 186px;
+    margin-top: 94px;
+  }
+
+  .container .image-1 {
+    position: relative;
+    z-index: 18;
+  }
+
+  .container .roboto-2 {
+    bottom: 26px;
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .container .text-1 {
+    visibility: hidden;
+    position: relative;
+    z-index: 19;
+  }
+
+  .container .text-2 {
+    position: relative;
+    z-index: 17;
+    margin-top: 10px;
+  }
+
+  .container-1 {
+    position: relative;
+    z-index: 23;
+  }
+
+  .container-10 {
+    position: relative;
+    z-index: 26;
+  }
+
+  .container-11 {
+    position: relative;
+    z-index: 28;
+  }
+
+  .container-3 {
+    position: relative;
+    z-index: 16;
+  }
+
+  .element-2 {
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
