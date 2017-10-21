@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/index.css">
 		<style>
       
-      @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400');
+      @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300');
       @import url('https://fonts.googleapis.com/css?family=Roboto');
       
       p.text.sanspro{
@@ -26,29 +26,22 @@
         font-family: 'Roboto', sans-serif !important;
       }
       
-      body{
-        font-family: 'Source Sans Pro', sans-serif;
-        font-weight : 400;
-        font-size: 20px;
-      }
-      
 </style>
 </head>
 <body class="body page-index clearfix">
   <div class="container container-1 clearfix">
     <div class="container container-2 clearfix">
       <img class="image" src="images/yallajs.svg">
-      <p class="text roboto">alla</p>
     </div>
-    <p class="text sanspro text-2">10kb&nbsp;High Performance Non VirtualDOM engine + SPA Inclusive</p>
+    <p class="text sanspro text-1">10kb&nbsp;High Performance Non VirtualDOM engine + SPA Inclusive</p>
   </div>
-  <div class="element _element"></div>
+  <div class="element"></div>
   <div class="container container-3 clearfix">
-    <p class="text sanspro text-3">Javascript framework for building webapp swiftly</p>
+    <p class="text sanspro text-2">Javascript framework for building webapp swiftly</p>
     <div class="container container-4 clearfix">
       <div class="container container-5 clearfix">
         <p class="text sansprotext">Friend of Developer and Designer</p>
-        <div class="text _text text-5">
+        <div class="text _text text-4">
           <p>Unlike other javascript libraries, YallaJS simply uses the native web language, "Javascript". By using Javascript, you do not need the compiler to "transpile" your application. This means that your development will be much faster, you can debugging natively through the browser, and you can use DevTools source mapper that you can not use if you use JSX or TypeScript. sweeet!</p>
           <p>Templating with JSX makes it easy for Web Developer to make sure the code that is created does not break.&nbsp;For this yalla js use ES6 String Literals, so your templating will be much easier and you get autocomplete feature from your favorite javascript editor.<br></p>
 </div>
@@ -57,16 +50,17 @@
     <div class="container container-6 clearfix">
       <div class="container container-7 clearfix">
         <p class="text sansprotext">High Performance Feather Lite</p>
-        <div class="text _text text-7">
-          <p>YallaJS is very light, total size no more than 10kb. With a very small size, the bandwidth used is very cheap and indirectly much faster.</p>
+        <div class="text _text text-6">
+          <p>YallaJS is very light, total size no more than <span style="font-size: 15px"><img src="https://img.shields.io/github/size/yallajs/yalla/lib/yalla.min.js.gzip.svg" style="width: 100px;margin-bottom: -7px"></span>. With a very small size, the bandwidth used is very cheap and indirectly much faster.</p>
           <p>YallaJS does not use virtual DOM. To produce a high performance, Yallajs cached the parsed string literal into an <b>HtmlTemplate</b>. Then yallajs map the position of the dynamic parameter in HtmlTemplate into a <b>Placeholder</b>. So if there is a change of parameter value, yallajs simply update the effected placeholder. In this way the application is more efficient in memory usage, and the script computation usage is much lower.</p>
+          <a href="./benchmark.html" style="background-color: firebrick;color: white;padding: 10px" >Test benchmark</a>
 </div>
       </div>
     </div>
     <div class="container container-8 clearfix">
       <div class="container container-9 clearfix">
         <p class="text sansprotext">Trully Portable &amp; Embeddable</p>
-        <div class="text _text text-9">
+        <div class="text _text text-8">
           <p>You can create an application using yallajs as hybrid or single page application. By using hybrid, you can embed yallajs component into your larger web application.
 
 If you want to feel the ability of single page application, you can use yalla spa to get routing facility and integration with web component.</p>
@@ -74,12 +68,6 @@ If you want to feel the ability of single page application, you can use yalla sp
 </div>
       </div>
     </div>
-  </div>
-  <div class="container container-10 clearfix">
-    <p class="text sanspro text-10">See it in action</p>
-  </div>
-  <div class="container container-11 clearfix">
-    <div class="container _element"></div>
   </div>
 </body>
 </html>
