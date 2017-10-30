@@ -302,10 +302,13 @@ var Main = function () {
 }();
 
 var main = new Main();
+var context = new Context();
+var html = context.html();
+var htmlCollection = context.htmlCollection();
 
 var app = function app() {
     return html(_templateObject, main.run, main.runLots, main.add, main.update, main.clear, main.swapRows, htmlCollection(main.store.data, 'id', function (data, index) {
-        return cache('key').html(_templateObject2, data.id, main.select, data.id, data.label, main.delete, data.id);
+        return html(_templateObject2, data.id, main.select, data.id, data.label, main.delete, data.id);
     }));
 };
 

@@ -230,6 +230,9 @@ class Main {
 
 }
 let main = new Main();
+let context = new Context();
+let html = context.html();
+let htmlCollection = context.htmlCollection();
 
 let app = () => html`
     <div class="container">
@@ -264,7 +267,7 @@ let app = () => html`
         </div>
         <table class="table table-hover table-striped test-data">
             <tbody id="tbody">
-                ${htmlCollection(main.store.data,'id',(data, index) => cache('key').html`<tr>
+                ${htmlCollection(main.store.data,'id',(data, index) => html`<tr>
                         <td class="col-md-1">${data.id}</td>
                         <td class="col-md-4">
                             <a class="lbl" onclick="${main.select}" data-id="${data.id}">${data.label}</a>

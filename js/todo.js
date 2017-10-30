@@ -41,6 +41,10 @@ function addTodo(e) {
     return false;
 }
 
+var context = new Context();
+var html = context.html();
+var htmlCollection = context.htmlCollection();
+
 var app = function app() {
     return html(_templateObject, addTodo, htmlCollection(todos, 'id', function (todo, index) {
         return html(_templateObject2, todo.id, todo.done ? 'line-through' : '', toggleDone, todo.id, deleteTodo, todo.id, todo.todo);
