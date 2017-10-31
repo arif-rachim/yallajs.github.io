@@ -9,9 +9,9 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 	'use strict';
 	// Your starting point. Enjoy the ride!
 
-	var context = new Context();
-	var html = context.html();
-	var htmlCollection = context.htmlCollection();
+	var _ref = new Context(),
+	    html = _ref.html,
+	    htmlCollection = _ref.htmlCollection;
 
 	var todos = localStorage.getItem('todos');
 	todos = todos ? JSON.parse(todos) : [];

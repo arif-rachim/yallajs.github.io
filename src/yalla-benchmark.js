@@ -230,9 +230,7 @@ class Main {
 
 }
 let main = new Main();
-let context = new Context();
-let html = context.html();
-let htmlCollection = context.htmlCollection();
+let {html,htmlCollection} = new Context();
 
 let app = () => html`
     <div class="container">

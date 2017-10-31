@@ -1,9 +1,7 @@
 (function (window) {
 	'use strict';
 	// Your starting point. Enjoy the ride!
-	let context = new Context();
-	let html = context.html();
-	let htmlCollection = context.htmlCollection();
+	let {html,htmlCollection} = new Context();
 
 	let todos = localStorage.getItem('todos');
 	todos = todos ? JSON.parse(todos) : [];
