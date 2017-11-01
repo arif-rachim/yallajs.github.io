@@ -1,67 +1,22 @@
 'use strict';
-// https://tc39.github.io/ecma262/#sec-array.prototype.findIndex
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n    <div class="container">\n        <div class="jumbotron">\n            <div class="row">\n                <div class="col-md-6">\n                    <h1>YallaJS-"keyed"</h1>\n                </div>\n                <div class="col-md-6">\n                    <div class="row">\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id="run" onclick="', '">Create 1,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'runlots\' onclick="', '">Create 10,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'add\' onclick="', '">Append 1,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'update\' onclick="', '">Update every 10th row</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'clear\' onclick="', '">Clear</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'swaprows\' onclick="', '">Swap Rows</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <table class="table table-hover table-striped test-data">\n            <tbody id="tbody">\n                ', '\n            </tbody>\n        </table>\n        <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>\n    </div>\n'], ['\n    <div class="container">\n        <div class="jumbotron">\n            <div class="row">\n                <div class="col-md-6">\n                    <h1>YallaJS-"keyed"</h1>\n                </div>\n                <div class="col-md-6">\n                    <div class="row">\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id="run" onclick="', '">Create 1,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'runlots\' onclick="', '">Create 10,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'add\' onclick="', '">Append 1,000 rows</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'update\' onclick="', '">Update every 10th row</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'clear\' onclick="', '">Clear</button>\n                        </div>\n                        <div class="col-sm-6 smallpad">\n                            <button type=\'button\' class=\'btn btn-primary btn-block\' id=\'swaprows\' onclick="', '">Swap Rows</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <table class="table table-hover table-striped test-data">\n            <tbody id="tbody">\n                ', '\n            </tbody>\n        </table>\n        <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>\n    </div>\n']),
-    _templateObject2 = _taggedTemplateLiteral(['<tr>\n                        <td class="col-md-1">', '</td>\n                        <td class="col-md-4">\n                            <a class="lbl" onclick="', '" data-id="', '">', '</a>\n                        </td>\n                        <td class="col-md-1">\n                            <a class="remove" onclick="', '" data-id="', '">\n                                <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>\n                            </a>\n                        </td>\n                        <td class="col-md-6"></td>\n                    </tr>'], ['<tr>\n                        <td class="col-md-1">', '</td>\n                        <td class="col-md-4">\n                            <a class="lbl" onclick="', '" data-id="', '">', '</a>\n                        </td>\n                        <td class="col-md-1">\n                            <a class="remove" onclick="', '" data-id="', '">\n                                <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>\n                            </a>\n                        </td>\n                        <td class="col-md-6"></td>\n                    </tr>']);
+var _templateObject = _taggedTemplateLiteral(["<div id='main'>\n        <div class=\"container\">\n            <div class=\"jumbotron\">\n                <div class=\"row\">\n                    <div class=\"col-md-6\">\n                        <h1>YallaJS-\"keyed\"</h1>\n                    </div>\n                    <div class=\"col-md-6\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='run' onclick=\"", "\">Create 1,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='runlots' onclick=\"", "\">Create 10,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='add' onclick=\"", "\">Append 1,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='update' onclick=\"", "\">Update every 10th row</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='clear' onclick=\"", "\">Clear</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='swaprows' onclick=\"", "\">Swap Rows</button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <table class=\"table table-hover table-striped test-data\">\n                <tbody id=\"tbody\">\n                    ", "\n                </tbody>\n            </table>\n            <span class=\"preloadicon glyphicon glyphicon-remove\" aria-hidden=\"true\"></span>\n        </div>\n    </div>"], ["<div id='main'>\n        <div class=\"container\">\n            <div class=\"jumbotron\">\n                <div class=\"row\">\n                    <div class=\"col-md-6\">\n                        <h1>YallaJS-\"keyed\"</h1>\n                    </div>\n                    <div class=\"col-md-6\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='run' onclick=\"", "\">Create 1,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='runlots' onclick=\"", "\">Create 10,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='add' onclick=\"", "\">Append 1,000 rows</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='update' onclick=\"", "\">Update every 10th row</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='clear' onclick=\"", "\">Clear</button>\n                            </div>\n                            <div class=\"col-sm-6 smallpad\">\n                                <button type='button' class='btn btn-primary btn-block' id='swaprows' onclick=\"", "\">Swap Rows</button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <table class=\"table table-hover table-striped test-data\">\n                <tbody id=\"tbody\">\n                    ", "\n                </tbody>\n            </table>\n            <span class=\"preloadicon glyphicon glyphicon-remove\" aria-hidden=\"true\"></span>\n        </div>\n    </div>"]),
+    _templateObject2 = _taggedTemplateLiteral(["<tr class=\"", "\">\n                            <td class=\"col-md-1\">", "</td>\n                            <td class=\"col-md-4\">\n                                <a class=\"lbl\" onclick=\"", "\">", "</a>\n                            </td>\n                            <td class=\"col-md-1\">\n                                <a class=\"remove\"><span class=\"glyphicon glyphicon-remove remove\" aria-hidden=\"true\" onclick=\"", "\"></span></a>\n                            </td>\n                            <td class=\"col-md-6\"></td>\n                        </tr>"], ["<tr class=\"", "\">\n                            <td class=\"col-md-1\">", "</td>\n                            <td class=\"col-md-4\">\n                                <a class=\"lbl\" onclick=\"", "\">", "</a>\n                            </td>\n                            <td class=\"col-md-1\">\n                                <a class=\"remove\"><span class=\"glyphicon glyphicon-remove remove\" aria-hidden=\"true\" onclick=\"", "\"></span></a>\n                            </td>\n                            <td class=\"col-md-6\"></td>\n                        </tr>"]);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-if (!Array.prototype.findIndex) {
-    Object.defineProperty(Array.prototype, 'findIndex', {
-        value: function value(predicate) {
-            // 1. Let O be ? ToObject(this value).
-            if (this == null) {
-                throw new TypeError('"this" is null or not defined');
-            }
-
-            var o = Object(this);
-
-            // 2. Let len be ? ToLength(? Get(O, "length")).
-            var len = o.length >>> 0;
-
-            // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-            if (typeof predicate !== 'function') {
-                throw new TypeError('predicate must be a function');
-            }
-
-            // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
-            var thisArg = arguments[1];
-
-            // 5. Let k be 0.
-            var k = 0;
-
-            // 6. Repeat, while k < len
-            while (k < len) {
-                // a. Let Pk be ! ToString(k).
-                // b. Let kValue be ? Get(O, Pk).
-                // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
-                // d. If testResult is true, return k.
-                var kValue = o[k];
-                if (predicate.call(thisArg, kValue, k, o)) {
-                    return k;
-                }
-                // e. Increase k by 1.
-                k++;
-            }
-
-            // 7. Return -1.
-            return -1;
-        }
-    });
-}
-
-var startTime;
-var lastMeasure;
+var startTime = void 0;
+var lastMeasure = void 0;
 var startMeasure = function startMeasure(name) {
     startTime = performance.now();
     lastMeasure = name;
 };
-
 var stopMeasure = function stopMeasure() {
+    paint();
     var last = lastMeasure;
     if (lastMeasure) {
         window.setTimeout(function () {
@@ -88,10 +43,9 @@ var Store = function () {
     }
 
     _createClass(Store, [{
-        key: 'buildData',
+        key: "buildData",
         value: function buildData() {
             var count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
-
 
             var adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
             var colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
@@ -102,17 +56,16 @@ var Store = function () {
             }return data;
         }
     }, {
-        key: 'updateData',
+        key: "updateData",
         value: function updateData() {
             var mod = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
 
             for (var i = 0; i < this.data.length; i += 10) {
                 this.data[i].label += ' !!!';
-                // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
             }
         }
     }, {
-        key: 'delete',
+        key: "delete",
         value: function _delete(id) {
             var idx = this.data.findIndex(function (d) {
                 return d.id == id;
@@ -123,56 +76,56 @@ var Store = function () {
             return this;
         }
     }, {
-        key: 'run',
+        key: "run",
         value: function run() {
             this.data = this.buildData();
             this.selected = null;
         }
     }, {
-        key: 'add',
+        key: "add",
         value: function add() {
             this.data = this.data.concat(this.buildData(1000));
             this.selected = null;
         }
     }, {
-        key: 'update',
+        key: "update",
         value: function update() {
             this.updateData();
             this.selected = null;
         }
     }, {
-        key: 'select',
+        key: "select",
         value: function select(id) {
             this.selected = id;
         }
     }, {
-        key: 'hideAll',
+        key: "hideAll",
         value: function hideAll() {
             this.backup = this.data;
             this.data = [];
             this.selected = null;
         }
     }, {
-        key: 'showAll',
+        key: "showAll",
         value: function showAll() {
             this.data = this.backup;
             this.backup = null;
             this.selected = null;
         }
     }, {
-        key: 'runLots',
+        key: "runLots",
         value: function runLots() {
             this.data = this.buildData(10000);
             this.selected = null;
         }
     }, {
-        key: 'clear',
+        key: "clear",
         value: function clear() {
             this.data = [];
             this.selected = null;
         }
     }, {
-        key: 'swapRows',
+        key: "swapRows",
         value: function swapRows() {
             if (this.data.length > 10) {
                 var a = this.data[4];
@@ -194,106 +147,73 @@ var Main = function () {
         this.delete = this.delete.bind(this);
         this.add = this.add.bind(this);
         this.run = this.run.bind(this);
-        this.runLots = this.runLots.bind(this);
         this.update = this.update.bind(this);
-        this.clear = this.clear.bind(this);
-        this.swapRows = this.swapRows.bind(this);
         this.start = 0;
-        this.tbody = document.getElementById("tbody");
     }
 
     _createClass(Main, [{
-        key: 'printDuration',
+        key: "printDuration",
         value: function printDuration() {
             stopMeasure();
         }
     }, {
-        key: 'run',
+        key: "run",
         value: function run() {
             startMeasure("run");
             this.store.clear();
             this.store.run();
-            updateDisplay();
-            this.unselect();
             stopMeasure();
         }
     }, {
-        key: 'add',
+        key: "add",
         value: function add() {
             startMeasure("add");
             this.store.add();
-            updateDisplay();
             stopMeasure();
         }
     }, {
-        key: 'update',
+        key: "update",
         value: function update() {
             startMeasure("update");
             this.store.update();
-            updateDisplay();
             stopMeasure();
         }
     }, {
-        key: 'unselect',
-        value: function unselect() {
-            // if (this.selectedRow !== undefined) {
-            //     this.selectedRow.className = "";
-            //     this.selectedRow = undefined;
-            // }
-        }
-    }, {
-        key: 'select',
-        value: function select(e) {
-            var idx = e.currentTarget.getAttribute('data-id');
+        key: "select",
+        value: function select(idx) {
             startMeasure("select");
-            this.unselect();
             this.store.select(idx);
-            // this.selectedRow = this.rows[idx];
-            // this.selectedRow.className = "danger";
             stopMeasure();
         }
     }, {
-        key: 'delete',
-        value: function _delete(e) {
-            var idx = e.currentTarget.getAttribute('data-id');
+        key: "delete",
+        value: function _delete(idx) {
             startMeasure("delete");
             this.store.delete(idx);
-            updateDisplay();
-            this.unselect();
             stopMeasure();
         }
     }, {
-        key: 'runLots',
+        key: "runLots",
         value: function runLots() {
             startMeasure("runLots");
             this.store.clear();
-            this.data = [];
             this.store.runLots();
-            updateDisplay();
-            this.unselect();
             stopMeasure();
         }
     }, {
-        key: 'clear',
+        key: "clear",
         value: function clear() {
-            var _this = this;
-
             startMeasure("clear");
             this.store.clear();
-            updateDisplay();
             requestAnimationFrame(function () {
-                _this.unselect();
                 stopMeasure();
             });
         }
     }, {
-        key: 'swapRows',
+        key: "swapRows",
         value: function swapRows() {
             startMeasure("swapRows");
-            if (this.store.data.length > 10) {
-                this.store.swapRows();
-            }
-            updateDisplay();
+            this.store.swapRows();
             stopMeasure();
         }
     }]);
@@ -307,14 +227,26 @@ var _ref = new Context(),
     html = _ref.html,
     htmlCollection = _ref.htmlCollection;
 
-var app = function app() {
-    return html(_templateObject, main.run, main.runLots, main.add, main.update, main.clear, main.swapRows, htmlCollection(main.store.data, 'id', function (data, index) {
-        return html(_templateObject2, data.id, main.select, data.id, data.label, main.delete, data.id);
-    }));
+var paint = function paint() {
+    render(html(_templateObject, function (e) {
+        return main.run();
+    }, function (e) {
+        return main.runLots();
+    }, function (e) {
+        return main.add();
+    }, function (e) {
+        return main.update();
+    }, function (e) {
+        return main.clear();
+    }, function (e) {
+        return main.swapRows();
+    }, htmlCollection(main.store.data, 'id', function (data) {
+        return html(_templateObject2, main.store.selected == data.id ? 'danger' : '', data.id, function (e) {
+            return main.select(data.id);
+        }, data.label, function (e) {
+            return main.delete(data.id);
+        });
+    })), document.body);
 };
 
-function updateDisplay() {
-    render(app(), document.getElementsByTagName('body')[0]);
-}
-
-updateDisplay();
+paint();

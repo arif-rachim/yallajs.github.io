@@ -1,63 +1,19 @@
 'use strict';
-// https://tc39.github.io/ecma262/#sec-array.prototype.findIndex
-if (!Array.prototype.findIndex) {
-    Object.defineProperty(Array.prototype, 'findIndex', {
-        value: function(predicate) {
-            // 1. Let O be ? ToObject(this value).
-            if (this == null) {
-                throw new TypeError('"this" is null or not defined');
-            }
 
-            var o = Object(this);
-
-            // 2. Let len be ? ToLength(? Get(O, "length")).
-            var len = o.length >>> 0;
-
-            // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-            if (typeof predicate !== 'function') {
-                throw new TypeError('predicate must be a function');
-            }
-
-            // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
-            var thisArg = arguments[1];
-
-            // 5. Let k be 0.
-            var k = 0;
-
-            // 6. Repeat, while k < len
-            while (k < len) {
-                // a. Let Pk be ! ToString(k).
-                // b. Let kValue be ? Get(O, Pk).
-                // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
-                // d. If testResult is true, return k.
-                var kValue = o[k];
-                if (predicate.call(thisArg, kValue, k, o)) {
-                    return k;
-                }
-                // e. Increase k by 1.
-                k++;
-            }
-
-            // 7. Return -1.
-            return -1;
-        }
-    });
-}
-
-var startTime;
-var lastMeasure;
-var startMeasure = function(name) {
+let startTime;
+let lastMeasure;
+let startMeasure = function(name) {
     startTime = performance.now();
     lastMeasure = name;
 }
-
-var stopMeasure = function() {
-    var last = lastMeasure;
+let stopMeasure = function() {
+    paint();
+    let last = lastMeasure;
     if (lastMeasure) {
         window.setTimeout(function () {
             lastMeasure = null;
-            var stop = performance.now();
-            var duration = 0;
+            let stop = performance.now();
+            let duration = 0;
             console.log(last+" took "+(stop-startTime));
         }, 0);
     }
@@ -75,20 +31,17 @@ class Store {
         this.id = 1;
     }
     buildData(count = 1000) {
-
-        var adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
-        var colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
-        var nouns = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
-        var data = [];
-        for (var i = 0; i < count; i++)
+        let adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
+        let colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
+        let nouns = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
+        let data = [];
+        for (let i = 0; i < count; i++)
             data.push({id: this.id++, label: adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)] });
-
         return data;
     }
     updateData(mod = 10) {
         for (let i=0;i<this.data.length;i+=10) {
             this.data[i].label += ' !!!';
-            // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
         }
     }
     delete(id) {
@@ -131,7 +84,7 @@ class Store {
     }
     swapRows() {
         if(this.data.length > 10) {
-            var a = this.data[4];
+            let a = this.data[4];
             this.data[4] = this.data[9];
             this.data[9] = a;
         }
@@ -145,12 +98,8 @@ class Main {
         this.delete = this.delete.bind(this);
         this.add = this.add.bind(this);
         this.run = this.run.bind(this);
-        this.runLots = this.runLots.bind(this);
         this.update = this.update.bind(this);
-        this.clear = this.clear.bind(this);
-        this.swapRows = this.swapRows.bind(this);
         this.start = 0;
-        this.tbody = document.getElementById("tbody");
     }
 
     printDuration() {
@@ -160,132 +109,105 @@ class Main {
         startMeasure("run");
         this.store.clear();
         this.store.run();
-        updateDisplay();
-        this.unselect();
         stopMeasure();
     }
     add() {
         startMeasure("add");
         this.store.add();
-        updateDisplay();
         stopMeasure();
     }
     update() {
         startMeasure("update");
         this.store.update();
-        updateDisplay();
-        stopMeasure();
-    }
-    unselect() {
-        // if (this.selectedRow !== undefined) {
-        //     this.selectedRow.className = "";
-        //     this.selectedRow = undefined;
-        // }
-    }
-    select(e) {
-        let idx = e.currentTarget.getAttribute('data-id');
-        startMeasure("select");
-        this.unselect();
-        this.store.select(idx);
-        // this.selectedRow = this.rows[idx];
-        // this.selectedRow.className = "danger";
         stopMeasure();
     }
 
-    delete(e) {
-        let idx = e.currentTarget.getAttribute('data-id');
+    select(idx) {
+        startMeasure("select");
+        this.store.select(idx);
+        stopMeasure();
+    }
+
+    delete(idx) {
         startMeasure("delete");
         this.store.delete(idx);
-        updateDisplay();
-        this.unselect();
         stopMeasure();
     }
 
     runLots() {
         startMeasure("runLots");
         this.store.clear();
-        this.data = [];
         this.store.runLots();
-        updateDisplay();
-        this.unselect();
         stopMeasure();
     }
     clear() {
         startMeasure("clear");
         this.store.clear();
-        updateDisplay();
         requestAnimationFrame(() => {
-            this.unselect();
             stopMeasure();
         });
     }
     swapRows() {
         startMeasure("swapRows");
-        if (this.store.data.length>10) {
-            this.store.swapRows();
-        }
-        updateDisplay();
+        this.store.swapRows();
         stopMeasure();
     }
-
 }
+
 let main = new Main();
 let {html,htmlCollection} = new Context();
 
-let app = () => html`
-    <div class="container">
-        <div class="jumbotron">
-            <div class="row">
-                <div class="col-md-6">
-                    <h1>YallaJS-"keyed"</h1>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id="run" onclick="${main.run}">Create 1,000 rows</button>
-                        </div>
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id='runlots' onclick="${main.runLots}">Create 10,000 rows</button>
-                        </div>
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id='add' onclick="${main.add}">Append 1,000 rows</button>
-                        </div>
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id='update' onclick="${main.update}">Update every 10th row</button>
-                        </div>
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id='clear' onclick="${main.clear}">Clear</button>
-                        </div>
-                        <div class="col-sm-6 smallpad">
-                            <button type='button' class='btn btn-primary btn-block' id='swaprows' onclick="${main.swapRows}">Swap Rows</button>
+let paint = () => {
+    render(html`<div id='main'>
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>YallaJS-"keyed"</h1>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='run' onclick="${e=> main.run()}">Create 1,000 rows</button>
+                            </div>
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='runlots' onclick="${e => main.runLots()}">Create 10,000 rows</button>
+                            </div>
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='add' onclick="${e => main.add()}">Append 1,000 rows</button>
+                            </div>
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='update' onclick="${e => main.update()}">Update every 10th row</button>
+                            </div>
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='clear' onclick="${e => main.clear()}">Clear</button>
+                            </div>
+                            <div class="col-sm-6 smallpad">
+                                <button type='button' class='btn btn-primary btn-block' id='swaprows' onclick="${e => main.swapRows()}">Swap Rows</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <table class="table table-hover table-striped test-data">
+                <tbody id="tbody">
+                    ${htmlCollection(main.store.data, 'id', data => {
+        return html`<tr class="${main.store.selected == data.id ? 'danger' : '' }">
+                            <td class="col-md-1">${data.id}</td>
+                            <td class="col-md-4">
+                                <a class="lbl" onclick="${e => main.select(data.id)}">${data.label}</a>
+                            </td>
+                            <td class="col-md-1">
+                                <a class="remove"><span class="glyphicon glyphicon-remove remove" aria-hidden="true" onclick="${e => main.delete(data.id)}"></span></a>
+                            </td>
+                            <td class="col-md-6"></td>
+                        </tr>`
+    })}
+                </tbody>
+            </table>
+            <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
         </div>
-        <table class="table table-hover table-striped test-data">
-            <tbody id="tbody">
-                ${htmlCollection(main.store.data,'id',(data, index) => html`<tr>
-                        <td class="col-md-1">${data.id}</td>
-                        <td class="col-md-4">
-                            <a class="lbl" onclick="${main.select}" data-id="${data.id}">${data.label}</a>
-                        </td>
-                        <td class="col-md-1">
-                            <a class="remove" onclick="${main.delete}" data-id="${data.id}">
-                                <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
-                            </a>
-                        </td>
-                        <td class="col-md-6"></td>
-                    </tr>`)}
-            </tbody>
-        </table>
-        <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-    </div>
-`;
+    </div>`, document.body);
+};
 
-function updateDisplay(){
-    render(app(),document.getElementsByTagName('body')[0]);
-}
-
-updateDisplay();
-
+paint();
