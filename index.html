@@ -1,74 +1,113 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1.0">
-  <title>index</title>
-  <link rel="stylesheet" href="css/standardize.css">
-  <link rel="stylesheet" href="css/index-grid.css">
-  <link rel="stylesheet" href="css/index.css">
-		<style>
-      
-      @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300');
-      @import url('https://fonts.googleapis.com/css?family=Roboto');
-      
-      p.text.sanspro{
-        font-family: 'Source Sans Pro', sans-serif;
-        font-weight : 200;
-      }
-      
-      .sansprotext{
-        font-family: 'Source Sans Pro', sans-serif;
-        font-weight : 300;
-      }
-      
-      .roboto {
-        font-family: 'Roboto', sans-serif !important;
-      }
-      
-</style>
-</head>
-<body class="body page-index clearfix">
-  <div class="container container-1 clearfix">
-    <div class="container container-2 clearfix">
-      <img class="image" src="images/yallajs.svg">
-    </div>
-    <p class="text sanspro text-1">10kb&nbsp;High Performance Non VirtualDOM engine + SPA Inclusive</p>
-  </div>
-  <div class="element"></div>
-  <div class="container container-3 clearfix">
-    <p class="text sanspro text-2">Javascript framework for building webapp swiftly</p>
-    <div class="container container-4 clearfix">
-      <div class="container container-5 clearfix">
-        <p class="text sansprotext">Friend of Developer and Designer</p>
-        <div class="text _text text-4">
-          <p>Unlike other javascript libraries, YallaJS simply uses the native web language, "Javascript". By using Javascript, you do not need the compiler to "transpile" your application. This means that your development will be much faster, you can debugging natively through the browser, and you can use DevTools source mapper that you can not use if you use JSX or TypeScript. sweeet!</p>
-          <p>Templating with JSX makes it easy for Web Developer to make sure the code that is created does not break.&nbsp;For this yalla js use ES6 String Literals, so your templating will be much easier and you get autocomplete feature from your favorite javascript editor.<br></p>
-</div>
-      </div>
-    </div>
-    <div class="container container-6 clearfix">
-      <div class="container container-7 clearfix">
-        <p class="text sansprotext">High Performance Feather Lite</p>
-        <div class="text _text text-6">
-          <p>YallaJS is very light, total size no more than <span style="font-size: 15px"><img src="https://img.shields.io/github/size/yallajs/yalla/lib/yalla.min.js.gzip.svg" style="width: 100px;margin-bottom: -7px"></span>. With a very small size, the bandwidth used is very cheap and indirectly much faster.</p>
-          <p>YallaJS does not use virtual DOM. To produce a high performance, Yallajs cached the parsed string literal into an <b>HtmlTemplate</b>. Then yallajs map the position of the dynamic parameter in HtmlTemplate into a <b>Placeholder</b>. So if there is a change of parameter value, yallajs simply update the effected placeholder. In this way the application is more efficient in memory usage, and the script computation usage is much lower.</p>
-          <a href="./benchmark.html" style="background-color: firebrick;color: white;padding: 10px" >Test benchmark</a>
-          <a href="./todomvc.html" style="background-color: blue;color: white;padding: 10px" >TodoMVC</a>
-</div>
-      </div>
-    </div>
-    <div class="container container-8 clearfix">
-      <div class="container container-9 clearfix">
-        <p class="text sansprotext">Trully Portable &amp; Embeddable</p>
-        <div class="text _text text-8">
-          <p>You can create an application using yallajs as hybrid or single page application. By using hybrid, you can embed yallajs component into your larger web application.
+    <title>YallaJS</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet">
+    <link href="./css/prism.css" rel="stylesheet">
 
-If you want to feel the ability of single page application, you can use yalla spa to get routing facility and integration with web component.</p>
-          <p>Yalla Js is compatible with all browsers that support ES5. Yalla Js runs well in Internet Explorer 11, iOS 9, Android 5, and other modern browsers.<br><br>Browserstack is the platform we use for crossbrowser testing and we thank them for their support.<br></p>
-</div>
-      </div>
-    </div>
-  </div>
+</head>
+<body>
+    <style>
+        body {
+            font-family: Lato;
+            font-weight: 400;
+            margin : 0px;
+            padding : 0px;
+        }
+
+        .background-color{
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f2f6ff+2,f4f4eb+100 */
+            background: #f2f6ff; /* Old browsers */
+            background: -moz-linear-gradient(top, #f2f6ff 2%, #f4f4eb 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top, #f2f6ff 2%,#f4f4eb 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom, #f2f6ff 2%,#f4f4eb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#f4f4eb',GradientType=0 ); /* IE6-9 */
+        }
+
+        .shadow{
+            -webkit-box-shadow: -1px 1px 35px -3px rgba(0,0,0,0.64);
+            -moz-box-shadow: -1px 1px 35px -3px rgba(0,0,0,0.64);
+            box-shadow: -1px 1px 35px -3px rgba(0,0,0,0.64);
+        }
+
+    </style>
+    <section class="background-color shadow" style="text-align: center;padding-bottom: 10px">
+        <span style="font-size: 8em;font-weight: 100;margin: 0px;padding: 0px;line-height: 120px;">YallaJS</span>
+        <span style="font-size: 1.7em;font-weight: 300;display: block">ES6 Template Literal Templating Library</span>
+    </section>
+    <section style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <p style="text-align: center;padding-bottom: 30px;font-style: italic;font-size: 1.3em;">YallaJS is high performance, small size footprint and light weight ES6 Templating Engine library.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <h3>Getting Started</h3>
+                    <p>This guide walks through building a simple Hello World.</p>
+                    <ol>
+                        <li>Import yallajs in your index.html
+                            <pre ><code class="language-markup"><script type="prism-html-markup"><!document html>
+<html>
+    <head>
+        <script src="https://unpkg.com/yallajs"></ script>
+    </head>
+    <body>
+    </body>
+</html>
+</script></code></pre>
+                        </li>
+                        <li>Create main javascript file (main.js).
+                            <pre><code class="language-markup"><script type="prism-html-markup">let {html} = new Context();
+render(html`<div>Hello World ${new Date()}</div>`,document.body);
+</script></code></pre></li>
+                        <li>Import main.js into index.html<pre><code class="language-markup"><script type="prism-html-markup"><!document html>
+<html>
+    <head>
+        <script src="https://unpkg.com/yallajs"></ script>
+    </head>
+    <body>
+    </body>
+    <script src="main.js"></ script>
+</html>
+</script></code></pre>
+                        </li>
+                        <li>
+                            Open browser to see the changes
+                            <p>
+                            <img src="./images/hello-world.gif" class="img-fluid" alt="Responsive image">
+                            </p>
+                        </li>
+                    </ol>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm" >
+                    <h3 style="margin-top:20px">More Examples</h3>
+                    <ul>
+                        <li>
+                            <a href="./todomvc.html">TodoMVC</a> : A TodoMVC project rewritten in yallajs.
+                        </li>
+                        <li>
+                            <a href="./benchmark.html"> Performance</a> : Performance implementation to benchmark yallajs based on <a href="http://www.stefankrause.net/wp/">Stefan Krause.</a>
+                        </li>
+                        <li>
+                            Codepen hello world
+                            <p data-height="265" data-theme-id="light" data-slug-hash="NwGpGZ" data-default-tab="js,result" data-user="yallajs" data-embed-version="2" data-pen-title="YallaJS Hello World" class="codepen">See the Pen <a href="https://codepen.io/yallajs/pen/NwGpGZ/">YallaJS Hello World</a> by yallajs (<a href="https://codepen.io/yallajs">@yallajs</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+                            <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="./js/prism.js"></script>
 </body>
 </html>

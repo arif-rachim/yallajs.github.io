@@ -1,0 +1,126 @@
+body {
+  background-color: rgb(255, 255, 255);
+  font: 300 1em/1.38 Roboto;
+  color: rgb(0, 0, 0);
+}
+
+.container {
+  float: left;
+}
+
+.container .container {
+  width: 200px;
+  margin: 51px 0 0 41.6666666666%;
+  padding: 10px;
+}
+
+.container .text {
+  clear: both;
+  width: 80%;
+  min-height: 40px;
+  margin-left: 10%;
+  padding-bottom: 10px;
+  font-size: 1.375em;
+  line-height: 1.5;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #333333;
+}
+
+.image {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.text {
+  float: left;
+}
+
+.text-3 p,
+.text-5 p {
+  margin-bottom: 1em;
+}
+
+.wrapper {
+  position: relative;
+  float: left;
+  overflow: hidden;
+}
+
+.container-1 {
+  width: 100%;
+  margin-top: -30px;
+  background-image: -webkit-linear-gradient(90deg, #f1f4f7 0%, #fefefe 99.76190476190476%, rgb(226, 226, 226) 100%);
+  background-image:    -moz-linear-gradient(90deg, #f1f4f7 0%, #fefefe 99.76190476190476%, rgb(226, 226, 226) 100%);
+  background-image:      -o-linear-gradient(90deg, #f1f4f7 0%, #fefefe 99.76190476190476%, rgb(226, 226, 226) 100%);
+  background-image:     -ms-linear-gradient(90deg, #f1f4f7 0%, #fefefe 99.76190476190476%, rgb(226, 226, 226) 100%);
+  background-image:         linear-gradient(360deg, #f1f4f7 0%, #fefefe 99.76190476190476%, rgb(226, 226, 226) 100%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.text-2 {
+  position: relative;
+  z-index: 5;
+  width: 32.3333333333%;
+  min-height: 30px;
+  margin: 50px 0 0 1.66667%;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  font-size: 1.5em;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+}
+
+.text-3 {
+  position: relative;
+  clear: both;
+  z-index: 6;
+  width: 32.3333333333%;
+  min-height: 225px;
+  margin: -225px 0 0 57.66667%;
+  padding-top: 10px;
+  font-size: 1em;
+  color: rgb(0, 0, 0);
+}
+
+.text-4 {
+  position: relative;
+  z-index: 7;
+  width: 18.8333333333%;
+  min-height: 30px;
+  margin: 25px 0 0 10%;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  font-size: 1.5em;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+}
+
+.text-5 {
+  position: relative;
+  clear: both;
+  z-index: 8;
+  width: 18.8333333333%;
+  min-height: 209px;
+  margin-left: 10%;
+  padding-top: 10px;
+  font-size: 1em;
+  color: rgb(0, 0, 0);
+}
+
+.wrapper-1 {
+  clear: both;
+  z-index: 4;
+  width: 46%;
+  height: 258px;
+  margin: 50px 0 0 10%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.wrapper-2 {
+  z-index: 9;
+  width: 59.5833333333%;
+  height: 500px;
+  margin: -34px 0 0 1.58073%;
+}

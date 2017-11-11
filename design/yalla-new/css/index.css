@@ -1,0 +1,69 @@
+body {
+  background-color: rgb(255, 255, 255);
+  font: 400 3.125em/1.38 Helvetica;
+  color: rgb(255, 255, 255);
+}
+
+.container .container {
+  width: 256px;
+  margin: 100px auto 0;
+  border: 1px dashed rgb(0, 0, 0);
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.image {
+  display: block;
+  position: relative;
+  float: left;
+  z-index: 0;
+  width: 173px;
+  height: auto;
+  overflow: hidden;
+}
+
+.text {
+  position: relative;
+  float: left;
+  clear: both;
+  z-index: 1;
+  width: 33.4645669291%;
+  min-height: 29px;
+  margin: -79px 0 0 167px;
+  font-size: 1em;
+  letter-spacing: 3px;
+  color: rgb(255, 255, 255);
+}
+
+._container {
+  position: relative;
+}
+
+._element {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  width: 100%;
+  height: 70px;
+  margin: 0 auto;
+  background: rgb(57, 64, 66);
+  background: -webkit-linear-gradient(90deg, rgb(57, 64, 66) 0%, rgb(70, 79, 82) 100%) rgba(255, 255, 255, 0);
+  background:    -moz-linear-gradient(90deg, rgb(57, 64, 66) 0%, rgb(70, 79, 82) 100%) rgba(255, 255, 255, 0);
+  background:      -o-linear-gradient(90deg, rgb(57, 64, 66) 0%, rgb(70, 79, 82) 100%) rgba(255, 255, 255, 0);
+  background:     -ms-linear-gradient(90deg, rgb(57, 64, 66) 0%, rgb(70, 79, 82) 100%) rgba(255, 255, 255, 0);
+  background:         linear-gradient(360deg, rgb(57, 64, 66) 0%, rgb(70, 79, 82) 100%) rgba(255, 255, 255, 0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.container-1 {
+  float: left;
+  z-index: 3;
+  width: 100%;
+  height: 500px;
+  background-image: -webkit-linear-gradient(92deg, rgb(45, 50, 54) 0%, rgb(57, 64, 66) 100%);
+  background-image:    -moz-linear-gradient(92deg, rgb(45, 50, 54) 0%, rgb(57, 64, 66) 100%);
+  background-image:      -o-linear-gradient(92deg, rgb(45, 50, 54) 0%, rgb(57, 64, 66) 100%);
+  background-image:     -ms-linear-gradient(92deg, rgb(45, 50, 54) 0%, rgb(57, 64, 66) 100%);
+  background-image:         linear-gradient(358deg, rgb(45, 50, 54) 0%, rgb(57, 64, 66) 100%);
+}
